@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import useWindowDimensionHook from "@/hooks/useWindowDimensionHook";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 import USERFOLER from "@/public/Windows Icons/Yellow Folder user.ico";
@@ -16,6 +16,7 @@ import THISPC from "@/public/Windows Icons/Computer.ico";
 import CONTROLPANEL from "@/public/Windows Icons/Control Panel.ico";
 import RECYCLEBINEMPTY from "@/public/Windows Icons/Trash Empty.ico";
 import RECYCLEBINFULL from "@/public/Windows Icons/Trash Full.ico";
+import useDetectOutsideClick from "@/hooks/detectOutsideClickHook";
 
 export default function Page() {
   const [windows, setWindows] = useState<
@@ -169,6 +170,10 @@ function WindowModal({
   setActiveWindow?: Function;
 }) {
   const id = `${title?.split(" ").join("__")}__${idx}__`;
+  const windowRef = useRef();
+
+  //@ts-ignore
+  useDetectOutsideClick(windowRef, () => setActiveWindow(null), windowRef);
 
   const [isMaximized, setIsMaximized] = useState(maximize || false);
   const [dragging, setDragging] = useState(false);
@@ -272,6 +277,8 @@ function WindowModal({
 
   return (
     <div
+      // @ts-ignore
+      ref={windowRef}
       onMouseDown={() => setActiveWindow && setActiveWindow(idx)}
       style={{
         top: position.top,

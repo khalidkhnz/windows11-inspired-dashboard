@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React, { useRef, useState } from "react";
 import SETTINGS from "@/public/Settings.svg";
 import EXPLORER from "@/public/Windows Icons/Explorer.ico";
 import SEARCH from "@/public/Search.svg";
@@ -6,47 +7,96 @@ import START from "@/public/windows-start.svg";
 import BELL from "@/public/Bell.svg";
 import Image from "next/image";
 import { format } from "date-fns";
+import gsap from "gsap";
+import useDetectOutsideClick from "@/hooks/detectOutsideClickHook";
 
 type Props = {};
 
 const WindowsTaskBar = (props: Props) => {
-  return (
-    <header className="fixed bottom-0 left-0 z-50 flex h-[55px] w-full items-center justify-center gap-4 border-t-[1px] border-gray-500/50 bg-neutral-800/95 text-white">
-      <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
-        <Image
-          className="aspect-square h-7 w-7 active:scale-90"
-          src={START}
-          alt="START"
-        />
-        <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
-      </div>
-      <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
-        <Image
-          className="aspect-square h-9 w-9 active:scale-90"
-          src={SEARCH}
-          alt="SEARCH"
-        />
-        <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
-      </div>
-      <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
-        <Image
-          className="aspect-square h-8 w-8 active:scale-90"
-          src={EXPLORER}
-          alt="FOLDER"
-        />
-        <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
-      </div>
-      <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
-        <Image
-          className="aspect-square h-9 w-9 active:scale-90"
-          src={SETTINGS}
-          alt="SETTINGS"
-        />
-        <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
-      </div>
+  const [isStartOpen, setIsStartOpen] = useState(false);
 
-      <TaskbarRight />
-    </header>
+  const startWindowRef = useRef();
+  const startButtonRef = useRef();
+  useDetectOutsideClick(
+    //@ts-ignore
+    startWindowRef,
+    () => isStartOpen && openStart(),
+    startButtonRef,
+  );
+
+  function openStart() {
+    if (isStartOpen) {
+      gsap.to(".__start__", {
+        translateY: "130%",
+        duration: 0.2,
+        ease: "power2.inOut",
+      });
+    } else {
+      gsap.to(".__start__", {
+        translateY: "0%",
+        duration: 0.2,
+        ease: "power2.inOut",
+      });
+    }
+    setIsStartOpen(!isStartOpen);
+  }
+
+  return (
+    <>
+      <header className="fixed bottom-0 left-0 z-50 flex h-[55px] w-full items-center justify-center gap-4 border-t-[1px] border-gray-500/50 bg-neutral-800/95 text-white">
+        <div
+          //@ts-ignore
+          ref={startButtonRef}
+          onClick={openStart}
+          className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10"
+        >
+          <Image
+            className="aspect-square h-7 w-7 active:scale-90"
+            src={START}
+            alt="START"
+          />
+          {isStartOpen && (
+            <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
+          )}
+        </div>
+        <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
+          <Image
+            className="aspect-square h-9 w-9 active:scale-90"
+            src={SEARCH}
+            alt="SEARCH"
+          />
+          <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
+        </div>
+        <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
+          <Image
+            className="aspect-square h-8 w-8 active:scale-90"
+            src={EXPLORER}
+            alt="FOLDER"
+          />
+          <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
+        </div>
+        <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
+          <Image
+            className="aspect-square h-9 w-9 active:scale-90"
+            src={SETTINGS}
+            alt="SETTINGS"
+          />
+          <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
+        </div>
+
+        <TaskbarRight />
+      </header>
+      <div
+        //@ts-ignore
+        ref={startWindowRef}
+        style={{
+          transform: "translateX(calc(50% + 315px))",
+        }}
+        className="__start__ absolute bottom-[65px] left-0 z-40 h-[740px] w-[630px] rounded-lg bg-neutral-800/90 backdrop-blur-md"
+      >
+        START
+      </div>
+    </>
   );
 };
 
