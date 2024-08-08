@@ -8,9 +8,11 @@ type Props = {
 
 const layout = ({ children }: Props) => {
   return (
-    <main className="bg-black min-h-screen relative">
-      {children}
+    <main className="relative min-h-screen overflow-hidden bg-black">
       <Wallpaper />
+      <section id="desktop-root" className="absolute w-full">
+        {children}
+      </section>
       <WindowsTaskBar />
     </main>
   );

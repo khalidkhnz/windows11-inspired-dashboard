@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SETTINGS from "@/public/Settings.svg";
-import FOLDER from "@/public/Folder.svg";
+import EXPLORER from "@/public/Windows Icons/Explorer.ico";
 import SEARCH from "@/public/Search.svg";
 import START from "@/public/windows-start.svg";
 import BELL from "@/public/Bell.svg";
@@ -11,38 +11,38 @@ type Props = {};
 
 const WindowsTaskBar = (props: Props) => {
   return (
-    <header className="w-full gap-4 flex justify-center items-center text-white bg-neutral-800/95  border-t-[1px] border-gray-500/50 fixed bottom-0 left-0 bg-white h-[55px]">
-      <div className="relative hover:bg-white/10 cursor-pointer rounded-[4px] flex justify-center items-center w-11 h-11">
+    <header className="fixed bottom-0 left-0 z-50 flex h-[55px] w-full items-center justify-center gap-4 border-t-[1px] border-gray-500/50 bg-neutral-800/95 text-white">
+      <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
         <Image
-          className="aspect-square active:scale-90 h-7 w-7"
+          className="aspect-square h-7 w-7 active:scale-90"
           src={START}
           alt="START"
         />
-        <span className="w-[6px] h-[3px] bg-gray-400 absolute bottom-0 rounded-2xl" />
+        <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
       </div>
-      <div className="relative hover:bg-white/10 cursor-pointer rounded-[4px] flex justify-center items-center w-11 h-11">
+      <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
         <Image
-          className="aspect-square active:scale-90 h-9 w-9"
+          className="aspect-square h-9 w-9 active:scale-90"
           src={SEARCH}
           alt="SEARCH"
         />
-        <span className="w-[6px] h-[3px] bg-gray-400 absolute bottom-0 rounded-2xl" />
+        <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
       </div>
-      <div className="relative hover:bg-white/10 cursor-pointer rounded-[4px] flex justify-center items-center w-11 h-11">
+      <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
         <Image
-          className="aspect-square active:scale-90 h-9 w-9"
-          src={FOLDER}
+          className="aspect-square h-8 w-8 active:scale-90"
+          src={EXPLORER}
           alt="FOLDER"
         />
-        <span className="w-[6px] h-[3px] bg-gray-400 absolute bottom-0 rounded-2xl" />
+        <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
       </div>
-      <div className="relative hover:bg-white/10 cursor-pointer rounded-[4px] flex justify-center items-center w-11 h-11">
+      <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
         <Image
-          className="aspect-square active:scale-90 h-9 w-9"
+          className="aspect-square h-9 w-9 active:scale-90"
           src={SETTINGS}
           alt="SETTINGS"
         />
-        <span className="w-[6px] h-[3px] bg-gray-400 absolute bottom-0 rounded-2xl" />
+        <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
       </div>
 
       <TaskbarRight />
@@ -52,15 +52,15 @@ const WindowsTaskBar = (props: Props) => {
 
 function TaskbarRight() {
   return (
-    <div className="absolute flex items-center right-0 px-4">
-      <div className="active:scale-95 px-2 hover:bg-white/5 p-1 rounded-[4px] h-11 cursor-pointer flex gap-2 items-center">
-        <div className="flex flex-col text-[11px] font-light text-right">
+    <div className="absolute right-0 flex items-center px-4">
+      <div className="flex h-11 cursor-pointer items-center gap-2 rounded-[4px] p-1 px-2 hover:bg-white/5 active:scale-95">
+        <div className="flex flex-col text-right text-[11px] font-light">
           <span>{format(new Date(), "hh:mm:a")}</span>
           <span className="flex items-center">
             {format(new Date(), "eee")}, {format(new Date(), "dd-MM-yyyy")}
           </span>
         </div>
-        <Image src={BELL} alt="bell" className="w-[18px] h-[18px]" />
+        <Image src={BELL} alt="bell" className="h-[18px] w-[18px]" />
       </div>
     </div>
   );
