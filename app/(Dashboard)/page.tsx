@@ -1,391 +1,244 @@
 "use client";
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import useWindowDimensionHook from "@/hooks/useWindowDimensionHook";
-import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import Wallpaper from "@/components/Wallpaper";
+import { AvatarFallback } from "@radix-ui/react-avatar";
+import React, { useState } from "react";
+import USERICON from "@/public/Windows Icons/User.ico";
 import Image from "next/image";
-import USERFOLER from "@/public/Windows Icons/Yellow Folder user.ico";
-import THISPC from "@/public/Windows Icons/Computer.ico";
-import CONTROLPANEL from "@/public/Windows Icons/Control Panel.ico";
-import RECYCLEBINEMPTY from "@/public/Windows Icons/Trash Empty.ico";
-import RECYCLEBINFULL from "@/public/Windows Icons/Trash Full.ico";
-import useDetectOutsideClick from "@/hooks/detectOutsideClickHook";
+import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
+import WindowsLoading from "@/components/WindowsLoading/WindowsLoading";
+import gsap from "gsap";
+import { googleAuthAction, signoutAction } from "@/actions/googleAuth.action";
+import useSwr, { mutate } from "swr";
+import { getSessionAction } from "@/actions/getSession.action";
+import { ISession } from "@/types/session";
 
-export default function Page() {
-  const [windows, setWindows] = useState<
-    { title: string; id: number; content?: any }[]
-  >([]);
+type Props = {};
 
-  const apps: {
-    title: string;
-    content?: any;
-    ICON: any;
-    customCSS?: string;
-    iconParentCSS?: string;
-    onClick?: () => {} | any;
-  }[] = [
-    {
-      title: "Khalid",
-      ICON: USERFOLER,
-    },
-    {
-      title: "This PC",
-      ICON: THISPC,
-      onClick: () => {
-        setWindows((prev) => [
-          ...prev,
-          {
-            id: prev.length > 0 ? prev[prev.length - 1].id + 1 : Date.now(),
-            title: "NEW WINDOW",
-            content: "This PC",
-          },
-        ]);
-      },
-    },
-    {
-      title: "Recycle Bin",
-      ICON: RECYCLEBINEMPTY || RECYCLEBINFULL,
-      customCSS: "object-contain pb-6",
-      iconParentCSS: "absolute top-1",
-    },
-    {
-      title: "Control Panel",
-      ICON: CONTROLPANEL,
-      customCSS: "p-2 object-contain",
-    },
-  ];
+const Page = ({}: Props) => {
+  const [activeWindow, setActiveWindow] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [activeWindow, setActiveWindow] = useState<null | number>(null);
-  const { height, width } = useWindowDimensionHook();
-  const [grid, setGrid] = useState({
-    numberOfColumns: 0,
-    numberOfRows: 0,
-  });
-
-  const blockSize = 120;
-
-  useEffect(() => {
-    const numberOfColumns = Math.floor(width / blockSize);
-    const numberOfRows = Math.floor((height - 55) / blockSize);
-    setGrid({
-      numberOfColumns,
-      numberOfRows,
-    });
-  }, [height, width]);
+  const {
+    data: sessionData,
+    error: isSessionHaveError,
+    isLoading: isSessionLoading,
+    mutate,
+  }: { data: ISession; error: any; isLoading: boolean; mutate: any } = useSwr(
+    "Session",
+    async () => JSON.parse(await getSessionAction()),
+  );
 
   return (
-    <section className="relative flex h-screen w-full justify-center pt-4">
-      <TooltipProvider>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${grid.numberOfColumns}, ${blockSize}px)`,
-            gridTemplateRows: `repeat(${grid.numberOfRows}, ${blockSize}px)`,
-            gridAutoFlow: "column",
-          }}
-          className="text-white"
-        >
-          {apps.map((app, idx) => {
-            return (
-              <Tooltip key={idx}>
-                <TooltipTrigger>
-                  <div
-                    onDoubleClick={app.onClick ? app.onClick : () => {}}
-                    className="relative flex h-[120px] w-[120px] items-center justify-center rounded-md border-white p-2 hover:bg-white/15"
-                  >
-                    {app.ICON && (
-                      <div
-                        className={cn(
-                          "relative h-full w-full",
-                          app.iconParentCSS,
-                        )}
-                      >
-                        <Image
-                          src={app.ICON}
-                          alt={app.title}
-                          className={cn("object-fill p-1", app.customCSS)}
-                          fill
-                        />
-                      </div>
-                    )}
-                    <span className="absolute bottom-[2px] text-xs">
-                      {app.title}
-                    </span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{app.title}</p>
-                </TooltipContent>
-              </Tooltip>
-            );
-          })}
-        </div>
-      </TooltipProvider>
-
-      {windows?.map((win, index) => (
-        <WindowModal
-          key={win.id}
-          initialX={100 + 20 * index}
-          initialY={40 + 20 * index}
-          idx={win.id}
-          activeWindow={activeWindow == win.id}
-          setActiveWindow={setActiveWindow}
-          onClose={() =>
-            setWindows((prev) => prev.filter((itm, i) => itm.id !== win.id))
-          }
-          title={win.title}
-          content={<p className="text-xs text-white">{win.content}</p>}
+    <main className="relative h-screen w-full overflow-hidden">
+      <Wallpaper />
+      <section className="absolute flex h-full w-full items-center justify-center text-white backdrop-blur-md">
+        <AvatarAuth
+          mutate={mutate}
+          sessionData={sessionData}
+          setIsLoading={setIsLoading}
+          defaultWindow={activeWindow === 0}
         />
-      ))}
-    </section>
+        <AccountsList
+          sessionData={sessionData}
+          activeWindow={activeWindow}
+          setActiveWindow={setActiveWindow}
+        />
+        {isLoading && <WindowsLoading />}
+      </section>
+    </main>
   );
-}
+};
 
-function WindowModal({
-  content,
-  title,
-  initialX,
-  initialY,
-  idx,
-  onClose,
-  maximize,
-  activeWindow,
-  setActiveWindow,
+function AvatarAuth({
+  defaultWindow = true,
+  setIsLoading,
+  sessionData,
+  mutate,
 }: {
-  content?: any;
-  title?: string;
-  initialX?: number;
-  initialY?: number;
-  idx?: number;
-  maximize?: boolean;
-  activeWindow?: boolean;
-  onClose?: Function;
-  setActiveWindow?: Function;
+  defaultWindow?: boolean;
+  setIsLoading?: any;
+  sessionData?: ISession;
+  mutate: any;
 }) {
-  const id = `${title?.split(" ").join("__")}__${idx}__`;
-  const windowRef = useRef();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  //@ts-ignore
-  useDetectOutsideClick(windowRef, () => setActiveWindow(null), windowRef);
-
-  const [isMaximized, setIsMaximized] = useState(maximize || false);
-  const [dragging, setDragging] = useState(false);
-  const [position, setPosition] = useState({
-    top: initialY || 32,
-    left: initialX || 32,
-  });
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (isMaximized) {
-      setIsMaximized(false);
-      gsap.to(`.${id}`, {
-        width: "800px",
-        height: "600px",
-        duration: 0.1,
-      });
-    }
-
-    setDragging(true);
-    setOffset({
-      x: e.clientX - position.left,
-      y: e.clientY - position.top,
-    });
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (dragging) {
-      const newLeft = e.clientX - offset.x;
-      const newTop = e.clientY - offset.y;
-
-      setPosition({
-        left: newLeft,
-        top: newTop,
+  function handleContinue() {
+    if (defaultWindow || sessionData?.user) {
+      gsap.to(".__avatar__auth__", {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.inOut",
       });
 
-      gsap.to(`.${id}`, {
-        left: newLeft,
-        top: newTop,
-        duration: 0.1,
+      gsap.to(".__accounts__list__", {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.inOut",
       });
-    }
-  };
 
-  const handleMouseUp = () => {
-    setDragging(false);
-  };
-
-  useEffect(() => {
-    if (dragging) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
-    } else {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    }
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [dragging]);
-
-  function handleMinimize() {}
-
-  function handleMaximize() {
-    if (!isMaximized) {
-      gsap
-        .to(`.${id}`, {
-          left: "0",
-          top: "0",
-          width: "100%",
-          height: "100%",
-          duration: 0.1,
-        })
-        .then(() => {
-          setPosition({
-            left: 0,
-            top: 0,
-          });
-        });
-      setIsMaximized(true);
-    } else {
-      gsap
-        .to(`.${id}`, {
-          left: "50%",
-          top: "50%",
-          width: "800px",
-          height: "600px",
-          duration: 0.1,
-        })
-        .then(() => {
-          setPosition({
-            left: 0,
-            top: 0,
-          });
-        });
-      setIsMaximized(false);
+      setIsLoading(true);
+      setTimeout(() => {
+        router.push("/desktop");
+        setIsLoading(false);
+      }, 2000);
+      return;
     }
   }
 
+  async function handleLogout() {
+    gsap.to(".__avatar__auth__", {
+      opacity: 0,
+      duration: 0.2,
+      ease: "power2.inOut",
+    });
+    gsap.to(".__accounts__list__", {
+      opacity: 0,
+      duration: 0.2,
+      ease: "power2.inOut",
+    });
+    setIsLoading(true);
+    await signoutAction();
+    mutate();
+    setTimeout(() => {
+      setIsLoading(false);
+      gsap.to(".__avatar__auth__", {
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.inOut",
+      });
+
+      gsap.to(".__accounts__list__", {
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.inOut",
+      });
+    }, 2000);
+  }
+
+  if (defaultWindow)
+    return (
+      <div className="__avatar__auth__ flex flex-col items-center justify-center gap-2">
+        <Avatar className="flex aspect-square h-[160px] w-[160px] items-center justify-center bg-white/20 backdrop-blur-xl">
+          <AvatarImage
+            src="https://media.licdn.com/dms/image/D4D03AQFGucz-fPn_VA/profile-displayphoto-shrink_200_200/0/1683378380890?e=2147483647&v=beta&t=VVWzsf6NfZSe5UTnmrH1p6Gs1PWiNVVtIOPaosPb6Y8"
+            alt="@shadcn"
+          />
+          <AvatarFallback className="relative p-8 mix-blend-hard-light grayscale-[100%]">
+            <Image src={USERICON} alt="user icon" className="object-contain" />
+          </AvatarFallback>
+        </Avatar>
+        <h1 className="my-2 text-xl">Khalid's Portfolio</h1>
+        <Button
+          onClick={handleContinue}
+          className="min-w-[150px] bg-white/20 backdrop-blur-lg hover:bg-white/40"
+        >
+          Continue
+        </Button>
+      </div>
+    );
+  else
+    return (
+      <div className="__avatar__auth__ flex flex-col items-center justify-center gap-2">
+        <Avatar className="flex aspect-square h-[160px] w-[160px] items-center justify-center bg-white/20 backdrop-blur-xl">
+          <AvatarImage src={sessionData?.user?.image || ""} alt="avatar" />
+          <AvatarFallback className="relative p-8 mix-blend-hard-light grayscale-[100%]">
+            <Image src={USERICON} alt="user icon" className="object-contain" />
+          </AvatarFallback>
+        </Avatar>
+        {/* <Input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="mt-2 border-[0.5px] border-white/20 border-b-purple-600 bg-neutral-800/70 px-4 py-4 backdrop-blur-lg focus-visible:ring-0"
+          placeholder="Enter Email"
+        /> */}
+        {sessionData?.user ? (
+          <>
+            <Button
+              onClick={handleContinue}
+              className="min-w-[150px] bg-white/20 backdrop-blur-lg hover:bg-white/40"
+            >
+              Continue
+            </Button>
+            <Button
+              onClick={handleLogout}
+              className="min-w-[150px] bg-white/20 backdrop-blur-lg hover:bg-red-500/70"
+            >
+              Logout
+            </Button>
+          </>
+        ) : (
+          <form action={googleAuthAction}>
+            <Button
+              type="submit"
+              className="min-w-[150px] bg-white/20 backdrop-blur-lg hover:bg-white/40"
+            >
+              Signin with Google
+            </Button>
+          </form>
+        )}
+        {searchParams.get("error") === "CallbackRouteError" && (
+          <div className="text-red-500">Sign in failed</div>
+        )}
+      </div>
+    );
+}
+
+function AccountsList({
+  activeWindow,
+  setActiveWindow,
+  sessionData,
+}: {
+  activeWindow: any;
+  sessionData?: ISession;
+  setActiveWindow: any;
+}) {
   return (
-    <div
-      // @ts-ignore
-      ref={windowRef}
-      onMouseDown={() => setActiveWindow && setActiveWindow(idx)}
-      style={{
-        top: position.top,
-        left: position.left,
-        // width: "800px",
-        // height: "600px",
-      }}
-      className={cn(
-        "absolute right-8 top-8 flex w-fit flex-col overflow-hidden rounded-md border-[1px] border-gray-200/10 bg-gray-900/95 text-white backdrop-blur-md",
-        id,
-        {
-          "border-blue-800": activeWindow && !isMaximized,
-          "z-10 bg-gray-900/80 backdrop-blur-md": activeWindow,
-          "rounded-none": isMaximized,
-          "h-[500px] w-[400px] lg:h-[600px] lg:w-[800px]": true,
-        },
-      )}
-    >
+    <div className="__accounts__list__ absolute bottom-3 left-3 flex h-fit min-h-[100px] w-[200px] flex-col items-start justify-end gap-1">
       <div
-        onMouseDown={handleMouseDown}
+        onClick={() => setActiveWindow(0)}
         className={cn(
-          "flex h-[40px] w-full cursor-pointer items-center justify-center gap-8 border-gray-500/50 bg-neutral-800/95 pl-3",
+          "flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg p-2 transition-all hover:bg-white/20 hover:backdrop-blur-md",
           {
-            "bg-blue-800": activeWindow,
+            "bg-white/20 backdrop-blur-md": activeWindow === 0,
           },
         )}
       >
-        <h1 className="text-sm font-normal capitalize">
-          {title?.toLowerCase()}
-        </h1>
-        <div className="ml-auto flex w-fit items-center justify-center text-white">
-          <Minimize //@ts-ignore
-            onClick={handleMinimize}
-            className="min-h-[40px] min-w-[45px] p-1 px-[14px] hover:bg-red-500"
-          />
-          <Maximize //@ts-ignore
-            onClick={handleMaximize}
-            className="min-h-[40px] min-w-[45px] p-[6px] px-[16px] hover:bg-red-500"
-          />
-          <Cross
-            //@ts-ignore
-            onClick={onClose}
-            className="min-h-[40px] min-w-[45px] p-1 px-[14px] hover:bg-red-500"
-          />
-        </div>
+        <Avatar className="flex aspect-square items-center justify-center bg-white/20 backdrop-blur-xl">
+          <AvatarImage src="" alt="@shadcn" />
+          <AvatarFallback className="relative p-8 mix-blend-hard-light grayscale-[100%]">
+            K
+          </AvatarFallback>
+        </Avatar>
+        <h1 className="text-sm">Khalid</h1>
       </div>
-      <div className="p-3">{content}</div>
+
+      <div
+        onClick={() => setActiveWindow(1)}
+        className={cn(
+          "flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg p-2 transition-all hover:bg-white/20 hover:backdrop-blur-md",
+          {
+            "bg-white/20 backdrop-blur-md": activeWindow === 1,
+          },
+        )}
+      >
+        <Avatar className="flex aspect-square items-center justify-center bg-white/20 backdrop-blur-xl">
+          <AvatarImage src={sessionData?.user?.image || ""} alt="@shadcn" />
+          <AvatarFallback className="relative p-2 mix-blend-hard-light grayscale-[100%]">
+            <Image src={USERICON} alt="user icon" className="object-contain" />
+          </AvatarFallback>
+        </Avatar>
+        <h1 className="text-sm">
+          {sessionData?.user?.name
+            ? sessionData?.user?.name
+            : `Login or Signup`}
+        </h1>
+      </div>
     </div>
   );
 }
 
-function Cross({ className, ...props }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className={cn(className)}
-      // class="lucide lucide-x"
-      {...props}
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
-function Maximize({ className, ...props }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className={cn(className)}
-      {...props}
-    >
-      <rect width="18" height="18" x="3" y="3" rx="2" />
-    </svg>
-  );
-}
-function Minimize({ className, ...props }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className={cn(className)}
-      {...props}
-    >
-      <path d="M5 12h14" />
-    </svg>
-  );
-}
+export default Page;

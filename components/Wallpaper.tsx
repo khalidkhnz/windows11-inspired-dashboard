@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import WALLPAPER from "@/public/GOJO.png";
-
+import WALLPAPER2 from "@/public/wallpaper1.jpg";
 type Props = {};
 
 const Wallpaper = (props: Props) => {
@@ -12,7 +12,7 @@ const Wallpaper = (props: Props) => {
     <Image
       className="object-cover"
       alt="wallpaper"
-      src={image || WALLPAPER}
+      src={WALLPAPER2 || image || WALLPAPER}
       fill
     />
   );
