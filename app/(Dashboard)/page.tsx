@@ -283,8 +283,8 @@ function WindowModal({
       style={{
         top: position.top,
         left: position.left,
-        width: "800px",
-        height: "600px",
+        // width: "800px",
+        // height: "600px",
       }}
       className={cn(
         "absolute right-8 top-8 flex w-fit flex-col overflow-hidden rounded-md border-[1px] border-gray-200/10 bg-gray-900/95 text-white backdrop-blur-md",
@@ -293,6 +293,7 @@ function WindowModal({
           "border-blue-800": activeWindow && !isMaximized,
           "z-10 bg-gray-900/80 backdrop-blur-md": activeWindow,
           "rounded-none": isMaximized,
+          "h-[500px] w-[400px] lg:h-[600px] lg:w-[800px]": true,
         },
       )}
     >

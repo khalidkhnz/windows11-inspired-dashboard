@@ -85,17 +85,18 @@ const WindowsTaskBar = (props: Props) => {
         </div>
 
         <TaskbarRight />
+        <div
+          //@ts-ignore
+          ref={startWindowRef}
+          style={{
+            // transform: "translateX(calc(50% + 315px))",
+            transform: "translateX(0px) translateY(130%)",
+          }}
+          className="__start__ absolute bottom-[65px] z-40 h-[740px] w-[90%] rounded-lg bg-neutral-800/90 backdrop-blur-md md:w-[630px]"
+        >
+          START
+        </div>
       </header>
-      <div
-        //@ts-ignore
-        ref={startWindowRef}
-        style={{
-          transform: "translateX(calc(50% + 315px))",
-        }}
-        className="__start__ absolute bottom-[65px] left-0 z-40 h-[740px] w-[630px] rounded-lg bg-neutral-800/90 backdrop-blur-md"
-      >
-        START
-      </div>
     </>
   );
 };

@@ -8,7 +8,7 @@ type Props = {
 
 const layout = ({ children }: Props) => {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black">
+    <main className="relative min-h-screen w-full overflow-hidden bg-black">
       <Wallpaper />
       <section id="desktop-root" className="absolute w-full">
         {children}
