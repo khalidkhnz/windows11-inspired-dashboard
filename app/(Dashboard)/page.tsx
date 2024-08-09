@@ -131,7 +131,7 @@ function AvatarAuth({
             <Image src={USERICON} alt="user icon" className="object-contain" />
           </AvatarFallback>
         </Avatar>
-        <h1 className="my-2 text-xl">Khalid's Portfolio</h1>
+        <h1 className="my-2 text-xl">{`Khalid's Portfolio`}</h1>
         <Button
           onClick={handleContinue}
           className="min-w-[150px] bg-white/20 backdrop-blur-lg hover:bg-white/40"
