@@ -7,8 +7,8 @@ import { AppContextProvider } from "@/context/AppContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Win-Dashboard",
-  description: "",
+  title: "Khalidkhnz",
+  description: "Khalid's Portfolio",
 };
 
 export default function RootLayout({
