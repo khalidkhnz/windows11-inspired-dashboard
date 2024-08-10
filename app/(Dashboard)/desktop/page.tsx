@@ -16,20 +16,23 @@ import THISPC from "@/public/Windows Icons/Computer.ico";
 import CONTROLPANEL from "@/public/Windows Icons/Control Panel.ico";
 import RECYCLEBINEMPTY from "@/public/Windows Icons/Trash Empty.ico";
 import RECYCLEBINFULL from "@/public/Windows Icons/Trash Full.ico";
+import { useAppContext } from "@/context/AppContext";
+import { IWindow } from "@/types/context";
+
+interface IAppType {
+  title: string;
+  content?: any;
+  ICON: any;
+  customCSS?: string;
+  iconParentCSS?: string;
+  onClick?: () => {} | any;
+}
 
 export default function Page() {
-  const [windows, setWindows] = useState<
-    { title: string; id: number; content?: any }[]
-  >([]);
+  const { windows, setWindows, activeWindow, setActiveWindow } =
+    useAppContext();
 
-  const apps: {
-    title: string;
-    content?: any;
-    ICON: any;
-    customCSS?: string;
-    iconParentCSS?: string;
-    onClick?: () => {} | any;
-  }[] = [
+  const apps: IAppType[] = [
     {
       title: "Khalid",
       ICON: USERFOLER,
@@ -38,7 +41,7 @@ export default function Page() {
       title: "This PC",
       ICON: THISPC,
       onClick: () => {
-        setWindows((prev) => {
+        setWindows((prev: IWindow[]) => {
           const id =
             prev.length > 0 ? prev[prev.length - 1].id + 1 : Date.now();
           setActiveWindow(id);
@@ -66,7 +69,6 @@ export default function Page() {
     },
   ];
 
-  const [activeWindow, setActiveWindow] = useState<null | number>(null);
   const { height, width } = useWindowDimensionHook();
   const [grid, setGrid] = useState({
     numberOfColumns: 0,
@@ -142,7 +144,9 @@ export default function Page() {
           activeWindow={activeWindow == win.id}
           setActiveWindow={setActiveWindow}
           onClose={() =>
-            setWindows((prev) => prev.filter((itm, i) => itm.id !== win.id))
+            setWindows((prev: IWindow[]) =>
+              prev.filter((itm, i) => itm.id !== win.id),
+            )
           }
           title={win.title}
           content={
