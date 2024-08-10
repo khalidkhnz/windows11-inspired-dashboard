@@ -151,19 +151,25 @@ function StartWindow({ startWindowRef }: { startWindowRef: any }) {
                 key={idx}
                 className={cn(
                   `__start__apps__scroll__item__${idx}__`,
-                  "my-auto grid h-full w-full snap-start grid-cols-6 grid-rows-3 gap-3",
+                  "my-auto grid h-full w-full snap-start grid-cols-4 grid-rows-3 gap-3 md:grid-cols-6",
                 )}
               >
-                {apps.startApps.map((item, index) => (
+                {apps.startApps.map((item: IAppType, index) => (
                   <div
                     key={index}
                     onClick={item.onClick}
-                    className="relative flex cursor-pointer flex-col items-center justify-end gap-4 border-[2px] border-transparent p-3 active:scale-90"
+                    className={cn(
+                      "relative flex cursor-pointer flex-col items-center justify-end gap-4 border-[2px] border-transparent p-3 active:scale-90",
+                      item.iconParentCSS,
+                    )}
                   >
                     <Image
                       src={item.ICON}
                       alt="icon"
-                      className="h-[55px] w-[55px] object-contain"
+                      className={cn(
+                        "h-[55px] w-[55px] object-contain",
+                        item.customCSS,
+                      )}
                     />
                     <h2 className="absolute bottom-0 left-0 w-full text-center text-[10px]">
                       {`${item.title}`}

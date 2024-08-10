@@ -12,6 +12,10 @@ import BELL from "@/public/Bell.svg";
 import DOWNLOADS from "@/public/Windows Icons/Folder Downloads.ico";
 import PDFICON from "@/public/Windows Icons/pdf-icon.png";
 import SPORTJACKS from "@/public/Windows Icons/sj.ico";
+import PORTFOLIO from "@/public/portfolio.png";
+import X from "@/public/x-logo.svg";
+import DEEPALI from "@/public/Deepali.png";
+import GITHUB from "@/public/Github.svg";
 
 export const ICONS = {
   USERFOLER,
@@ -28,4 +32,8 @@ export const ICONS = {
   DOWNLOADS,
   PDFICON,
   SPORTJACKS,
+  PORTFOLIO,
+  X,
+  DEEPALI,
+  GITHUB,
 };
