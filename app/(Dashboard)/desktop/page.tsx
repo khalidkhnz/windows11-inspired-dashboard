@@ -8,66 +8,15 @@ import {
 } from "@/components/ui/tooltip";
 import useWindowDimensionHook from "@/hooks/useWindowDimensionHook";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
-import USERFOLER from "@/public/Windows Icons/Yellow Folder user.ico";
-import THISPC from "@/public/Windows Icons/Computer.ico";
-import CONTROLPANEL from "@/public/Windows Icons/Control Panel.ico";
-import RECYCLEBINEMPTY from "@/public/Windows Icons/Trash Empty.ico";
-import RECYCLEBINFULL from "@/public/Windows Icons/Trash Full.ico";
 import { useAppContext } from "@/context/AppContext";
 import { IWindow } from "@/types/context";
 
-interface IAppType {
-  title: string;
-  content?: any;
-  ICON: any;
-  customCSS?: string;
-  iconParentCSS?: string;
-  onClick?: () => {} | any;
-}
-
 export default function Page() {
-  const { windows, setWindows, activeWindow, setActiveWindow } =
+  const { windows, setWindows, activeWindow, setActiveWindow, apps } =
     useAppContext();
-
-  const apps: IAppType[] = [
-    {
-      title: "Khalid",
-      ICON: USERFOLER,
-    },
-    {
-      title: "This PC",
-      ICON: THISPC,
-      onClick: () => {
-        setWindows((prev: IWindow[]) => {
-          const id =
-            prev.length > 0 ? prev[prev.length - 1].id + 1 : Date.now();
-          setActiveWindow(id);
-          return [
-            ...prev,
-            {
-              id: id,
-              title: "NEW WINDOW",
-              content: "This PC",
-            },
-          ];
-        });
-      },
-    },
-    {
-      title: "Recycle Bin",
-      ICON: RECYCLEBINEMPTY || RECYCLEBINFULL,
-      customCSS: "object-contain pb-6",
-      iconParentCSS: "absolute top-1",
-    },
-    {
-      title: "Control Panel",
-      ICON: CONTROLPANEL,
-      customCSS: "p-2 object-contain",
-    },
-  ];
 
   const { height, width } = useWindowDimensionHook();
   const [grid, setGrid] = useState({
@@ -98,7 +47,7 @@ export default function Page() {
           }}
           className="text-white"
         >
-          {apps.map((app, idx) => {
+          {apps.desktopApps.map((app, idx) => {
             return (
               <Tooltip key={idx}>
                 <TooltipTrigger>
@@ -149,12 +98,7 @@ export default function Page() {
             )
           }
           title={win.title}
-          content={
-            <p className="text-xs text-white">
-              <div>ID: {win.id}</div>
-              <div>Active: {activeWindow}</div>
-            </p>
-          }
+          content={win.content}
         />
       ))}
     </section>
@@ -334,7 +278,11 @@ function WindowModal({
           />
         </div>
       </div>
-      <div className="p-3">{content}</div>
+      <div
+        className={cn("relative h-full w-full", { "pb-[52px]": isMaximized })}
+      >
+        {content}
+      </div>
     </div>
   );
 }

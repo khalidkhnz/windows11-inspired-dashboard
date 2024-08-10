@@ -7,6 +7,11 @@ export type IAppContext = {
   setWindows: Dispatch<SetStateAction<IWindow[]>>;
   activeWindow: number | null;
   setActiveWindow: Dispatch<SetStateAction<number | null>>;
+  apps: {
+    startApps: IAppType[];
+    recommandedApps: IAppType[];
+    desktopApps: IAppType[];
+  };
 };
 
 export interface IWindow {

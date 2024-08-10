@@ -67,3 +67,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+.scrollbar__hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE 10+ */
+  overflow: -moz-scrollbars-none; /* Firefox */
+  -webkit-overflow-scrolling: touch; /* Chrome */
+}
