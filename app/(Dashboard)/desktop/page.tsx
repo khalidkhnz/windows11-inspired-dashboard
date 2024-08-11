@@ -95,6 +95,7 @@ export default function Page() {
       {windows?.map((win, index) => (
         <WindowModal
           key={win.id}
+          icon={win.icon}
           initialX={20}
           initialY={5 + 20 * index}
           idx={win.id}
@@ -127,6 +128,7 @@ function WindowModal({
   activeWindow,
   setActiveWindow,
   onMinimize,
+  icon,
 }: {
   content?: any;
   title?: string;
@@ -138,6 +140,7 @@ function WindowModal({
   onClose?: Function;
   setActiveWindow?: Function;
   onMinimize?: Function;
+  icon?: any;
 }) {
   const id = `${title?.split(" ").join("__")}__${idx}__`;
 
@@ -299,6 +302,11 @@ function WindowModal({
           },
         )}
       >
+        {icon && (
+          <div className="ml-1 flex aspect-square h-full items-center justify-center p-2">
+            <Image src={icon} alt={`${title}`} />
+          </div>
+        )}
         <h1
           onMouseDown={handleMouseDown}
           onDoubleClick={handleMaximize}
