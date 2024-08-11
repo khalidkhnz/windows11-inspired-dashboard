@@ -13,6 +13,7 @@ import gsap from "gsap";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import { IWindow } from "@/types/context";
+import useScreenSize from "@/hooks/useScreenSizes";
 
 export default function Page() {
   const { windows, setWindows, activeWindow, setActiveWindow, apps } =
@@ -87,8 +88,8 @@ export default function Page() {
       {windows?.map((win, index) => (
         <WindowModal
           key={win.id}
-          initialX={100 + 20 * index}
-          initialY={40 + 20 * index}
+          initialX={20}
+          initialY={5 + 20 * index}
           idx={win.id}
           activeWindow={activeWindow == win.id}
           setActiveWindow={setActiveWindow}
@@ -128,11 +129,13 @@ function WindowModal({
 }) {
   const id = `${title?.split(" ").join("__")}__${idx}__`;
 
+  const { xl, sm, md, lg, xxl } = useScreenSize();
+
   const [isMaximized, setIsMaximized] = useState(maximize || false);
   const [dragging, setDragging] = useState(false);
   const [position, setPosition] = useState({
-    top: initialY || 32,
-    left: initialX || 32,
+    top: initialY || 0,
+    left: initialX || 0,
   });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
@@ -140,8 +143,10 @@ function WindowModal({
     if (isMaximized) {
       setIsMaximized(false);
       gsap.to(`.${id}`, {
-        width: "800px",
-        height: "600px",
+        // left: lg ? "calc(50% - 400px)" : "calc(50% - 150px)",
+        // top: lg ? "calc(50% - 300px)" : "calc(50% - 250px)",
+        width: lg ? "800px" : "400px",
+        height: lg ? "600px" : "600px",
         duration: 0.1,
       });
     }
@@ -190,7 +195,16 @@ function WindowModal({
     };
   }, [dragging]);
 
-  function handleMinimize() {}
+  function handleMinimize() {
+    gsap.to(`.${id}`, {
+      left: lg ? "calc(50% - 400px)" : "calc(50% - 200px)",
+      top: "100%",
+      width: lg ? "800px" : "400px",
+      height: lg ? "600px" : "600px",
+      duration: 0.1,
+      ease: "power4.inOut",
+    });
+  }
 
   function handleMaximize() {
     if (!isMaximized) {
@@ -212,10 +226,10 @@ function WindowModal({
     } else {
       gsap
         .to(`.${id}`, {
-          left: "0%",
-          top: "0%",
-          width: "800px",
-          height: "600px",
+          // left: lg ? "calc(50% - 400px)" : "calc(50% - 150px)",
+          // top: lg ? "calc(50% - 300px)" : "calc(50% - 250px)",
+          width: lg ? "800px" : "400px",
+          height: lg ? "600px" : "600px",
           duration: 0.1,
         })
         .then(() => {
@@ -244,7 +258,7 @@ function WindowModal({
           "border-blue-800": activeWindow && !isMaximized,
           "z-10 bg-gray-900/80 backdrop-blur-md": activeWindow,
           "rounded-none": isMaximized,
-          "h-[500px] w-[400px] lg:h-[600px] lg:w-[800px]": true,
+          "h-[600px] w-[380px] sm:w-[400px] lg:h-[600px] lg:w-[800px]": true,
         },
       )}
     >
@@ -258,6 +272,7 @@ function WindowModal({
       >
         <h1
           onMouseDown={handleMouseDown}
+          onDoubleClick={handleMaximize}
           className="flex h-full w-full items-center justify-start px-2 text-sm font-normal capitalize"
         >
           {title?.toLowerCase()}
@@ -279,8 +294,11 @@ function WindowModal({
         </div>
       </div>
       <div
-        className={cn("relative h-full w-full", { "pb-[52px]": isMaximized })}
+        className={cn("relative h-full w-full", {
+          "pb-[52px]": isMaximized,
+        })}
       >
+        {/* {JSON.stringify({ sm, md, lg, xl, xxl })} */}
         {content}
       </div>
     </div>

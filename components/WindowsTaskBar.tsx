@@ -72,7 +72,10 @@ const WindowsTaskBar = (props: Props) => {
             <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
           )}
         </div>
-        <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
+        <div
+          onClick={openStart}
+          className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10"
+        >
           <Image
             className="aspect-square h-9 w-9 active:scale-90"
             src={ICONS.SEARCH}
