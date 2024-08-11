@@ -17,6 +17,7 @@ import X from "@/public/x-logo.svg";
 import DEEPALI from "@/public/Deepali.png";
 import GITHUB from "@/public/Github.svg";
 import TASKVIEW from "@/public/Task-view.png";
+import CONTACT from "@/public/contact.svg";
 import { cn } from "./utils";
 
 export const ICONS = {
@@ -39,6 +40,7 @@ export const ICONS = {
   DEEPALI,
   GITHUB,
   TASKVIEW,
+  CONTACT,
 };
 
 export function Cross({

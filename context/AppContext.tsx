@@ -1,5 +1,6 @@
 "use client";
 
+import ContactApp from "@/components/ContactApp";
 import { ICONS } from "@/lib/icons";
 import { IAppType } from "@/types/apps";
 import {
@@ -228,6 +229,28 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
       // iconParentCSS: "p-2",
       onClick: () => {
         router.push("https://github.com/khalidkhnz?tab=repositories");
+      },
+    },
+    {
+      title: "Contact Me",
+      ICON: ICONS.CONTACT,
+      customCSS: "p-4 object-contain",
+      // iconParentCSS: "p-4",
+      onClick: () => {
+        setWindows((prev: IWindow[]) => {
+          const id =
+            prev.length > 0 ? prev[prev.length - 1].id + 1 : Date.now();
+          setActiveWindow(id);
+          return [
+            ...prev,
+            {
+              id: id,
+              title: "Contact Me",
+              icon: ICONS.CONTACT,
+              content: <ContactApp />,
+            },
+          ];
+        });
       },
     },
   ];

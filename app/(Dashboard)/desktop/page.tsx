@@ -15,6 +15,9 @@ import { useAppContext } from "@/context/AppContext";
 import { IWindow } from "@/types/context";
 import useScreenSize from "@/hooks/useScreenSizes";
 import { Cross, Maximize, Minimize } from "@/lib/icons";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const {
@@ -335,7 +338,6 @@ function WindowModal({
           "pb-[52px]": isMaximized,
         })}
       >
-        {/* {JSON.stringify({ sm, md, lg, xl, xxl })} */}
         {content}
       </div>
     </div>
