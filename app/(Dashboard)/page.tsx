@@ -14,6 +14,7 @@ import { googleAuthAction, signoutAction } from "@/actions/googleAuth.action";
 import useSwr, { mutate } from "swr";
 import { getSessionAction } from "@/actions/getSession.action";
 import { ISession } from "@/types/session";
+import { ICONS } from "@/lib/icons";
 
 type Props = {};
 
@@ -124,8 +125,10 @@ function AvatarAuth({
       <div className="__avatar__auth__ flex flex-col items-center justify-center gap-2">
         <Avatar className="flex aspect-square h-[160px] w-[160px] items-center justify-center bg-white/20 backdrop-blur-xl">
           <AvatarImage
-            src="https://media.licdn.com/dms/image/D4D03AQFGucz-fPn_VA/profile-displayphoto-shrink_200_200/0/1683378380890?e=2147483647&v=beta&t=VVWzsf6NfZSe5UTnmrH1p6Gs1PWiNVVtIOPaosPb6Y8"
-            alt="@shadcn"
+            src={
+              "https://utfs.io/f/23f924b7-7d78-454f-9702-f9e549169e8b-zbx71s.jpeg"
+            }
+            alt="OWNERs-PICTURE"
           />
           <AvatarFallback className="relative p-8 mix-blend-hard-light grayscale-[100%]">
             <Image src={USERICON} alt="user icon" className="object-contain" />
@@ -208,7 +211,10 @@ function AccountsList({
         )}
       >
         <Avatar className="flex aspect-square items-center justify-center bg-white/20 backdrop-blur-xl">
-          <AvatarImage src="" alt="@shadcn" />
+          <AvatarImage
+            src="https://utfs.io/f/23f924b7-7d78-454f-9702-f9e549169e8b-zbx71s.jpeg"
+            alt="@shadcn"
+          />
           <AvatarFallback className="relative p-8 mix-blend-hard-light grayscale-[100%]">
             K
           </AvatarFallback>

@@ -18,6 +18,7 @@ import DEEPALI from "@/public/Deepali.png";
 import GITHUB from "@/public/Github.svg";
 import TASKVIEW from "@/public/Task-view.png";
 import CONTACT from "@/public/contact.svg";
+import OWNER from "@/public/OWNER-DEVELOPER.jpeg";
 import { cn } from "./utils";
 
 export const ICONS = {
@@ -41,6 +42,7 @@ export const ICONS = {
   GITHUB,
   TASKVIEW,
   CONTACT,
+  OWNER,
 };
 
 export function Cross({
