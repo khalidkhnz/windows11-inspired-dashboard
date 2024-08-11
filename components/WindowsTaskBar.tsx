@@ -19,13 +19,47 @@ import {
 } from "./ui/dropdown-menu";
 import { RiShutDownLine } from "react-icons/ri";
 import { IAppType } from "@/types/apps";
-import { IWindow } from "@/types/context";
 import { useAppContext } from "@/context/AppContext";
-import { ICONS } from "@/lib/icons";
+import { Cross, ICONS } from "@/lib/icons";
+import HoverOverWindow from "./CustomHoverOver";
+import { IWindow } from "@/types/context";
 
 type Props = {};
 
 const WindowsTaskBar = (props: Props) => {
+  const {
+    minimizedWindows,
+    setMinimizedWindows,
+    windows,
+    activeWindow,
+    setActiveWindow,
+  } = useAppContext();
+
+  // CODE TO ADD AND REMOVE MINIMIZED WINDOWS
+  let groupedWindowsByTitle: { [key: string]: IWindow[] } = {};
+
+  (windows as IWindow[]).map((win) => {
+    if (!groupedWindowsByTitle[win.title as string]) {
+      groupedWindowsByTitle[win.title] = [];
+    }
+    groupedWindowsByTitle[win.title].push(win);
+  });
+
+  function handleUnMinimize(title: string, winId: number) {
+    setActiveWindow(winId);
+    const id = `${title?.split(" ").join("__")}__${winId}__`;
+    setMinimizedWindows((prev: number[]) => [
+      ...prev.filter((id) => id !== winId),
+    ]);
+    gsap.to(`.${id}`, {
+      left: 0,
+      top: 0,
+      opacity: "1",
+      duration: 0.1,
+    });
+  }
+  // ENDS
+
   const [isStartOpen, setIsStartOpen] = useState(false);
 
   const startWindowRef = useRef();
@@ -81,15 +115,30 @@ const WindowsTaskBar = (props: Props) => {
             src={ICONS.SEARCH}
             alt="SEARCH"
           />
-          <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
+          {/* <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" /> */}
         </div>
+        <HoverOverWindow
+          className="bg-transparen t h-fit w-fit border-none p-0"
+          content={<MinimizedWindowsCollection />}
+        >
+          <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
+            <Image
+              className="aspect-square h-8 w-8 active:scale-90"
+              src={ICONS.TASKVIEW}
+              alt="TaskView"
+            />
+            {minimizedWindows?.length > 0 && (
+              <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
+            )}
+          </div>
+        </HoverOverWindow>
         <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
           <Image
             className="aspect-square h-8 w-8 active:scale-90"
             src={ICONS.EXPLORER}
             alt="FOLDER"
           />
-          <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
+          {/* <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" /> */}
         </div>
         <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
           <Image
@@ -97,8 +146,50 @@ const WindowsTaskBar = (props: Props) => {
             src={ICONS.SETTINGS}
             alt="SETTINGS"
           />
-          <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" />
+          {/* <span className="absolute bottom-0 h-[3px] w-[6px] rounded-2xl bg-gray-400" /> */}
         </div>
+
+        {Object.keys(groupedWindowsByTitle)?.map(
+          (title: string, index: number) => {
+            if (index > 10) return <></>;
+            return (
+              <HoverOverWindow
+                key={groupedWindowsByTitle[title][0]?.id}
+                className="bg-transparen t h-fit w-fit border-none p-0"
+                content={
+                  <MinimizedWindowsCollection
+                    propWindows={groupedWindowsByTitle[title]}
+                  />
+                }
+              >
+                <div
+                  key={groupedWindowsByTitle[title][0]?.id}
+                  onClick={() =>
+                    handleUnMinimize(title, groupedWindowsByTitle[title][0]?.id)
+                  }
+                  className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10"
+                >
+                  <Image
+                    className="aspect-square h-9 w-9 active:scale-90"
+                    src={groupedWindowsByTitle[title][0]?.icon}
+                    alt={title}
+                  />
+
+                  <span
+                    className={cn(
+                      "absolute bottom-0 h-[2.8px] w-[8px] rounded-3xl bg-gray-400",
+                      {
+                        "bg-pink-400": groupedWindowsByTitle[title]
+                          .map((win) => win.id)
+                          .includes(activeWindow as number),
+                      },
+                    )}
+                  />
+                </div>
+              </HoverOverWindow>
+            );
+          },
+        )}
 
         <TaskbarRight />
         <StartWindow startWindowRef={startWindowRef} />
@@ -106,6 +197,73 @@ const WindowsTaskBar = (props: Props) => {
     </>
   );
 };
+
+function MinimizedWindowsCollection({
+  propWindows,
+}: {
+  propWindows?: IWindow[];
+}) {
+  const {
+    minimizedWindows,
+    setMinimizedWindows,
+    windows,
+    setWindows,
+    activeWindow,
+    setActiveWindow,
+  } = useAppContext();
+
+  // const windowsToMap = (windows as IWindow[])?.filter((win) =>
+  //   minimizedWindows.includes(win.id),
+  // );
+
+  const windowsToMap = windows as IWindow[];
+
+  function handleUnMinimize(title: string, winId: number) {
+    setActiveWindow(winId);
+    const id = `${title?.split(" ").join("__")}__${winId}__`;
+    setMinimizedWindows((prev: number[]) => [
+      ...prev.filter((id) => id !== winId),
+    ]);
+    gsap.to(`.${id}`, {
+      left: 0,
+      top: 0,
+      opacity: "1",
+      duration: 0.1,
+    });
+  }
+
+  function handleClose(win: IWindow) {
+    setWindows((prev: IWindow[]) => prev.filter((itm, i) => itm.id !== win.id));
+  }
+
+  if (!(windowsToMap.length > 0) && !propWindows) return;
+
+  return (
+    <div className="flex w-[270px] flex-col items-start justify-end gap-1 rounded-md bg-neutral-800/70 p-2 text-xs text-white backdrop-blur-sm">
+      {(propWindows ? propWindows : windowsToMap)?.map((win, index) => (
+        <div
+          onClick={() => handleUnMinimize(win.title, win.id)}
+          className={cn(
+            "relative flex w-full cursor-pointer items-center justify-start gap-2 rounded-md hover:bg-neutral-100/20 hover:backdrop-blur-lg",
+            {
+              "bg-pink-600/60 hover:bg-pink-700/60": win.id === activeWindow,
+            },
+          )}
+          key={win?.id}
+        >
+          <div className="flex h-10 w-10 items-center justify-center p-2">
+            <Image alt={win?.title} src={win?.icon} />
+          </div>
+          <span>{win?.title}</span>
+          <Cross
+            onClick={() => handleClose(win)}
+            className="absolute right-2 aspect-square h-7 w-7 rounded-md p-1 text-gray-300 hover:bg-red-500/70"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function RightSidebar({ rightSidebarRef, ...props }: { rightSidebarRef: any }) {
   return (

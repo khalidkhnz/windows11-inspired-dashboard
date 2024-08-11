@@ -14,10 +14,17 @@ import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import { IWindow } from "@/types/context";
 import useScreenSize from "@/hooks/useScreenSizes";
+import { Cross, Maximize, Minimize } from "@/lib/icons";
 
 export default function Page() {
-  const { windows, setWindows, activeWindow, setActiveWindow, apps } =
-    useAppContext();
+  const {
+    windows,
+    setWindows,
+    activeWindow,
+    setActiveWindow,
+    apps,
+    setMinimizedWindows,
+  } = useAppContext();
 
   const { height, width } = useWindowDimensionHook();
   const [grid, setGrid] = useState({
@@ -98,6 +105,9 @@ export default function Page() {
               prev.filter((itm, i) => itm.id !== win.id),
             )
           }
+          onMinimize={() =>
+            setMinimizedWindows((prev: number[]) => [...prev, win.id])
+          }
           title={win.title}
           content={win.content}
         />
@@ -116,6 +126,7 @@ function WindowModal({
   maximize,
   activeWindow,
   setActiveWindow,
+  onMinimize,
 }: {
   content?: any;
   title?: string;
@@ -126,6 +137,7 @@ function WindowModal({
   activeWindow?: boolean;
   onClose?: Function;
   setActiveWindow?: Function;
+  onMinimize?: Function;
 }) {
   const id = `${title?.split(" ").join("__")}__${idx}__`;
 
@@ -196,14 +208,31 @@ function WindowModal({
   }, [dragging]);
 
   function handleMinimize() {
-    gsap.to(`.${id}`, {
-      left: lg ? "calc(50% - 400px)" : "calc(50% - 200px)",
-      top: "100%",
-      width: lg ? "800px" : "400px",
-      height: lg ? "600px" : "600px",
-      duration: 0.1,
-      ease: "power4.inOut",
-    });
+    gsap
+      .to(`.${id}`, {
+        left: lg ? "calc(50% - 400px)" : "calc(50% - 200px)",
+        top: "100%",
+        width: lg ? "800px" : "400px",
+        height: lg ? "600px" : "600px",
+        duration: 0.1,
+        opacity: "0",
+        ease: "power4.inOut",
+      })
+      .then(() => {
+        setPosition({
+          left: 0,
+          top: 0,
+        });
+        gsap.to(`.${id}`, {
+          left: lg ? "calc(50% - 400px)" : "calc(50% - 200px)",
+          top: "100%",
+          width: lg ? "800px" : "400px",
+          height: lg ? "600px" : "600px",
+          duration: 0.1,
+          ease: "power4.inOut",
+        });
+      });
+    onMinimize && onMinimize();
   }
 
   function handleMaximize() {
@@ -302,65 +331,5 @@ function WindowModal({
         {content}
       </div>
     </div>
-  );
-}
-
-function Cross({ className, ...props }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className={cn(className)}
-      // class="lucide lucide-x"
-      {...props}
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
-function Maximize({ className, ...props }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className={cn(className)}
-      {...props}
-    >
-      <rect width="18" height="18" x="3" y="3" rx="2" />
-    </svg>
-  );
-}
-function Minimize({ className, ...props }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className={cn(className)}
-      {...props}
-    >
-      <path d="M5 12h14" />
-    </svg>
   );
 }

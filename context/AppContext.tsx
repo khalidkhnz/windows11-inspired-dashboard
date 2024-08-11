@@ -15,6 +15,7 @@ const AppContext = createContext<IAppContext | null>(null);
 export function AppContextProvider({ children }: IAppContextProviderProps) {
   const [windows, setWindows] = useState<IWindow[]>([]);
   const [activeWindow, setActiveWindow] = useState<null | number>(null);
+  const [minimizedWindows, setMinimizedWindows] = useState<number[]>([]);
 
   const router = useRouter();
 
@@ -37,6 +38,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
               id: id,
               title: "This PC",
               content: "This PC",
+              icon: ICONS.THISPC,
             },
           ];
         });
@@ -68,6 +70,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
               id: id,
               title: "Resume",
               content: <div className="h-full w-full"></div>,
+              icon: ICONS.PDFICON,
             },
           ];
         });
@@ -96,6 +99,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
                   ></iframe>
                 </div>
               ),
+              icon: ICONS.PORTFOLIO,
             },
           ];
         });
@@ -116,6 +120,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "Portfolio v2",
+              icon: ICONS.PORTFOLIO,
               content: (
                 <div className="h-full w-full">
                   <iframe
@@ -144,6 +149,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "SportJacks",
+              icon: ICONS.SPORTJACKS,
               content: (
                 <div className="h-full w-full">
                   <iframe
@@ -172,6 +178,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "Twitter Bot",
+              icon: ICONS.X,
               content: (
                 <div className="h-full w-full">
                   <iframe
@@ -200,6 +207,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "Hotel Deepali Portfolio",
+              icon: ICONS.DEEPALI,
               content: (
                 <div className="h-full w-full">
                   <iframe
@@ -243,6 +251,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
               id: id,
               title: "NEW WINDOW",
               content: "This PC",
+              icon: ICONS.THISPC,
             },
           ];
         });
@@ -273,6 +282,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "Resume",
+              icon: ICONS.PDFICON,
               content: <div className="h-full w-full"></div>,
             },
           ];
@@ -294,6 +304,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "Portfolio v2",
+              icon: ICONS.PORTFOLIO,
               content: (
                 <div className="h-full w-full">
                   <iframe
@@ -322,6 +333,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "Portfolio v2",
+              icon: ICONS.PORTFOLIO,
               content: (
                 <div className="h-full w-full">
                   <iframe
@@ -350,6 +362,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "SportJacks",
+              icon: ICONS.SPORTJACKS,
               content: (
                 <div className="h-full w-full">
                   <iframe
@@ -387,6 +400,8 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
         activeWindow,
         setActiveWindow,
         apps,
+        minimizedWindows,
+        setMinimizedWindows,
       }}
     >
       {children}

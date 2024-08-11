@@ -7,6 +7,8 @@ export type IAppContext = {
   setWindows: Dispatch<SetStateAction<IWindow[]>>;
   activeWindow: number | null;
   setActiveWindow: Dispatch<SetStateAction<number | null>>;
+  minimizedWindows: number[];
+  setMinimizedWindows: Dispatch<SetStateAction<number[]>>;
   apps: {
     startApps: IAppType[];
     recommandedApps: IAppType[];
@@ -18,4 +20,5 @@ export interface IWindow {
   title: string;
   id: number;
   content?: any;
+  icon?: any;
 }
