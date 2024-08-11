@@ -14,7 +14,6 @@ import { googleAuthAction, signoutAction } from "@/actions/googleAuth.action";
 import useSwr, { mutate } from "swr";
 import { getSessionAction } from "@/actions/getSession.action";
 import { ISession } from "@/types/session";
-import { ICONS } from "@/lib/icons";
 
 type Props = {};
 

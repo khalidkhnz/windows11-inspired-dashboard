@@ -15,9 +15,20 @@ import { useAppContext } from "@/context/AppContext";
 import { IWindow } from "@/types/context";
 import useScreenSize from "@/hooks/useScreenSizes";
 import { Cross, Maximize, Minimize } from "@/lib/icons";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+
+// export async function generateMetadata() {
+//   return {
+//     title: "Main Space",
+//     description: "",
+//     openGraph: {
+//       type: "Main Space",
+//       url: "https://khalidkhnz.vercel.app",
+//       title: "Main Space | Khalidkhnz",
+//       description: "",
+//       images: [],
+//     },
+//   };
+// }
 
 export default function Page() {
   const {
