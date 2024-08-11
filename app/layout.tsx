@@ -28,7 +28,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            <Toaster />
+            <Toaster theme="dark" />
           </ThemeProvider>
         </body>
       </AppContextProvider>
