@@ -1,6 +1,7 @@
 "use client";
 
 import ContactApp from "@/components/ContactApp";
+import KhalidDocuments from "@/components/KhalidDocuments";
 import { ICONS } from "@/lib/icons";
 import { IAppType } from "@/types/apps";
 import {
@@ -24,6 +25,22 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
     {
       title: "Khalid",
       ICON: ICONS.USERFOLER,
+      onClick: () => {
+        setWindows((prev: IWindow[]) => {
+          const id =
+            prev.length > 0 ? prev[prev.length - 1].id + 1 : Date.now();
+          setActiveWindow(id);
+          return [
+            ...prev,
+            {
+              id: id,
+              title: "Khalid Documents",
+              content: <KhalidDocuments />,
+              icon: ICONS.THISPC,
+            },
+          ];
+        });
+      },
     },
     {
       title: "This PC",
@@ -70,7 +87,11 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             {
               id: id,
               title: "Resume",
-              content: <div className="h-full w-full"></div>,
+              content: (
+                <div className="h-full w-full">
+                  <iframe className="h-full w-full" src="/resume.pdf"></iframe>
+                </div>
+              ),
               icon: ICONS.PDFICON,
             },
           ];
@@ -259,6 +280,22 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
     {
       title: "Khalid",
       ICON: ICONS.USERFOLER,
+      onClick: () => {
+        setWindows((prev: IWindow[]) => {
+          const id =
+            prev.length > 0 ? prev[prev.length - 1].id + 1 : Date.now();
+          setActiveWindow(id);
+          return [
+            ...prev,
+            {
+              id: id,
+              title: "Khalid Documents",
+              content: <KhalidDocuments />,
+              icon: ICONS.THISPC,
+            },
+          ];
+        });
+      },
     },
     {
       title: "This PC",
@@ -272,7 +309,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
             ...prev,
             {
               id: id,
-              title: "NEW WINDOW",
+              title: "Resume",
               content: "This PC",
               icon: ICONS.THISPC,
             },
@@ -306,7 +343,11 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
               id: id,
               title: "Resume",
               icon: ICONS.PDFICON,
-              content: <div className="h-full w-full"></div>,
+              content: (
+                <div className="h-full w-full">
+                  <iframe className="h-full w-full" src="/resume.pdf"></iframe>
+                </div>
+              ),
             },
           ];
         });
@@ -406,6 +447,26 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
       title: "Resume.pdf",
       ICON: ICONS.PDFICON,
       customCSS: "p-2 object-contain",
+      onClick: () => {
+        setWindows((prev: IWindow[]) => {
+          const id =
+            prev.length > 0 ? prev[prev.length - 1].id + 1 : Date.now();
+          setActiveWindow(id);
+          return [
+            ...prev,
+            {
+              id: id,
+              title: "Resume",
+              content: (
+                <div className="h-full w-full">
+                  <iframe className="h-full w-full" src="/resume.pdf"></iframe>
+                </div>
+              ),
+              icon: ICONS.THISPC,
+            },
+          ];
+        });
+      },
     },
   ];
 
