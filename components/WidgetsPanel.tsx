@@ -85,7 +85,7 @@ export default function WidgetsPanel() {
       <div className="rounded-xl bg-neutral-800/70 p-4 backdrop-blur-md">
         <div className="mb-3 flex items-center gap-2">
           <FiCalendar className="h-5 w-5 text-blue-400" />
-          <h3 className="font-semibold">Today's Schedule</h3>
+          <h3 className="font-semibold">Today&apos;s Schedule</h3>
         </div>
         <div className="mb-2 text-sm text-gray-400">
           {format(time, "EEEE, MMMM d, yyyy")}

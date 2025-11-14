@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import useWindowDimensionHook from "@/hooks/useWindowDimensionHook";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
@@ -217,7 +217,7 @@ function WindowModal({
     });
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (dragging) {
       const newLeft = e.clientX - offset.x;
       const newTop = e.clientY - offset.y;
@@ -233,13 +233,13 @@ function WindowModal({
         duration: 0.1,
       });
     }
-  };
+  }, [dragging, offset.x, offset.y, id]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setDragging(false);
     setIsResizing(false);
     setResizeDirection(null);
-  };
+  }, []);
 
   const handleResizeMouseDown = (e: React.MouseEvent, direction: string) => {
     if (isMaximized) return;
@@ -252,7 +252,7 @@ function WindowModal({
     });
   };
 
-  const handleResizeMouseMove = (e: MouseEvent) => {
+  const handleResizeMouseMove = useCallback((e: MouseEvent) => {
     if (!isResizing || !resizeDirection) return;
 
     const deltaX = e.clientX - offset.x;
@@ -289,7 +289,7 @@ function WindowModal({
       height: `${newHeight}px`,
       duration: 0,
     });
-  };
+  }, [isResizing, resizeDirection, windowSize, position, offset, id]);
 
   useEffect(() => {
     if (dragging) {
@@ -304,7 +304,7 @@ function WindowModal({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [dragging]);
+  }, [dragging, handleMouseMove, handleMouseUp]);
 
   useEffect(() => {
     if (isResizing) {
@@ -319,7 +319,7 @@ function WindowModal({
       window.removeEventListener("mousemove", handleResizeMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizing, resizeDirection, windowSize, position, offset]);
+  }, [isResizing, handleResizeMouseMove, handleMouseUp]);
 
   function handleMinimize() {
     gsap
