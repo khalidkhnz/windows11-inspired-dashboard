@@ -8,13 +8,17 @@ import {
 } from "@/components/ui/tooltip";
 import useWindowDimensionHook from "@/hooks/useWindowDimensionHook";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import { IWindow } from "@/types/context";
 import useScreenSize from "@/hooks/useScreenSizes";
 import { Cross, Maximize, Minimize } from "@/lib/icons";
+import DesktopContextMenu from "@/components/DesktopContextMenu";
+import SnapLayouts from "@/components/SnapLayouts";
+import ResizeHandle from "@/components/ResizeHandle";
+import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 
 // export async function generateMetadata() {
 //   return {
@@ -45,6 +49,7 @@ export default function Page() {
     numberOfColumns: 0,
     numberOfRows: 0,
   });
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
   const blockSize = 120;
 
@@ -57,8 +62,18 @@ export default function Page() {
     });
   }, [height, width]);
 
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY });
+  };
+
   return (
-    <section className="relative flex h-screen w-full justify-center pt-4">
+    <section 
+      className="relative flex h-screen w-full justify-center pt-4"
+      onContextMenu={handleContextMenu}
+      onClick={() => setContextMenu(null)}
+    >
+      <KeyboardShortcuts />
       <TooltipProvider>
         <div
           style={{
@@ -127,6 +142,14 @@ export default function Page() {
           content={win.content}
         />
       ))}
+
+      {contextMenu && (
+        <DesktopContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onClose={() => setContextMenu(null)}
+        />
+      )}
     </section>
   );
 }
@@ -167,6 +190,13 @@ function WindowModal({
     left: initialX || 0,
   });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [showSnapLayouts, setShowSnapLayouts] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizeDirection, setResizeDirection] = useState<string | null>(null);
+  const [windowSize, setWindowSize] = useState({
+    width: lg ? 800 : 400,
+    height: 600,
+  });
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isMaximized) {
@@ -187,7 +217,7 @@ function WindowModal({
     });
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (dragging) {
       const newLeft = e.clientX - offset.x;
       const newTop = e.clientY - offset.y;
@@ -203,11 +233,63 @@ function WindowModal({
         duration: 0.1,
       });
     }
+  }, [dragging, offset.x, offset.y, id]);
+
+  const handleMouseUp = useCallback(() => {
+    setDragging(false);
+    setIsResizing(false);
+    setResizeDirection(null);
+  }, []);
+
+  const handleResizeMouseDown = (e: React.MouseEvent, direction: string) => {
+    if (isMaximized) return;
+    e.stopPropagation();
+    setIsResizing(true);
+    setResizeDirection(direction);
+    setOffset({
+      x: e.clientX,
+      y: e.clientY,
+    });
   };
 
-  const handleMouseUp = () => {
-    setDragging(false);
-  };
+  const handleResizeMouseMove = useCallback((e: MouseEvent) => {
+    if (!isResizing || !resizeDirection) return;
+
+    const deltaX = e.clientX - offset.x;
+    const deltaY = e.clientY - offset.y;
+
+    let newWidth = windowSize.width;
+    let newHeight = windowSize.height;
+    let newLeft = position.left;
+    let newTop = position.top;
+
+    if (resizeDirection.includes("e")) {
+      newWidth = Math.max(400, windowSize.width + deltaX);
+    }
+    if (resizeDirection.includes("w")) {
+      newWidth = Math.max(400, windowSize.width - deltaX);
+      newLeft = position.left + deltaX;
+    }
+    if (resizeDirection.includes("s")) {
+      newHeight = Math.max(300, windowSize.height + deltaY);
+    }
+    if (resizeDirection.includes("n")) {
+      newHeight = Math.max(300, windowSize.height - deltaY);
+      newTop = position.top + deltaY;
+    }
+
+    setWindowSize({ width: newWidth, height: newHeight });
+    setPosition({ left: newLeft, top: newTop });
+    setOffset({ x: e.clientX, y: e.clientY });
+
+    gsap.to(`.${id}`, {
+      left: newLeft,
+      top: newTop,
+      width: `${newWidth}px`,
+      height: `${newHeight}px`,
+      duration: 0,
+    });
+  }, [isResizing, resizeDirection, windowSize, position, offset, id]);
 
   useEffect(() => {
     if (dragging) {
@@ -222,7 +304,22 @@ function WindowModal({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [dragging]);
+  }, [dragging, handleMouseMove, handleMouseUp]);
+
+  useEffect(() => {
+    if (isResizing) {
+      window.addEventListener("mousemove", handleResizeMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    } else {
+      window.removeEventListener("mousemove", handleResizeMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleResizeMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizing, handleResizeMouseMove, handleMouseUp]);
 
   function handleMinimize() {
     gsap
@@ -250,6 +347,70 @@ function WindowModal({
         });
       });
     onMinimize && onMinimize();
+  }
+
+  function handleSnapLayout(layout: string) {
+    const { innerWidth, innerHeight } = window;
+    const taskbarHeight = 55;
+    
+    setIsMaximized(false);
+    
+    switch (layout) {
+      case "left":
+        gsap.to(`.${id}`, {
+          left: "0",
+          top: "0",
+          width: `${innerWidth / 2}px`,
+          height: `${innerHeight - taskbarHeight}px`,
+          duration: 0.2,
+        });
+        break;
+      case "right":
+        gsap.to(`.${id}`, {
+          left: `${innerWidth / 2}px`,
+          top: "0",
+          width: `${innerWidth / 2}px`,
+          height: `${innerHeight - taskbarHeight}px`,
+          duration: 0.2,
+        });
+        break;
+      case "top-left":
+        gsap.to(`.${id}`, {
+          left: "0",
+          top: "0",
+          width: `${innerWidth / 2}px`,
+          height: `${(innerHeight - taskbarHeight) / 2}px`,
+          duration: 0.2,
+        });
+        break;
+      case "top-right":
+        gsap.to(`.${id}`, {
+          left: `${innerWidth / 2}px`,
+          top: "0",
+          width: `${innerWidth / 2}px`,
+          height: `${(innerHeight - taskbarHeight) / 2}px`,
+          duration: 0.2,
+        });
+        break;
+      case "bottom-left":
+        gsap.to(`.${id}`, {
+          left: "0",
+          top: `${(innerHeight - taskbarHeight) / 2}px`,
+          width: `${innerWidth / 2}px`,
+          height: `${(innerHeight - taskbarHeight) / 2}px`,
+          duration: 0.2,
+        });
+        break;
+      case "bottom-right":
+        gsap.to(`.${id}`, {
+          left: `${innerWidth / 2}px`,
+          top: `${(innerHeight - taskbarHeight) / 2}px`,
+          width: `${innerWidth / 2}px`,
+          height: `${(innerHeight - taskbarHeight) / 2}px`,
+          duration: 0.2,
+        });
+        break;
+    }
   }
 
   function handleMaximize() {
@@ -298,12 +459,13 @@ function WindowModal({
         // height: "600px",
       }}
       className={cn(
-        "absolute right-8 top-8 flex w-fit flex-col overflow-hidden rounded-md border-[1px] border-gray-200/10 bg-gray-900/95 text-white backdrop-blur-md",
+        "absolute right-8 top-8 flex w-fit flex-col overflow-hidden border-[1px] border-gray-200/10 bg-gray-900/95 text-white shadow-2xl backdrop-blur-md",
         id,
         {
-          "border-blue-800": activeWindow && !isMaximized,
+          "border-blue-800 shadow-blue-500/20": activeWindow && !isMaximized,
           "z-10 bg-gray-900/80 backdrop-blur-md": activeWindow,
           "rounded-none": isMaximized,
+          "rounded-lg": !isMaximized,
           "h-[600px] w-[380px] sm:w-[400px] lg:h-[600px] lg:w-[800px]": true,
         },
       )}
@@ -313,6 +475,7 @@ function WindowModal({
           "flex h-[40px] w-full cursor-pointer items-center justify-center border-gray-500/50 bg-neutral-800/95",
           {
             "bg-blue-800": activeWindow,
+            "rounded-t-lg": !isMaximized,
           },
         )}
       >
@@ -328,15 +491,26 @@ function WindowModal({
         >
           {title?.toLowerCase()}
         </h1>
-        <div className="flex w-fit items-center justify-center text-white">
+        <div className="relative flex w-fit items-center justify-center text-white">
           <Minimize //@ts-ignore
             onClick={handleMinimize}
-            className="min-h-[40px] min-w-[45px] p-1 px-[14px] hover:bg-red-500"
+            className="min-h-[40px] min-w-[45px] p-1 px-[14px] hover:bg-white/10"
           />
-          <Maximize //@ts-ignore
-            onClick={handleMaximize}
-            className="min-h-[40px] min-w-[45px] p-[6px] px-[16px] hover:bg-red-500"
-          />
+          <div
+            className="relative"
+            onMouseEnter={() => setShowSnapLayouts(true)}
+          >
+            <Maximize //@ts-ignore
+              onClick={handleMaximize}
+              className="min-h-[40px] min-w-[45px] p-[6px] px-[16px] hover:bg-white/10"
+            />
+            {showSnapLayouts && (
+              <SnapLayouts
+                onSelectLayout={handleSnapLayout}
+                onClose={() => setShowSnapLayouts(false)}
+              />
+            )}
+          </div>
           <Cross
             //@ts-ignore
             onClick={onClose}
@@ -351,6 +525,20 @@ function WindowModal({
       >
         {content}
       </div>
+
+      {/* Resize Handles */}
+      {!isMaximized && (
+        <>
+          <ResizeHandle direction="n" onMouseDown={handleResizeMouseDown} />
+          <ResizeHandle direction="s" onMouseDown={handleResizeMouseDown} />
+          <ResizeHandle direction="e" onMouseDown={handleResizeMouseDown} />
+          <ResizeHandle direction="w" onMouseDown={handleResizeMouseDown} />
+          <ResizeHandle direction="ne" onMouseDown={handleResizeMouseDown} />
+          <ResizeHandle direction="nw" onMouseDown={handleResizeMouseDown} />
+          <ResizeHandle direction="se" onMouseDown={handleResizeMouseDown} />
+          <ResizeHandle direction="sw" onMouseDown={handleResizeMouseDown} />
+        </>
+      )}
     </div>
   );
 }
