@@ -23,6 +23,9 @@ import { useAppContext } from "@/context/AppContext";
 import { Cross, ICONS } from "@/lib/icons";
 import HoverOverWindow from "./CustomHoverOver";
 import { IWindow } from "@/types/context";
+import WidgetsPanel from "./WidgetsPanel";
+import QuickSettings from "./QuickSettings";
+import FileExplorer from "./FileExplorer";
 
 type Props = {};
 
@@ -31,6 +34,7 @@ const WindowsTaskBar = (props: Props) => {
     minimizedWindows,
     setMinimizedWindows,
     windows,
+    setWindows,
     activeWindow,
     setActiveWindow,
   } = useAppContext();
@@ -132,7 +136,24 @@ const WindowsTaskBar = (props: Props) => {
             )}
           </div>
         </HoverOverWindow>
-        <div className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10">
+        <div 
+          onClick={() => {
+            setWindows((prev: IWindow[]) => {
+              const id = prev.length > 0 ? prev[prev.length - 1].id + 1 : Date.now();
+              setActiveWindow(id);
+              return [
+                ...prev,
+                {
+                  id: id,
+                  title: "File Explorer",
+                  content: <FileExplorer />,
+                  icon: ICONS.EXPLORER,
+                },
+              ];
+            });
+          }}
+          className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-[4px] hover:bg-white/10"
+        >
           <Image
             className="aspect-square h-8 w-8 active:scale-90"
             src={ICONS.EXPLORER}
@@ -266,6 +287,8 @@ function MinimizedWindowsCollection({
 }
 
 function RightSidebar({ rightSidebarRef, ...props }: { rightSidebarRef: any }) {
+  const [activeTab, setActiveTab] = useState<"notifications" | "quick">("notifications");
+
   return (
     <div
       {...props}
@@ -273,9 +296,38 @@ function RightSidebar({ rightSidebarRef, ...props }: { rightSidebarRef: any }) {
       style={{
         transform: "translateX(calc(100%))",
       }}
-      className="__right__sidebar__ absolute bottom-[65px] right-0 z-40 h-[600px] w-[300px] rounded-lg bg-neutral-800/90 p-2 backdrop-blur-md"
+      className="__right__sidebar__ absolute bottom-[65px] right-0 z-40 flex h-[700px] w-[380px] flex-col overflow-hidden rounded-lg border border-gray-700/50 bg-neutral-800/95 shadow-2xl backdrop-blur-xl"
     >
-      right sidebar
+      {/* Tab Switcher */}
+      <div className="flex border-b border-gray-700/50 bg-neutral-900/50">
+        <button
+          onClick={() => setActiveTab("notifications")}
+          className={cn(
+            "flex-1 px-4 py-3 text-sm font-medium transition-colors",
+            activeTab === "notifications"
+              ? "border-b-2 border-blue-500 text-white"
+              : "text-gray-400 hover:text-gray-300",
+          )}
+        >
+          Widgets
+        </button>
+        <button
+          onClick={() => setActiveTab("quick")}
+          className={cn(
+            "flex-1 px-4 py-3 text-sm font-medium transition-colors",
+            activeTab === "quick"
+              ? "border-b-2 border-blue-500 text-white"
+              : "text-gray-400 hover:text-gray-300",
+          )}
+        >
+          Quick Settings
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-hidden">
+        {activeTab === "notifications" ? <WidgetsPanel /> : <QuickSettings />}
+      </div>
     </div>
   );
 }
