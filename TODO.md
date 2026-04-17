@@ -225,10 +225,11 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## Milestones
 
-- [ ] **M1 — Foundation**: ThemeContext + persistence + picker route wired in (no actual variants yet)
-- [ ] **M2 — Windows baseline polish**: existing UI cleaned up as the reference implementation
-- [ ] **M3 — macOS theme**: dock, traffic-light windows, Launchpad, Control Center, squircle icons
-- [ ] **M4 — Linux theme**: top panel + dash, GNOME CSD windows, Activities, Papirus icons
-- [ ] **M5 — Custom mixer**: per-component picker, live preview, settings-app editor
-- [ ] **M6 — App-level theming**: portfolio apps adopt theme tokens
-- [ ] **M7 — Polish**: motion, a11y, keyboard shortcuts, tests
+- [x] **M1 — Foundation**: ThemeContext + persistence + picker route wired in (no actual variants yet)
+- [x] **M2 — Windows baseline polish**: existing UI cleaned up as the reference implementation
+- [x] **M3 — macOS theme**: dock, traffic-light windows, Launchpad, Control Center, squircle icons
+- [x] **M4 — Linux theme**: top panel + dash, GNOME CSD windows, Activities, Papirus icons
+- [x] **M5 — Custom mixer**: per-component picker, live preview, settings-app editor
+- [x] **M6 — App-level theming**: portfolio apps adopt theme tokens
+- [~] **M7 — Polish**: motion, a11y, keyboard shortcuts, tests
+  - _Shortcuts + reduced-motion + build-on-commit done; focus trap, sound, dynamic imports, and Playwright screenshots deferred._
