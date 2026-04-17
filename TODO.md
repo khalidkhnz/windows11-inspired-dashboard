@@ -42,14 +42,14 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 2. Boot / lock screen (themed)
 
-- [ ] `LockScreen` becomes a switcher:
-  - [ ] **Windows 11 lock** — clock + date, blurred wallpaper, avatar + "Sign in"
-  - [ ] **macOS lock** — centered avatar, name, PIN dots, battery/wifi pill
-  - [ ] **Linux GDM lock** — top bar with clock, user pill, "Not listed?" link
-- [ ] Per-theme boot animation
-  - [ ] Windows: 4-dot spinner
-  - [ ] macOS: apple logo + thin progress bar
-  - [ ] Linux: distro logo + text console lines
+- [x] `LockScreen` becomes a switcher:
+  - [x] **Windows 11 lock** — clock + date, blurred wallpaper, avatar + "Sign in"
+  - [x] **macOS lock** — centered avatar, name, PIN dots, battery/wifi pill
+  - [x] **Linux GDM lock** — top bar with clock, user pill, "Not listed?" link
+- [x] Per-theme boot animation
+  - [x] Windows: 4-dot spinner
+  - [x] macOS: apple logo + thin progress bar
+  - [x] Linux: distro logo + text console lines
 
 ---
 
