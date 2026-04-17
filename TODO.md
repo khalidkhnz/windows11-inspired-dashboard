@@ -56,27 +56,31 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 ## 3. Desktop shell
 
 ### 3.1 Taskbar / Dock / Panel
-- [ ] `ThemedTaskbar` slot
-  - [ ] **Windows 11 taskbar** (current impl) — bottom center, pinned icons, start, search, tray
-  - [ ] **macOS dock** — bottom center, magnification on hover, separator, trash slot, menu bar on top
-  - [ ] **Linux (GNOME-style)** — top bar (Activities, clock, status) + optional bottom dash
-- [ ] Keep running-app indicators consistent in shape (dot / pill / underline per theme)
+
+- [x] `ThemedTaskbar` slot
+  - [x] **Windows 11 taskbar** (current impl) — bottom center, pinned icons, start, search, tray
+  - [x] **macOS dock** — bottom center, magnification on hover, separator, trash slot, menu bar on top
+  - [x] **Linux (GNOME-style)** — top bar (Activities, clock, status) + optional bottom dash
+- [x] Keep running-app indicators consistent in shape (dot / pill / underline per theme)
 
 ### 3.2 Menu bar (macOS only; hidden for others)
-- [ ] Top menu bar with: Apple logo, app name, File, Edit, View, Help
-- [ ] Control Center / Battery / Wi-Fi / Spotlight affordances on the right
+
+- [x] Top menu bar with: Apple logo, app name, File, Edit, View, Help
+- [x] Control Center / Battery / Wi-Fi / Spotlight affordances on the right
 
 ### 3.3 Wallpaper
-- [ ] Ship one default wallpaper per theme
-  - [ ] Windows: existing Bloom
-  - [ ] macOS: a Big-Sur-style gradient mountain
-  - [ ] Linux: Ubuntu warty-brown-ish or GNOME Adwaita pattern
-- [ ] Settings still lets the user override per session
+
+- [x] Ship one default wallpaper per theme
+  - [x] Windows: existing Bloom
+  - [x] macOS: a Big-Sur-style gradient mountain
+  - [x] Linux: Ubuntu warty-brown-ish or GNOME Adwaita pattern
+- [x] Settings still lets the user override per session
 
 ### 3.4 Desktop icon grid
-- [ ] **Windows**: small gradient tiles + label below (current)
-- [ ] **macOS**: no desktop icons by default (hide); optionally rounded squircle app icons
-- [ ] **Linux**: flat Papirus-style mono-line icons with a subtle label shadow
+
+- [x] **Windows**: small gradient tiles + label below (current)
+- [x] **macOS**: no desktop icons by default (hide); optionally rounded squircle app icons
+- [x] **Linux**: flat Papirus-style mono-line icons with a subtle label shadow
 
 ---
 

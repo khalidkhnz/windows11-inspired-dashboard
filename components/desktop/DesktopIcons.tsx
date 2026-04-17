@@ -3,10 +3,12 @@
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useOs } from "@/context/OsContext";
+import { useThemeChoice } from "@/context/ThemeContext";
 import { AppIcon } from "./AppIcon";
 
 export default function DesktopIcons() {
   const { apps, openApp } = useOs();
+  const theme = useThemeChoice("desktopIcons");
   const pinned = apps.filter((a) => a.pinnedOnDesktop);
 
   // Open About Me by default on first desktop mount.
@@ -16,6 +18,11 @@ export default function DesktopIcons() {
     bootstrapped.current = true;
     openApp("about");
   }, [openApp]);
+
+  // macOS: no desktop icons by default.
+  if (theme === "macos") return null;
+
+  const isLinux = theme === "linux";
 
   return (
     <ul
@@ -29,9 +36,20 @@ export default function DesktopIcons() {
           <button
             onDoubleClick={() => openApp(app.id)}
             onKeyDown={(e) => e.key === "Enter" && openApp(app.id)}
-            className="group flex h-[92px] w-20 flex-col items-center justify-start gap-1.5 rounded-md border border-transparent px-1 py-2 text-center text-[11px] leading-tight text-white outline-none transition-colors focus-visible:border-white/30 focus-visible:bg-white/15 hover:bg-white/10"
+            className={cn(
+              "group flex h-[92px] w-20 flex-col items-center justify-start gap-1.5 rounded-md border border-transparent px-1 py-2 text-center text-[11px] leading-tight text-white outline-none transition-colors",
+              "focus-visible:border-white/30 focus-visible:bg-white/15 hover:bg-white/10",
+            )}
           >
-            <AppIcon icon={app.icon} className="h-11 w-11" glyphClassName="h-5 w-5" />
+            {isLinux ? (
+              <LinuxAppIcon app={app} />
+            ) : (
+              <AppIcon
+                icon={app.icon}
+                className="h-11 w-11"
+                glyphClassName="h-5 w-5"
+              />
+            )}
             <span className="line-clamp-2 px-0.5 [text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">
               {app.title}
             </span>
@@ -39,5 +57,18 @@ export default function DesktopIcons() {
         </li>
       ))}
     </ul>
+  );
+}
+
+function LinuxAppIcon({
+  app,
+}: {
+  app: { icon: { glyph: React.ComponentType<{ className?: string }> } };
+}) {
+  const Glyph = app.icon.glyph;
+  return (
+    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-900 ring-1 ring-white/10">
+      <Glyph className="h-5 w-5 text-[#e95420]" />
+    </div>
   );
 }

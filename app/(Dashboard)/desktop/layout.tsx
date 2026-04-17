@@ -1,17 +1,18 @@
 import Wallpaper from "@/components/desktop/Wallpaper";
-import Taskbar from "@/components/desktop/Taskbar";
 import DesktopContextMenu from "@/components/desktop/DesktopContextMenu";
 import WindowsLayer from "@/components/desktop/WindowsLayer";
+import { ThemedShell } from "@/components/desktop/Shell";
+import { ShellFrame } from "@/components/desktop/Shell/ShellFrame";
 
 export default function DesktopLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="relative h-screen w-full overflow-hidden bg-black text-white">
       <Wallpaper />
       <DesktopContextMenu>
-        <section className="relative h-[calc(100vh-52px)] w-full">{children}</section>
+        <ShellFrame>{children}</ShellFrame>
       </DesktopContextMenu>
       <WindowsLayer />
-      <Taskbar />
+      <ThemedShell />
     </main>
   );
 }

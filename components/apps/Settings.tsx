@@ -63,12 +63,19 @@ export default function Settings() {
                       : "border-white/5 hover:border-white/20",
                   )}
                 >
-                  <Image
-                    src={w.src}
-                    alt={w.label}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                  />
+                  {w.src ? (
+                    <Image
+                      src={w.src}
+                      alt={w.label}
+                      fill
+                      className="object-cover transition-transform group-hover:scale-105"
+                    />
+                  ) : (
+                    <div
+                      className="absolute inset-0 transition-transform group-hover:scale-105"
+                      style={{ background: w.gradient }}
+                    />
+                  )}
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5 text-left text-[11px] text-white">
                     {w.label}
                   </div>
