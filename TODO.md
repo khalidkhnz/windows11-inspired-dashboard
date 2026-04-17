@@ -97,10 +97,10 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 5. Launcher / App menu
 
-- [ ] `ThemedLauncher`
-  - [ ] **Windows 11 Start** (current) — Pinned + Recommended, user pill
-  - [ ] **macOS Launchpad** — full-screen grid of icons, pagination dots, search bar top
-  - [ ] **Linux Activities** — top-half grid + bottom favorites dock + virtual desktops preview strip
+- [x] `ThemedLauncher`
+  - [x] **Windows 11 Start** (current) — Pinned + Recommended, user pill
+  - [x] **macOS Launchpad** — full-screen grid of icons, pagination dots, search bar top
+  - [x] **Linux Activities** — top-half grid + bottom favorites dock + virtual desktops preview strip
 
 ---
 
