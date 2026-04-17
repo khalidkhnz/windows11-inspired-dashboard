@@ -5,7 +5,7 @@ import { Download, ExternalLink } from "lucide-react";
 
 export default function ResumeViewer() {
   return (
-    <div className="flex h-full w-full flex-col bg-neutral-950 text-neutral-100">
+    <div className="flex h-full w-full flex-col text-neutral-100">
       <header className="flex items-center justify-between border-b border-white/5 bg-white/[0.02] px-4 py-2">
         <div className="flex items-baseline gap-3">
           <span className="text-sm font-medium">Resume.pdf</span>

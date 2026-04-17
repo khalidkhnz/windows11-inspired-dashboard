@@ -19,8 +19,8 @@ export default function Settings() {
   const { wallpaperId, setWallpaperId } = useWallpaper();
 
   return (
-    <div className="flex h-full w-full overflow-hidden bg-neutral-950 text-neutral-100">
-      <aside className="w-56 border-r border-white/5 bg-neutral-950/80 p-3">
+    <div className="flex h-full w-full overflow-hidden text-neutral-100">
+      <aside className="w-56 border-r border-white/[0.06] bg-white/[0.02] p-3">
         <p className="px-2 pb-2 pt-1 text-[11px] uppercase tracking-widest text-neutral-500">
           Settings
         </p>

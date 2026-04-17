@@ -129,7 +129,7 @@ export default function Terminal() {
 
   return (
     <div
-      className="flex h-full w-full flex-col bg-black font-mono text-[13px] text-emerald-300"
+      className="flex h-full w-full flex-col bg-black/70 font-mono text-[13px] text-emerald-300"
       onClick={() => inputRef.current?.focus()}
     >
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3">

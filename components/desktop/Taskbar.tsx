@@ -11,6 +11,7 @@ import { ICONS } from "@/lib/icons";
 import { StartMenu } from "./StartMenu";
 import { ClockPopover } from "./ClockPopover";
 import { ActionCenter } from "./ActionCenter";
+import { AppIcon } from "./AppIcon";
 import { useClock } from "@/hooks/useClock";
 
 export default function Taskbar() {
@@ -23,7 +24,6 @@ export default function Taskbar() {
   const pinned = apps.filter((a) => a.pinnedInTaskbar);
   const running = windows;
 
-  // Merge pinned + running, but only show "running" badge for those that actually have windows.
   const seen = new Set<string>();
   const taskbarApps = [
     ...pinned.map((a) => ({ app: a, instances: running.filter((w) => w.appId === a.id) })),
@@ -45,11 +45,13 @@ export default function Taskbar() {
     <>
       <footer
         className={cn(
-          "fixed inset-x-0 bottom-0 z-40 flex h-[52px] items-center justify-center border-t border-white/5",
-          "bg-neutral-950/70 backdrop-blur-xl",
+          "fixed inset-x-0 bottom-0 z-40 flex h-[52px] items-center justify-center",
+          // Acrylic glass panel
+          "border-t border-white/10 bg-neutral-950/40 backdrop-blur-2xl backdrop-saturate-150",
+          "before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-t before:from-white/[0.03] before:to-transparent",
         )}
       >
-        <div className="flex items-center gap-1">
+        <div className="relative flex items-center gap-1">
           <button
             aria-label="Start"
             onClick={() => {
@@ -59,7 +61,7 @@ export default function Taskbar() {
             }}
             className={cn(
               "relative flex h-10 w-10 items-center justify-center rounded-md transition-colors",
-              startOpen ? "bg-white/10" : "hover:bg-white/5",
+              startOpen ? "bg-white/15" : "hover:bg-white/10",
             )}
           >
             <Image src={ICONS.START} alt="" className="h-6 w-6" />
@@ -74,9 +76,9 @@ export default function Taskbar() {
               setActionOpen(false);
               setClockOpen(false);
             }}
-            className="flex h-10 w-10 items-center justify-center rounded-md text-neutral-300 transition-colors hover:bg-white/5"
+            className="flex h-10 w-10 items-center justify-center rounded-md text-neutral-200 transition-colors hover:bg-white/10"
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-4 w-4" />
           </button>
 
           {taskbarApps.map(({ app, instances }) => {
@@ -92,10 +94,10 @@ export default function Taskbar() {
                 title={app.title}
                 className={cn(
                   "relative flex h-10 w-10 items-center justify-center rounded-md transition-colors",
-                  isActive ? "bg-white/10" : "hover:bg-white/5",
+                  isActive ? "bg-white/15" : "hover:bg-white/10",
                 )}
               >
-                <Image src={app.icon} alt="" className={cn("h-6 w-6 object-contain", app.iconClassName)} />
+                <AppIcon icon={app.icon} className="h-6 w-6" glyphClassName="h-3.5 w-3.5" rounded="rounded-md" />
                 {hasWindow && (
                   <motion.span
                     layoutId={`indicator-${app.id}`}
@@ -118,8 +120,8 @@ export default function Taskbar() {
               setStartOpen(false);
             }}
             className={cn(
-              "flex h-10 items-center gap-2 rounded-md px-2 text-neutral-300 transition-colors hover:bg-white/5",
-              actionOpen && "bg-white/10",
+              "flex h-10 items-center gap-2 rounded-md px-2 text-neutral-200 transition-colors hover:bg-white/10",
+              actionOpen && "bg-white/15",
             )}
             aria-label="Quick settings"
           >
@@ -134,8 +136,8 @@ export default function Taskbar() {
               setStartOpen(false);
             }}
             className={cn(
-              "flex h-10 items-center rounded-md px-3 text-right text-[11px] leading-tight text-neutral-200 transition-colors hover:bg-white/5",
-              clockOpen && "bg-white/10",
+              "flex h-10 items-center rounded-md px-3 text-right text-[11px] leading-tight text-neutral-100 transition-colors hover:bg-white/10",
+              clockOpen && "bg-white/15",
             )}
             aria-label="Clock"
           >

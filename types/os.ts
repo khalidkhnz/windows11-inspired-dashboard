@@ -1,16 +1,12 @@
 import type { ComponentType } from "react";
-import type { StaticImageData } from "next/image";
-
-export type AppIcon = StaticImageData | string;
+import type { AppIconSpec } from "@/components/desktop/AppIcon";
 
 export type AppId = string;
 
 export type AppDefinition = {
   id: AppId;
   title: string;
-  icon: AppIcon;
-  /** CSS applied to the icon <Image> element (padding tweaks etc.) */
-  iconClassName?: string;
+  icon: AppIconSpec;
   /** In-app content. If absent, `action` is used. */
   Content?: ComponentType<{ windowId: number }>;
   /** External link / custom side-effect opened by the taskbar/desktop shortcut. */
@@ -33,7 +29,7 @@ export type WindowState = {
   id: number;
   appId: AppId;
   title: string;
-  icon: AppIcon;
+  icon: AppIconSpec;
   x: number;
   y: number;
   width: number;

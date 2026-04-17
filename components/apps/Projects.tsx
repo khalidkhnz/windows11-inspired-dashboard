@@ -10,8 +10,8 @@ export default function Projects() {
   const active = projects.find((p) => p.slug === activeSlug) ?? projects[0];
 
   return (
-    <div className="flex h-full w-full overflow-hidden bg-neutral-950 text-neutral-100">
-      <aside className="flex h-full w-56 flex-shrink-0 flex-col border-r border-white/5 bg-neutral-950/80">
+    <div className="flex h-full w-full overflow-hidden text-neutral-100">
+      <aside className="flex h-full w-56 flex-shrink-0 flex-col border-r border-white/[0.06] bg-white/[0.02]">
         <div className="px-4 pb-2 pt-4 text-xs uppercase tracking-widest text-neutral-500">
           Projects
         </div>

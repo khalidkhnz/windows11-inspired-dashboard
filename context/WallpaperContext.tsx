@@ -20,9 +20,11 @@ export type Wallpaper = {
 };
 
 export const WALLPAPERS: Wallpaper[] = [
-  { id: "bloom", label: "Windows Bloom", src: WALLPAPER_BLOOM },
   { id: "gojo", label: "Infinity", src: WALLPAPER_GOJO },
+  { id: "bloom", label: "Windows Bloom", src: WALLPAPER_BLOOM },
 ];
+
+export const DEFAULT_WALLPAPER_ID = "gojo";
 
 type WallpaperContextValue = {
   wallpaperId: string;
@@ -35,7 +37,7 @@ const WallpaperContext = createContext<WallpaperContextValue | null>(null);
 const STORAGE_KEY = "portfolio-wallpaper";
 
 export function WallpaperProvider({ children }: { children: React.ReactNode }) {
-  const [wallpaperId, setWallpaperIdState] = useState<string>(WALLPAPERS[0].id);
+  const [wallpaperId, setWallpaperIdState] = useState<string>(DEFAULT_WALLPAPER_ID);
 
   useEffect(() => {
     try {
@@ -58,7 +60,10 @@ export function WallpaperProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const wallpaper = useMemo(
-    () => WALLPAPERS.find((w) => w.id === wallpaperId) ?? WALLPAPERS[0],
+    () =>
+      WALLPAPERS.find((w) => w.id === wallpaperId) ??
+      WALLPAPERS.find((w) => w.id === DEFAULT_WALLPAPER_ID) ??
+      WALLPAPERS[0],
     [wallpaperId],
   );
 

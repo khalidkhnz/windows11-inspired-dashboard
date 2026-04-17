@@ -12,22 +12,44 @@ import { getApps } from "@/lib/apps";
 const OsContext = createContext<OsContextValue | null>(null);
 
 const DEFAULT_SIZE = { width: 900, height: 620 };
+const TASKBAR_HEIGHT = 52;
+const MIN_WIDTH = 380;
+const MIN_HEIGHT = 260;
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-function pickSpawnPosition(existing: WindowState[], size: { width: number; height: number }) {
+/**
+ * Fit the requested size into the viewport, leaving room for the taskbar
+ * and a small breathing margin. Ensures a freshly-opened window is never
+ * clipped by the bottom taskbar on small displays.
+ */
+function fitSize(size: { width: number; height: number }) {
+  if (typeof window === "undefined") return size;
+  const margin = 16;
+  const maxW = window.innerWidth - margin * 2;
+  const maxH = window.innerHeight - TASKBAR_HEIGHT - margin * 2;
+  return {
+    width: Math.max(MIN_WIDTH, Math.min(size.width, maxW)),
+    height: Math.max(MIN_HEIGHT, Math.min(size.height, maxH)),
+  };
+}
+
+function pickSpawnPosition(
+  existing: WindowState[],
+  size: { width: number; height: number },
+) {
   if (typeof window === "undefined") {
     return { x: 80, y: 60 };
   }
-  const margin = 24;
+  const margin = 16;
   const maxX = Math.max(margin, window.innerWidth - size.width - margin);
-  const maxY = Math.max(margin, window.innerHeight - size.height - 72 /* taskbar */);
-  const offset = (existing.length % 6) * 32;
+  const maxY = Math.max(margin, window.innerHeight - TASKBAR_HEIGHT - size.height - margin);
+  const offset = (existing.length % 6) * 28;
   return {
     x: clamp(80 + offset, margin, maxX),
-    y: clamp(60 + offset, margin, maxY),
+    y: clamp(48 + offset, margin, maxY),
   };
 }
 
@@ -76,7 +98,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
             );
           }
         }
-        const size = app.defaultSize ?? DEFAULT_SIZE;
+        const size = fitSize(app.defaultSize ?? DEFAULT_SIZE);
         const pos = pickSpawnPosition(prev, size);
         const id = idRef.current++;
         zRef.current += 1;

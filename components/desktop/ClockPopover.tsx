@@ -44,10 +44,11 @@ export function ClockPopover({
           transition={{ duration: 0.16 }}
           className={cn(
             "fixed bottom-[60px] right-3 z-50 w-[320px] overflow-hidden rounded-xl",
-            "border border-white/10 bg-neutral-950/90 text-neutral-100 shadow-2xl backdrop-blur-2xl",
+            "border border-white/[0.08] bg-neutral-950/55 text-neutral-100 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-3xl backdrop-saturate-150",
           )}
         >
-          <div className="border-b border-white/5 px-5 pb-4 pt-5">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent" />
+          <div className="relative border-b border-white/[0.06] px-5 pb-4 pt-5">
             <div className="text-4xl font-light tabular-nums">
               {format(now, "hh:mm")}
               <span className="ml-1 text-xl text-neutral-400">{format(now, "a")}</span>
@@ -57,7 +58,7 @@ export function ClockPopover({
             </div>
           </div>
 
-          <div className="px-5 py-4">
+          <div className="relative px-5 py-4">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-sm font-medium">{format(now, "MMMM yyyy")}</span>
             </div>

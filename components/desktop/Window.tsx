@@ -1,17 +1,19 @@
 "use client";
 
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Square, Copy, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useOs } from "@/context/OsContext";
 import type { AppDefinition, WindowState } from "@/types/os";
+import { AppIcon } from "./AppIcon";
 
-const TASKBAR_HEIGHT = 52;
+export const TASKBAR_HEIGHT = 52;
 const TITLEBAR_HEIGHT = 36;
 const MIN_WIDTH = 380;
 const MIN_HEIGHT = 260;
+/** Keep at least this many px of titlebar visible when a window is near an edge. */
+const EDGE_VISIBLE_PX = 80;
 
 type WindowProps = {
   win: WindowState;
@@ -19,8 +21,15 @@ type WindowProps = {
 };
 
 function WindowImpl({ win, app }: WindowProps) {
-  const { focusWindow, closeWindow, minimizeWindow, toggleMaximize, moveWindow, resizeWindow, activeWindowId } =
-    useOs();
+  const {
+    focusWindow,
+    closeWindow,
+    minimizeWindow,
+    toggleMaximize,
+    moveWindow,
+    resizeWindow,
+    activeWindowId,
+  } = useOs();
   const isActive = activeWindowId === win.id;
   const Content = app.Content;
 
@@ -50,12 +59,18 @@ function WindowImpl({ win, app }: WindowProps) {
     const handleMove = (e: MouseEvent) => {
       const x = e.clientX - drag.offsetX;
       const y = e.clientY - drag.offsetY;
-      const maxX = window.innerWidth - MIN_WIDTH / 2;
-      const maxY = window.innerHeight - TASKBAR_HEIGHT - TITLEBAR_HEIGHT;
+      const viewportH = window.innerHeight;
+      const viewportW = window.innerWidth;
+      // Allow windows to partly overflow left/right but never hide the titlebar behind
+      // the taskbar. Clamp so top <= (viewport - taskbar - titlebar).
+      const minX = EDGE_VISIBLE_PX - win.width;
+      const maxX = viewportW - EDGE_VISIBLE_PX;
+      const minY = 0;
+      const maxY = viewportH - TASKBAR_HEIGHT - TITLEBAR_HEIGHT;
       moveWindow(
         win.id,
-        Math.max(-(win.width - MIN_WIDTH / 2), Math.min(maxX, x)),
-        Math.max(0, Math.min(maxY, y)),
+        Math.max(minX, Math.min(maxX, x)),
+        Math.max(minY, Math.min(maxY, y)),
       );
     };
     const handleUp = () => setDrag(null);
@@ -88,6 +103,14 @@ function WindowImpl({ win, app }: WindowProps) {
       }
       width = Math.max(MIN_WIDTH, width);
       height = Math.max(MIN_HEIGHT, height);
+
+      // Don't let the bottom edge go past the top of the taskbar.
+      const viewportH = window.innerHeight;
+      const maxBottom = viewportH - TASKBAR_HEIGHT;
+      if (y + height > maxBottom) {
+        height = Math.max(MIN_HEIGHT, maxBottom - y);
+      }
+
       resizeWindow(win.id, width, height);
       moveWindow(win.id, x, y);
     };
@@ -129,14 +152,19 @@ function WindowImpl({ win, app }: WindowProps) {
           onMouseDown={() => focusWindow(win.id)}
           style={{ ...style, zIndex: win.zIndex }}
           className={cn(
-            "fixed flex flex-col overflow-hidden text-neutral-100 shadow-2xl",
-            win.maximized ? "rounded-none" : "rounded-lg",
-            "border border-white/10 bg-neutral-950/95 backdrop-blur-md",
-            isActive && "shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)]",
+            "fixed flex flex-col overflow-hidden text-neutral-100",
+            win.maximized ? "rounded-none" : "rounded-xl",
+            // Glass frame
+            "border border-white/[0.08] bg-neutral-950/60 backdrop-blur-2xl backdrop-saturate-150",
+            "shadow-[0_24px_80px_-12px_rgba(0,0,0,0.65)]",
+            isActive && "border-white/15 shadow-[0_30px_100px_-12px_rgba(0,0,0,0.8)]",
           )}
           role="dialog"
           aria-label={win.title}
         >
+          {/* Subtle inner highlight, acrylic */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent" />
+
           <TitleBar
             title={win.title}
             icon={win.icon}
@@ -149,7 +177,7 @@ function WindowImpl({ win, app }: WindowProps) {
             onClose={() => closeWindow(win.id)}
           />
 
-          <div className="relative flex-1 overflow-hidden bg-neutral-950">
+          <div className="relative flex-1 overflow-hidden">
             {Content && <Content windowId={win.id} />}
           </div>
 
@@ -200,8 +228,8 @@ function TitleBar({
   return (
     <div
       className={cn(
-        "flex h-9 items-center justify-between border-b border-white/5 bg-neutral-950/60 pl-3 pr-0 text-xs backdrop-blur-md",
-        active ? "bg-neutral-900/80" : "bg-neutral-950/60",
+        "relative flex h-9 items-center justify-between border-b border-white/[0.06] pl-3 pr-0 text-xs",
+        active ? "bg-white/[0.04]" : "bg-transparent",
       )}
     >
       <div
@@ -209,9 +237,7 @@ function TitleBar({
         onDoubleClick={onDoubleClick}
         className="flex h-full flex-1 cursor-grab items-center gap-2 select-none active:cursor-grabbing"
       >
-        <div className="relative h-4 w-4">
-          <Image src={icon} alt="" fill className="object-contain" />
-        </div>
+        <AppIcon icon={icon} className="h-4 w-4" glyphClassName="h-2.5 w-2.5" rounded="rounded-[4px]" />
         <span className="truncate text-[12px] text-neutral-200">{title}</span>
       </div>
       <div className="flex h-full items-stretch">

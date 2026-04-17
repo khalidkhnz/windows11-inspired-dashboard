@@ -51,10 +51,11 @@ export function ActionCenter({ open, onClose }: { open: boolean; onClose: () => 
           transition={{ duration: 0.16 }}
           className={cn(
             "fixed bottom-[60px] right-3 z-50 w-[360px] overflow-hidden rounded-xl",
-            "border border-white/10 bg-neutral-950/90 p-4 text-neutral-100 shadow-2xl backdrop-blur-2xl",
+            "border border-white/[0.08] bg-neutral-950/55 p-4 text-neutral-100 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-3xl backdrop-saturate-150",
           )}
         >
-          <div className="grid grid-cols-3 gap-2">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent" />
+          <div className="relative grid grid-cols-3 gap-2">
             {tiles.map((t) => {
               const Icon = t.icon;
               return (
@@ -79,7 +80,7 @@ export function ActionCenter({ open, onClose }: { open: boolean; onClose: () => 
             })}
           </div>
 
-          <div className="mt-4 space-y-3 rounded-lg border border-white/10 bg-white/[0.03] p-3">
+          <div className="relative mt-4 space-y-3 rounded-lg border border-white/10 bg-white/[0.03] p-3">
             <div className="flex items-center gap-3">
               <Volume2 className="h-4 w-4 text-neutral-400" />
               <Slider defaultValue={[70]} max={100} step={1} className="flex-1" />

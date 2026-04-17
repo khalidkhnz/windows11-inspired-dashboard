@@ -31,7 +31,7 @@ export default function ContactMe() {
   }
 
   return (
-    <div className="flex h-full w-full flex-col overflow-y-auto bg-neutral-950 text-neutral-100">
+    <div className="flex h-full w-full flex-col overflow-y-auto text-neutral-100">
       <header className="border-b border-white/5 bg-white/[0.02] px-8 py-6">
         <p className="text-xs uppercase tracking-widest text-neutral-400">Contact</p>
         <h1 className="mt-1 text-2xl font-semibold">Let&apos;s talk</h1>

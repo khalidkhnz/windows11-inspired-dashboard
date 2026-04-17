@@ -5,7 +5,7 @@ import { owner, experience, socials } from "@/lib/portfolio";
 
 export default function AboutMe() {
   return (
-    <div className="flex h-full w-full flex-col overflow-y-auto bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 text-neutral-100">
+    <div className="flex h-full w-full flex-col overflow-y-auto text-neutral-100">
       <div className="relative px-8 pb-6 pt-10">
         <div
           aria-hidden
