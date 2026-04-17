@@ -11,11 +11,11 @@ import { useClock } from "@/hooks/useClock";
  * Root route. Shows the theme picker on first visit, then the lock screen.
  */
 export default function Root() {
-  const { hydrated, firstRun } = useTheme();
+  const { hydrated } = useTheme();
   const [pickerDone, setPickerDone] = useState(false);
 
   if (!hydrated) return null;
-  if (firstRun && !pickerDone) {
+  if (!pickerDone) {
     return <ThemePicker onDone={() => setPickerDone(true)} />;
   }
   return <LockScreen />;

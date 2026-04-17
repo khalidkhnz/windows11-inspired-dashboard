@@ -6,7 +6,6 @@ import { OsProvider } from "@/context/OsContext";
 import { ShellUIProvider } from "@/context/ShellUIContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ThemeHtmlBridge } from "@/context/ThemeHtmlBridge";
-import { ThemeWallpaperBridge } from "@/context/ThemeWallpaperBridge";
 import { WallpaperProvider } from "@/context/WallpaperContext";
 import { Toaster } from "@/components/ui/sonner";
 import { owner } from "@/lib/portfolio";
@@ -121,7 +120,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <ThemeHtmlBridge />
           <WallpaperProvider>
-            <ThemeWallpaperBridge />
             <OsProvider>
               <ShellUIProvider>
                 {children}

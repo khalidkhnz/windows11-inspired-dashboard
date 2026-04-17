@@ -23,8 +23,8 @@ export type Wallpaper = {
 };
 
 export const WALLPAPERS: Wallpaper[] = [
-  { id: "gojo", label: "Infinity", src: WALLPAPER_GOJO },
   { id: "bloom", label: "Windows Bloom", src: WALLPAPER_BLOOM },
+  { id: "gojo", label: "Infinity", src: WALLPAPER_GOJO },
   {
     id: "big-sur",
     label: "Big Sur",
@@ -39,21 +39,13 @@ export const WALLPAPERS: Wallpaper[] = [
   },
 ];
 
-export const DEFAULT_WALLPAPER_ID = "gojo";
-
-/** Default wallpaper per theme — used when the user hasn't picked one. */
-export const DEFAULT_WALLPAPER_BY_THEME: Record<string, string> = {
-  windows: "bloom",
-  macos: "big-sur",
-  linux: "ubuntu-warty",
-};
+/** Shared default across every theme. */
+export const DEFAULT_WALLPAPER_ID = "bloom";
 
 type WallpaperContextValue = {
-  wallpaperId: string | null;
+  wallpaperId: string;
   setWallpaperId: (id: string) => void;
   wallpaper: Wallpaper;
-  /** Theme hint used to pick a default when no explicit wallpaper is saved. */
-  setThemeHint: (theme: string | null) => void;
 };
 
 const WallpaperContext = createContext<WallpaperContextValue | null>(null);
@@ -61,8 +53,7 @@ const WallpaperContext = createContext<WallpaperContextValue | null>(null);
 const STORAGE_KEY = "portfolio-wallpaper";
 
 export function WallpaperProvider({ children }: { children: React.ReactNode }) {
-  const [wallpaperId, setWallpaperIdState] = useState<string | null>(null);
-  const [themeHint, setThemeHint] = useState<string | null>(null);
+  const [wallpaperId, setWallpaperIdState] = useState<string>(DEFAULT_WALLPAPER_ID);
 
   useEffect(() => {
     try {
@@ -84,23 +75,16 @@ export function WallpaperProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const wallpaper = useMemo(() => {
-    if (wallpaperId) {
-      const hit = WALLPAPERS.find((w) => w.id === wallpaperId);
-      if (hit) return hit;
-    }
-    const themedId = themeHint ? DEFAULT_WALLPAPER_BY_THEME[themeHint] : null;
-    return (
-      (themedId && WALLPAPERS.find((w) => w.id === themedId)) ||
-      WALLPAPERS.find((w) => w.id === DEFAULT_WALLPAPER_ID) ||
-      WALLPAPERS[0]
-    );
-  }, [wallpaperId, themeHint]);
+  const wallpaper = useMemo(
+    () =>
+      WALLPAPERS.find((w) => w.id === wallpaperId) ??
+      WALLPAPERS.find((w) => w.id === DEFAULT_WALLPAPER_ID) ??
+      WALLPAPERS[0],
+    [wallpaperId],
+  );
 
   return (
-    <WallpaperContext.Provider
-      value={{ wallpaperId, setWallpaperId, wallpaper, setThemeHint }}
-    >
+    <WallpaperContext.Provider value={{ wallpaperId, setWallpaperId, wallpaper }}>
       {children}
     </WallpaperContext.Provider>
   );
