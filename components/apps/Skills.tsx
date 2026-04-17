@@ -1,8 +1,18 @@
 "use client";
 
 import { skills } from "@/lib/portfolio";
+import { useThemeChoice } from "@/context/ThemeContext";
+import { cn } from "@/lib/utils";
+
+const PROGRESS_CLASS_BY_THEME = {
+  windows: "bg-gradient-to-r from-sky-400 to-violet-400 rounded-full",
+  macos: "bg-gradient-to-r from-[#0a84ff] to-[#64d2ff] rounded-[3px]",
+  linux: "bg-[#e95420] rounded-none",
+} as const;
 
 export default function Skills() {
+  const theme = useThemeChoice("window");
+  const barClass = PROGRESS_CLASS_BY_THEME[theme];
   return (
     <div className="flex h-full w-full flex-col overflow-y-auto text-neutral-100">
       <header className="border-b border-white/5 bg-white/[0.02] px-8 py-6">
@@ -27,9 +37,14 @@ export default function Skills() {
                     <span className="text-neutral-200">{it.name}</span>
                     <span className="text-neutral-500">{it.level}%</span>
                   </div>
-                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-white/5">
+                  <div
+                    className={cn(
+                      "mt-1 h-1.5 overflow-hidden bg-white/5",
+                      theme === "linux" ? "rounded-none" : "rounded-full",
+                    )}
+                  >
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-blue-400 to-violet-400"
+                      className={cn("h-full", barClass)}
                       style={{ width: `${it.level}%` }}
                     />
                   </div>

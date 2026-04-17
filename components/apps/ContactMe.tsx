@@ -8,10 +8,27 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Mail, Send } from "lucide-react";
+import { useThemeChoice } from "@/context/ThemeContext";
+import { cn } from "@/lib/utils";
+
+const SEND_BUTTON_BY_THEME = {
+  windows: "bg-sky-500 hover:bg-sky-400",
+  macos: "bg-[#0a84ff] hover:bg-[#1a8fff] rounded-md",
+  linux: "bg-[#e95420] hover:bg-[#f06434] rounded-md",
+} as const;
+
+const INPUT_RING_BY_THEME = {
+  windows: "focus-visible:ring-sky-500/60",
+  macos: "focus-visible:ring-[#0a84ff]/60",
+  linux: "focus-visible:ring-[#e95420]/60",
+} as const;
 
 export default function ContactMe() {
   const [pending, startTransition] = useTransition();
   const [sent, setSent] = useState(false);
+  const theme = useThemeChoice("window");
+  const sendBtn = SEND_BUTTON_BY_THEME[theme];
+  const inputRing = INPUT_RING_BY_THEME[theme];
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,7 +68,7 @@ export default function ContactMe() {
                 id="contact-name"
                 name="name"
                 placeholder="Grace Hopper"
-                className="border-white/10 bg-white/[0.03] focus-visible:ring-blue-500/60"
+                className={cn("border-white/10 bg-white/[0.03]", inputRing)}
               />
             </div>
             <div className="grid gap-1.5">
@@ -64,7 +81,7 @@ export default function ContactMe() {
                 type="email"
                 required
                 placeholder="you@example.com"
-                className="border-white/10 bg-white/[0.03] focus-visible:ring-blue-500/60"
+                className={cn("border-white/10 bg-white/[0.03]", inputRing)}
               />
             </div>
             <div className="grid gap-1.5">
@@ -77,13 +94,13 @@ export default function ContactMe() {
                 required
                 rows={8}
                 placeholder="Tell me a bit about what you're working on…"
-                className="min-h-[180px] resize-none border-white/10 bg-white/[0.03] focus-visible:ring-blue-500/60"
+                className={cn("min-h-[180px] resize-none border-white/10 bg-white/[0.03]", inputRing)}
               />
             </div>
             <Button
               type="submit"
               disabled={pending}
-              className="mt-1 gap-2 bg-blue-500 hover:bg-blue-400"
+              className={cn("mt-1 gap-2 text-white", sendBtn)}
             >
               <Send className="h-4 w-4" />
               {pending ? "Sending…" : sent ? "Send another" : "Send message"}

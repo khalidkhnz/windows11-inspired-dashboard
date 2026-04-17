@@ -3,11 +3,34 @@
 import { useState } from "react";
 import { projects } from "@/lib/portfolio";
 import { ExternalLink, Github, Sparkles } from "lucide-react";
+import { useThemeChoice } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
+
+const ACTIVE_ROW_BY_THEME = {
+  windows: "bg-white/10 text-white",
+  macos: "bg-[#0a84ff]/80 text-white",
+  linux: "bg-[#e95420] text-white",
+} as const;
+
+const ACCENT_BY_THEME = {
+  windows: "bg-sky-500/90 hover:bg-sky-500",
+  macos: "bg-[#0a84ff] hover:bg-[#1a8fff]",
+  linux: "bg-[#e95420] hover:bg-[#f06434]",
+} as const;
+
+const DOT_BY_THEME = {
+  windows: "bg-sky-400",
+  macos: "bg-[#0a84ff]",
+  linux: "bg-[#e95420]",
+} as const;
 
 export default function Projects() {
   const [activeSlug, setActiveSlug] = useState(projects[0]?.slug);
   const active = projects.find((p) => p.slug === activeSlug) ?? projects[0];
+  const theme = useThemeChoice("window");
+  const activeRow = ACTIVE_ROW_BY_THEME[theme];
+  const accent = ACCENT_BY_THEME[theme];
+  const dot = DOT_BY_THEME[theme];
 
   return (
     <div className="flex h-full w-full overflow-hidden text-neutral-100">
@@ -22,9 +45,7 @@ export default function Projects() {
               onClick={() => setActiveSlug(p.slug)}
               className={cn(
                 "group mb-1 flex w-full flex-col items-start rounded-md px-3 py-2 text-left text-sm transition-colors",
-                p.slug === active?.slug
-                  ? "bg-white/10 text-white"
-                  : "text-neutral-300 hover:bg-white/5",
+                p.slug === active?.slug ? activeRow : "text-neutral-300 hover:bg-white/5",
               )}
             >
               <span className="font-medium">{p.name}</span>
@@ -62,7 +83,10 @@ export default function Projects() {
                   href={active.live}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-blue-500/90 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500"
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white",
+                    accent,
+                  )}
                 >
                   <ExternalLink className="h-3.5 w-3.5" /> Visit
                 </a>
@@ -98,7 +122,7 @@ export default function Projects() {
                     key={i}
                     className="flex gap-3 rounded-md border border-white/5 bg-white/[0.03] px-4 py-2.5 text-sm text-neutral-200"
                   >
-                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-400" />
+                    <span className={cn("mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full", dot)} />
                     {h}
                   </li>
                 ))}

@@ -2,8 +2,18 @@
 
 import { resume } from "@/lib/portfolio";
 import { Download, ExternalLink } from "lucide-react";
+import { useThemeChoice } from "@/context/ThemeContext";
+import { cn } from "@/lib/utils";
+
+const DL_BY_THEME = {
+  windows: "bg-sky-500/90 hover:bg-sky-500",
+  macos: "bg-[#0a84ff] hover:bg-[#1a8fff]",
+  linux: "bg-[#e95420] hover:bg-[#f06434]",
+} as const;
 
 export default function ResumeViewer() {
+  const theme = useThemeChoice("window");
+  const dlClass = DL_BY_THEME[theme];
   return (
     <div className="flex h-full w-full flex-col text-neutral-100">
       <header className="flex items-center justify-between border-b border-white/5 bg-white/[0.02] px-4 py-2">
@@ -25,7 +35,10 @@ export default function ResumeViewer() {
           <a
             href={resume.url}
             download
-            className="inline-flex items-center gap-1.5 rounded-md bg-blue-500/90 px-2.5 py-1 text-xs font-medium text-white hover:bg-blue-500"
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-white",
+              dlClass,
+            )}
           >
             <Download className="h-3.5 w-3.5" /> Download
           </a>

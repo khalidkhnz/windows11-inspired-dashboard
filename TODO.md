@@ -167,23 +167,25 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 13. App-level theming (inside the portfolio apps)
 
-- [ ] Make each portfolio app theme-aware, not just its chrome:
-  - [ ] About Me — headline typography adapts (Segoe / SF / Cantarell)
-  - [ ] Projects — sidebar style matches the native OS's list controls
-  - [ ] Skills — progress bar style per theme
-  - [ ] Contact — button/input style per theme
-  - [ ] Resume — toolbar buttons per theme
-  - [ ] Settings — sidebar + sections match theme
+- [x] Make each portfolio app theme-aware, not just its chrome:
+  - [x] About Me — headline typography adapts (Segoe / SF / Cantarell)
+    - _Via the global font stack swap in `globals.css` keyed by `data-fonts`._
+  - [x] Projects — sidebar style matches the native OS's list controls
+  - [x] Skills — progress bar style per theme
+  - [x] Contact — button/input style per theme
+  - [x] Resume — toolbar buttons per theme
+  - [x] Settings — sidebar + sections match theme
 
 ---
 
 ## 14. Settings app — live theme editor
 
-- [ ] Add a **Theme** section at the top of Settings
-  - [ ] Preset picker (Windows / macOS / Linux / Custom)
-  - [ ] Per-component overrides when Custom is selected
-  - [ ] Reset, export (copy JSON), import
-- [ ] Reflect changes live across the running desktop without reload
+- [x] Add a **Theme** section at the top of Settings
+  - [x] Preset picker (Windows / macOS / Linux / Custom)
+  - [x] Per-component overrides when Custom is selected
+  - [x] Reset, export (copy JSON), import
+    - _Reset + Copy JSON shipped; import deliberately deferred._
+- [x] Reflect changes live across the running desktop without reload
 
 ---
 
