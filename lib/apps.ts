@@ -83,6 +83,7 @@ const APPS: AppDefinition[] = [
     icon: {
       glyph: FolderOpen,
       gradient: { from: "from-amber-400", to: "to-orange-600" },
+      native: "explorer",
     },
     Content: FileExplorer,
     defaultSize: { width: 900, height: 580 },
@@ -95,6 +96,7 @@ const APPS: AppDefinition[] = [
     icon: {
       glyph: TerminalSquare,
       gradient: { from: "from-neutral-700", to: "to-neutral-900" },
+      native: "terminal",
     },
     Content: Terminal,
     defaultSize: { width: 760, height: 500 },
@@ -108,6 +110,7 @@ const APPS: AppDefinition[] = [
     icon: {
       glyph: SettingsIcon,
       gradient: { from: "from-slate-400", to: "to-slate-700" },
+      native: "settings",
     },
     Content: Settings,
     defaultSize: { width: 880, height: 600 },
@@ -116,7 +119,11 @@ const APPS: AppDefinition[] = [
   {
     id: "github",
     title: "GitHub",
-    icon: { glyph: GithubIcon, gradient: { from: "from-zinc-700", to: "to-zinc-900" } },
+    icon: {
+      glyph: GithubIcon,
+      gradient: { from: "from-zinc-700", to: "to-zinc-900" },
+      native: "github",
+    },
     action: () => {
       if (typeof window !== "undefined") {
         window.open("https://github.com/khalidkhnz", "_blank");
@@ -128,7 +135,11 @@ const APPS: AppDefinition[] = [
   {
     id: "recycle-bin",
     title: "Recycle Bin",
-    icon: { glyph: Trash2, gradient: { from: "from-neutral-500", to: "to-neutral-700" } },
+    icon: {
+      glyph: Trash2,
+      gradient: { from: "from-neutral-500", to: "to-neutral-700" },
+      native: "trash",
+    },
     Content: FileExplorer,
     pinnedOnDesktop: true,
   },

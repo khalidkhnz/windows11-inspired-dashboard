@@ -3,6 +3,7 @@
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useThemeChoice } from "@/context/ThemeContext";
+import { NATIVE_ICONS, type NativeIconKey } from "./NativeIcons";
 
 export type AppIconGradient = {
   from: string;
@@ -12,6 +13,12 @@ export type AppIconGradient = {
 export type AppIconSpec = {
   glyph: LucideIcon;
   gradient: AppIconGradient;
+  /**
+   * Render a native platform icon for this app instead of the generic
+   * gradient + glyph tile. The resolved icons theme picks which variant
+   * (Windows / macOS / Linux) is shown.
+   */
+  native?: NativeIconKey;
 };
 
 type Props = {
@@ -22,7 +29,7 @@ type Props = {
   glyphClassName?: string;
   /** Corner radius override. If unset, each theme picks its own shape. */
   rounded?: string;
-  /** Opt out of theming and use the Windows tile look. */
+  /** Opt out of theming and use a specific theme's look. */
   forceTheme?: "windows" | "macos" | "linux";
 };
 
@@ -35,6 +42,22 @@ export function AppIcon({
 }: Props) {
   const resolved = useThemeChoice("icons");
   const theme = forceTheme ?? resolved;
+
+  if (icon.native) {
+    const Native = NATIVE_ICONS[icon.native][theme];
+    return (
+      <div
+        className={cn(
+          "relative flex items-center justify-center",
+          rounded,
+          className,
+        )}
+      >
+        <Native size={64} />
+      </div>
+    );
+  }
+
   const Glyph = icon.glyph;
 
   if (theme === "linux") {
