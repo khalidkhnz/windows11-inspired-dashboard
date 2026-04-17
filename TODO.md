@@ -86,11 +86,11 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 4. Windows / app chrome
 
-- [ ] `ThemedWindowChrome`
-  - [ ] **Windows 11** — min/max/close on right, rounded 8 px, subtle mica
-  - [ ] **macOS** — traffic lights on left (red/amber/green), inset titlebar, tight radii
-  - [ ] **Linux (GNOME CSD)** — only close button on right, header bar with title centered, small server-side-decoration fallback
-- [ ] Per-theme drop shadow intensity + border treatment
+- [x] `ThemedWindowChrome`
+  - [x] **Windows 11** — min/max/close on right, rounded 8 px, subtle mica
+  - [x] **macOS** — traffic lights on left (red/amber/green), inset titlebar, tight radii
+  - [x] **Linux (GNOME CSD)** — only close button on right, header bar with title centered, small server-side-decoration fallback
+- [x] Per-theme drop shadow intensity + border treatment
 - [ ] Per-theme drag/drop snap regions (Aero snap, macOS tiling hints, GNOME half-tile)
 
 ---
