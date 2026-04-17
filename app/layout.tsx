@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { OsProvider } from "@/context/OsContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { WallpaperProvider } from "@/context/WallpaperContext";
 import { Toaster } from "@/components/ui/sonner";
 import { owner } from "@/lib/portfolio";
@@ -114,12 +115,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           {JSON.stringify(personJsonLd)}
         </Script>
-        <WallpaperProvider>
-          <OsProvider>
-            {children}
-            <Toaster theme="dark" position="bottom-right" richColors />
-          </OsProvider>
-        </WallpaperProvider>
+        <ThemeProvider>
+          <WallpaperProvider>
+            <OsProvider>
+              {children}
+              <Toaster theme="dark" position="bottom-right" richColors />
+            </OsProvider>
+          </WallpaperProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

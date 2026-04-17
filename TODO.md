@@ -11,16 +11,16 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 0. Design foundations (prereq for everything)
 
-- [ ] Define a `Theme` type and a `ThemeChoices` record keyed by component
-  - [ ] `themes: "windows" | "macos" | "linux"`
-  - [ ] `components: "taskbar" | "window" | "icons" | "lockscreen" | "startMenu" | "terminal" | "fileExplorer" | "contextMenu" | "clockPopover" | "actionCenter" | "desktopIcons" | "wallpaper" | "fonts" | "cursors" | "scrollbars"`
-- [ ] Pick design tokens per OS (colors, radii, shadows, blur, typography, iconography)
-  - [ ] Windows 11: Segoe UI Variable, Mica acrylic, 8 px radii, fluent shadows
-  - [ ] macOS: SF Pro (fallback system-ui), vibrant translucency, 10 px radii, traffic lights red/amber/green
-  - [ ] Linux (GNOME/Adwaita-ish): Cantarell/Inter, flat + subtle gradients, 12 px radii, CSD close-button-only
-- [ ] `ThemeContext` with `useTheme()` returning the resolved per-component choice
-- [ ] Persist choices to `localStorage` (`portfolio-theme` key)
-- [ ] Add `ThemedSlot<T>` pattern: a component that swaps sub-implementations by theme
+- [x] Define a `Theme` type and a `ThemeChoices` record keyed by component
+  - [x] `themes: "windows" | "macos" | "linux"`
+  - [x] `components: "taskbar" | "window" | "icons" | "lockscreen" | "startMenu" | "terminal" | "fileExplorer" | "contextMenu" | "clockPopover" | "actionCenter" | "desktopIcons" | "wallpaper" | "fonts" | "cursors" | "scrollbars"`
+- [x] Pick design tokens per OS (colors, radii, shadows, blur, typography, iconography)
+  - [x] Windows 11: Segoe UI Variable, Mica acrylic, 8 px radii, fluent shadows
+  - [x] macOS: SF Pro (fallback system-ui), vibrant translucency, 10 px radii, traffic lights red/amber/green
+  - [x] Linux (GNOME/Adwaita-ish): Cantarell/Inter, flat + subtle gradients, 12 px radii, CSD close-button-only
+- [x] `ThemeContext` with `useTheme()` returning the resolved per-component choice
+- [x] Persist choices to `localStorage` (`portfolio-theme` key)
+- [x] Add `ThemedSlot<T>` pattern: a component that swaps sub-implementations by theme
 
 ---
 
