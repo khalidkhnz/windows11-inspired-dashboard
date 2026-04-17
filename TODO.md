@@ -1,6 +1,6 @@
-# Portfolio OS — Roadmap
+# Khalid's Portfolio — Roadmap
 
-Portfolio OS is a faux operating-system portfolio. The next major arc is a full
+This portfolio is a faux operating-system UI. The next major arc is a full
 **multi-theme system** — every visible surface can be rendered in one of three
 styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 **Custom** mode where the user mixes and matches per component.

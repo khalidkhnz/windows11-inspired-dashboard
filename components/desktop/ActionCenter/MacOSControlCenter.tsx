@@ -108,8 +108,8 @@ export function MacOSControlCenter({ open, onClose }: ActionCenterProps) {
               <Music2 className="h-4 w-4" />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-[13px] font-medium">Portfolio OS</div>
-              <div className="truncate text-[11px] text-white/60">Khalid — Developer Suite</div>
+              <div className="truncate text-[13px] font-medium">Khalid&apos;s Portfolio</div>
+              <div className="truncate text-[11px] text-white/60">Developer Suite</div>
             </div>
             <Airplay className="h-4 w-4 text-white/70" />
           </div>

@@ -1,9 +1,9 @@
-# Portfolio OS — khalidkhnz.in
+# Khalid&rsquo;s Portfolio — khalidkhnz.in
 
-A faux operating-system portfolio for [Khalid Khan](https://www.khalidkhnz.in).
-It currently ships as a **Windows 11** inspired desktop — lock screen, taskbar,
-start menu, real window management, and in-app portfolio content (no iframes to
-broken third-party sites, no database).
+The personal portfolio of [Khalid Khan](https://www.khalidkhnz.in), styled as a
+faux operating system. It currently ships as a **Windows 11** inspired desktop
+— lock screen, taskbar, start menu, real window management, and in-app
+portfolio content (no iframes to broken third-party sites, no database).
 
 > **Status — April 2026:** Windows 11 baseline is live. The next arc is a
 > **three-OS theme system** (Windows / macOS / Linux) with a per-component

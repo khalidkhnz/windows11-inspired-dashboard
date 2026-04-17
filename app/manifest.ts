@@ -3,7 +3,7 @@ import { owner } from "@/lib/portfolio";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${owner.name} — Portfolio 11`,
+    name: `${owner.name} — Portfolio`,
     short_name: owner.handle,
     description: owner.tagline,
     start_url: "/",

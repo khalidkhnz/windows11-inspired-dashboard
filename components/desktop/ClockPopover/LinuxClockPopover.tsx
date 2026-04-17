@@ -97,9 +97,9 @@ export function LinuxClockPopover({ open, onClose, now }: ClockPopoverProps) {
                 <Play className="h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[12px]">Portfolio OS</div>
+                <div className="truncate text-[12px]">Khalid&apos;s Portfolio</div>
                 <div className="truncate text-[10px] text-white/50">
-                  Khalid — GNOME Edition
+                  GNOME Edition
                 </div>
               </div>
               <button className="rounded p-1 hover:bg-white/10">

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Check, Sparkles, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/ThemeContext";
+import { owner } from "@/lib/portfolio";
 import {
   THEMES,
   THEME_LABELS,
@@ -47,7 +48,7 @@ export function ThemePicker({ onDone }: { onDone: () => void }) {
           <IntroLogo className="h-9 w-9" />
           <div>
             <div className="text-xs uppercase tracking-widest text-white/50">
-              Portfolio OS
+              {owner.name}&apos;s Portfolio
             </div>
             <div className="text-lg font-medium">Pick your look</div>
           </div>

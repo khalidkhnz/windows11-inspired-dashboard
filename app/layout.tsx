@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: `%s · ${owner.name}`,
   },
   description,
-  applicationName: `${owner.name} · Portfolio 11`,
+  applicationName: `${owner.name} · Portfolio`,
   authors: [{ name: owner.name, url: owner.siteUrl }],
   creator: owner.name,
   publisher: owner.name,

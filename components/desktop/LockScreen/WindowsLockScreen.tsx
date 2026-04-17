@@ -73,7 +73,7 @@ export function WindowsLockScreen({ stage, signingIn, now, onSignIn }: LockVaria
       </AnimatePresence>
 
       <div className="absolute inset-x-0 bottom-6 z-10 flex items-center justify-between px-6 text-xs text-white/70">
-        <span>{owner.handle}.portfolio.os</span>
+        <span>{owner.name}&apos;s Portfolio</span>
         <div className="flex items-center gap-3">
           <Accessibility className="h-4 w-4" />
           <Wifi className="h-4 w-4" />

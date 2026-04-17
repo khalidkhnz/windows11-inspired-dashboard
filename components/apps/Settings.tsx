@@ -255,7 +255,7 @@ export default function Settings() {
               </p>
               <dl className="mt-4 grid grid-cols-2 gap-y-2 text-xs">
                 <dt className="text-neutral-500">Build</dt>
-                <dd>Portfolio 11 · 2.0.0</dd>
+                <dd>{owner.name}&apos;s Portfolio · 2.0.0</dd>
                 <dt className="text-neutral-500">Owner</dt>
                 <dd>{owner.name}</dd>
                 <dt className="text-neutral-500">Source</dt>
