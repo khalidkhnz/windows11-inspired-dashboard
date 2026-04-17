@@ -1,11 +1,58 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useThemeChoice } from "@/context/ThemeContext";
 import { owner, projects, skills, socials } from "@/lib/portfolio";
 
 type Line = { kind: "in" | "out" | "err"; text: string };
 
-const prompt = `${owner.handle}@portfolio:~$`;
+type TerminalTheme = {
+  prompt: string;
+  container: string;
+  mono: string;
+  text: string;
+  textIn: string;
+  textErr: string;
+  textOk: string;
+  promptColor: string;
+  caretColor: string;
+};
+
+const TERMINAL_THEMES: Record<"windows" | "macos" | "linux", TerminalTheme> = {
+  windows: {
+    prompt: `PS C:\\Users\\${owner.handle}>`,
+    container: "bg-[#0c0c0c] text-[#cccccc]",
+    mono: '"Cascadia Code", "Consolas", ui-monospace, monospace',
+    text: "text-[#cccccc]",
+    textIn: "text-white",
+    textErr: "text-[#ff5555]",
+    textOk: "text-[#61dafb]",
+    promptColor: "text-[#61dafb]",
+    caretColor: "text-[#cccccc]",
+  },
+  macos: {
+    prompt: `${owner.handle}@macbook ~ %`,
+    container: "bg-black/85 text-[#e6e6e6]",
+    mono: '"SF Mono", Menlo, ui-monospace, monospace',
+    text: "text-[#e6e6e6]",
+    textIn: "text-white",
+    textErr: "text-[#ff6e6e]",
+    textOk: "text-[#a5ffa5]",
+    promptColor: "text-[#7adfff]",
+    caretColor: "text-[#e6e6e6]",
+  },
+  linux: {
+    prompt: `${owner.handle}@ubuntu:~$`,
+    container: "bg-[#300a24] text-white",
+    mono: '"Ubuntu Mono", "DejaVu Sans Mono", ui-monospace, monospace',
+    text: "text-white",
+    textIn: "text-white",
+    textErr: "text-[#ff6e6e]",
+    textOk: "text-[#8ae234]",
+    promptColor: "text-[#8ae234]",
+    caretColor: "text-white",
+  },
+};
 
 const help = [
   "Available commands:",
@@ -75,6 +122,8 @@ function run(command: string): Line[] {
 }
 
 export default function Terminal() {
+  const themeKey = useThemeChoice("terminal");
+  const theme = TERMINAL_THEMES[themeKey] ?? TERMINAL_THEMES.windows;
   const [lines, setLines] = useState<Line[]>([
     { kind: "out", text: `Welcome to ${owner.handle}'s portfolio shell — type 'help' to begin.` },
   ]);
@@ -93,7 +142,7 @@ export default function Terminal() {
     const out = run(input);
     const newLines: Line[] = [
       ...lines,
-      { kind: "in", text: `${prompt} ${input}` },
+      { kind: "in", text: `${theme.prompt} ${input}` },
       ...out.filter((l) => l.text !== "__CLEAR__"),
     ];
     if (out.some((l) => l.text === "__CLEAR__")) {
@@ -129,7 +178,11 @@ export default function Terminal() {
 
   return (
     <div
-      className="flex h-full w-full flex-col bg-black/70 font-mono text-[13px] text-emerald-300"
+      className={cn(
+        "flex h-full w-full flex-col text-[13px]",
+        theme.container,
+      )}
+      style={{ fontFamily: theme.mono }}
       onClick={() => inputRef.current?.focus()}
     >
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3">
@@ -138,23 +191,26 @@ export default function Terminal() {
             key={i}
             className={cn(
               "whitespace-pre-wrap break-words",
-              l.kind === "err" && "text-red-400",
-              l.kind === "in" && "text-neutral-200",
+              l.kind === "out" && theme.textOk,
+              l.kind === "err" && theme.textErr,
+              l.kind === "in" && theme.textIn,
             )}
+            style={{ fontFamily: theme.mono }}
           >
             {l.text}
           </pre>
         ))}
       </div>
       <form onSubmit={handleSubmit} className="flex items-center gap-2 px-4 py-2">
-        <span className="text-neutral-400">{prompt}</span>
+        <span className={cn(theme.promptColor)}>{theme.prompt}</span>
         <input
           ref={inputRef}
           value={input}
           autoFocus
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent text-emerald-200 outline-none"
+          className={cn("flex-1 bg-transparent outline-none", theme.caretColor)}
+          style={{ fontFamily: theme.mono }}
           spellCheck={false}
           autoComplete="off"
         />

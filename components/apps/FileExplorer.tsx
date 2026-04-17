@@ -1,8 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Folder, Image as ImageIcon, HardDrive } from "lucide-react";
+import {
+  FileText,
+  Folder,
+  Image as ImageIcon,
+  HardDrive,
+  ChevronRight,
+} from "lucide-react";
 import { resume } from "@/lib/portfolio";
+import { useThemeChoice } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 
 type FileNode = {
@@ -48,23 +55,54 @@ const tree: Record<string, FileNode[]> = {
   ],
 };
 
-function iconFor(node: FileNode) {
-  if (node.kind === "folder") return <Folder className="h-5 w-5 text-amber-300" />;
+function iconFor(node: FileNode, folderColor: string) {
+  if (node.kind === "folder")
+    return <Folder className={cn("h-5 w-5", folderColor)} />;
   if (node.icon === "pdf") return <FileText className="h-5 w-5 text-red-400" />;
   if (node.icon === "image") return <ImageIcon className="h-5 w-5 text-sky-300" />;
   return <FileText className="h-5 w-5 text-neutral-300" />;
 }
 
+const SIDEBAR_LABEL_BY_THEME = {
+  windows: "Quick access",
+  macos: "Favorites",
+  linux: "Places",
+} as const;
+
+const FOLDER_ICON_COLOR_BY_THEME = {
+  windows: "text-amber-300",
+  macos: "text-sky-400",
+  linux: "text-[#e95420]",
+} as const;
+
 export default function FileExplorer() {
   const [path, setPath] = useState<string[]>(["This PC"]);
   const current = path[path.length - 1];
   const items = tree[current] ?? [];
+  const theme = useThemeChoice("fileExplorer");
+
+  const sidebarLabel = SIDEBAR_LABEL_BY_THEME[theme];
+  const folderColor = FOLDER_ICON_COLOR_BY_THEME[theme];
 
   return (
     <div className="flex h-full w-full overflow-hidden text-neutral-100">
-      <aside className="w-52 border-r border-white/[0.06] bg-white/[0.02] p-3">
-        <p className="px-2 pb-1 text-[10px] uppercase tracking-widest text-neutral-500">
-          Quick access
+      <aside
+        className={cn(
+          "w-52 border-r p-3",
+          theme === "macos"
+            ? "border-white/5 bg-neutral-900/40 backdrop-blur"
+            : theme === "linux"
+              ? "border-black/30 bg-[#242424]"
+              : "border-white/[0.06] bg-white/[0.02]",
+        )}
+      >
+        <p
+          className={cn(
+            "px-2 pb-1 text-[10px] uppercase tracking-widest",
+            theme === "linux" ? "text-white/50" : "text-neutral-500",
+          )}
+        >
+          {sidebarLabel}
         </p>
         {Object.keys(tree).map((folder) => (
           <button
@@ -73,14 +111,18 @@ export default function FileExplorer() {
             className={cn(
               "mb-0.5 flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors",
               current === folder
-                ? "bg-white/10 text-white"
+                ? theme === "linux"
+                  ? "bg-[#e95420] text-white"
+                  : theme === "macos"
+                    ? "bg-[#0a84ff]/80 text-white"
+                    : "bg-white/10 text-white"
                 : "text-neutral-300 hover:bg-white/5",
             )}
           >
             {folder === "This PC" ? (
               <HardDrive className="h-4 w-4" />
             ) : (
-              <Folder className="h-4 w-4 text-amber-300" />
+              <Folder className={cn("h-4 w-4", folderColor)} />
             )}
             {folder}
           </button>
@@ -88,16 +130,28 @@ export default function FileExplorer() {
       </aside>
 
       <section className="flex flex-1 flex-col">
-        <div className="flex items-center gap-1 border-b border-white/5 bg-white/[0.02] px-3 py-2 text-xs text-neutral-400">
+        <div
+          className={cn(
+            "flex items-center gap-1 border-b px-3 py-2 text-xs",
+            theme === "linux"
+              ? "border-black/30 bg-[#2d2d2d] text-white/75"
+              : "border-white/5 bg-white/[0.02] text-neutral-400",
+          )}
+        >
           {path.map((p, i) => (
             <span key={p} className="flex items-center gap-1">
               <button
                 onClick={() => setPath(path.slice(0, i + 1))}
-                className="rounded px-1.5 py-0.5 hover:bg-white/5 hover:text-neutral-200"
+                className={cn(
+                  "rounded px-1.5 py-0.5 hover:bg-white/5 hover:text-neutral-200",
+                  theme === "linux" && "rounded-sm bg-white/5",
+                )}
               >
                 {p}
               </button>
-              {i < path.length - 1 && <span className="text-neutral-600">›</span>}
+              {i < path.length - 1 && (
+                <ChevronRight className="h-3 w-3 text-neutral-600" />
+              )}
             </span>
           ))}
         </div>
@@ -123,7 +177,7 @@ export default function FileExplorer() {
                       }}
                       className="group flex w-full flex-col items-center gap-2 rounded-lg border border-transparent p-3 text-xs text-neutral-200 hover:border-white/10 hover:bg-white/5"
                     >
-                      {iconFor(item)}
+                      {iconFor(item, folderColor)}
                       <span className="truncate">{item.name}</span>
                       {item.locked && (
                         <span className="text-[10px] text-neutral-500">Private</span>
@@ -136,7 +190,7 @@ export default function FileExplorer() {
                       rel="noreferrer noopener"
                       className="group flex w-full flex-col items-center gap-2 rounded-lg border border-transparent p-3 text-xs text-neutral-200 hover:border-white/10 hover:bg-white/5"
                     >
-                      {iconFor(item)}
+                      {iconFor(item, folderColor)}
                       <span className="truncate">{item.name}</span>
                       <span className="text-[10px] text-neutral-500">{item.size}</span>
                     </a>
@@ -145,7 +199,7 @@ export default function FileExplorer() {
                       className="flex w-full cursor-not-allowed flex-col items-center gap-2 rounded-lg p-3 text-xs text-neutral-500 opacity-70"
                       title="Private"
                     >
-                      {iconFor(item)}
+                      {iconFor(item, folderColor)}
                       <span className="truncate">{item.name}</span>
                       <span className="text-[10px]">Private</span>
                     </div>

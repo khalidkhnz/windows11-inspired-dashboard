@@ -129,37 +129,39 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 9. App icons
 
-- [ ] `ThemedAppIcon`
-  - [ ] Windows: gradient rounded-square tile + lucide glyph (current)
-  - [ ] macOS: squircle (22.5% squircle mask) + color/gradient fill + inner highlight, optional dock shadow
-  - [ ] Linux: Papirus-style flat two-tone with colored glyph on circular base
-- [ ] Every app gets three icon variants declared alongside its `AppDefinition`
+- [x] `ThemedAppIcon`
+  - [x] Windows: gradient rounded-square tile + lucide glyph (current)
+  - [x] macOS: squircle (22.5% squircle mask) + color/gradient fill + inner highlight, optional dock shadow
+  - [x] Linux: Papirus-style flat two-tone with colored glyph on circular base
+- [x] Every app gets three icon variants declared alongside its `AppDefinition`
+  - _Implementation note:_ a single `AppIconSpec` (glyph + gradient) feeds all three styles via the themed `AppIcon`, rather than requiring per-theme definitions on every app._
 
 ## 10. Terminal
 
-- [ ] `ThemedTerminal`
-  - [ ] **Windows Terminal / PowerShell** — dark blue chrome, `PS C:\Users\khalid>` prompt, Cascadia Code
-  - [ ] **macOS Terminal.app** — beige/solarized or default black, `khalid@macbook ~ %` prompt, SF Mono
-  - [ ] **Linux / GNOME Terminal** — dark, `khalid@ubuntu:~$` prompt, Ubuntu Mono
-- [ ] Theme-aware color palette for error/info/success
+- [x] `ThemedTerminal`
+  - [x] **Windows Terminal / PowerShell** — dark blue chrome, `PS C:\Users\khalid>` prompt, Cascadia Code
+  - [x] **macOS Terminal.app** — beige/solarized or default black, `khalid@macbook ~ %` prompt, SF Mono
+  - [x] **Linux / GNOME Terminal** — dark, `khalid@ubuntu:~$` prompt, Ubuntu Mono
+- [x] Theme-aware color palette for error/info/success
 
 ## 11. File Explorer / Finder / Files (Nautilus)
 
-- [ ] `ThemedFileExplorer`
-  - [ ] **Windows 11 Explorer** — left Quick Access tree, breadcrumb bar, grid/list toggle (current)
-  - [ ] **macOS Finder** — sidebar with colored section labels, column view, tags
-  - [ ] **Linux Nautilus / Files** — pathbar buttons, flat icons, grid by default
+- [x] `ThemedFileExplorer`
+  - [x] **Windows 11 Explorer** — left Quick Access tree, breadcrumb bar, grid/list toggle (current)
+  - [x] **macOS Finder** — sidebar with colored section labels, column view, tags
+  - [x] **Linux Nautilus / Files** — pathbar buttons, flat icons, grid by default
 
 ## 12. Cursors, fonts, scrollbars
 
-- [ ] Scrollbar styling per theme
-  - [ ] Windows: thin, transparent, fat on hover
-  - [ ] macOS: auto-hide, overlay
-  - [ ] Linux: medium, always visible, flat
-- [ ] Fonts
-  - [ ] Load Segoe UI Variable / SF Pro / Ubuntu as web fonts where licensing allows
-  - [ ] Graceful fallbacks in `globals.css`
-- [ ] Optional cursor stylesheet per theme (low priority)
+- [x] Scrollbar styling per theme
+  - [x] Windows: thin, transparent, fat on hover
+  - [x] macOS: auto-hide, overlay
+  - [x] Linux: medium, always visible, flat
+- [x] Fonts
+  - [x] Load Segoe UI Variable / SF Pro / Ubuntu as web fonts where licensing allows
+    - _Using system fonts via font stacks (license-safe)._
+  - [x] Graceful fallbacks in `globals.css`
+- [x] Optional cursor stylesheet per theme (low priority)
 
 ---
 

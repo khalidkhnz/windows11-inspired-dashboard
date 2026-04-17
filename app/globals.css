@@ -74,3 +74,80 @@
   overflow: -moz-scrollbars-none; /* Firefox */
   -webkit-overflow-scrolling: touch; /* Chrome */
 }
+
+/* ---------- theme-aware scrollbars ---------- */
+html[data-scrollbars="windows"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+html[data-scrollbars="windows"] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+html[data-scrollbars="windows"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+html[data-scrollbars="windows"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+  background-clip: padding-box;
+}
+
+html[data-scrollbars="macos"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+html[data-scrollbars="macos"] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+html[data-scrollbars="macos"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0);
+  border-radius: 999px;
+  transition: background 180ms ease;
+}
+html[data-scrollbars="macos"] :hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+html[data-scrollbars="linux"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+html[data-scrollbars="linux"] ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.35);
+}
+html[data-scrollbars="linux"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+html[data-scrollbars="linux"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* ---------- theme-aware font stack ---------- */
+html[data-fonts="windows"] body {
+  font-family:
+    "Segoe UI Variable", "Segoe UI", var(--font-sans), ui-sans-serif, system-ui,
+    sans-serif;
+}
+html[data-fonts="macos"] body {
+  font-family:
+    "SF Pro Text", "SF Pro", -apple-system, BlinkMacSystemFont, var(--font-sans),
+    "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+html[data-fonts="linux"] body {
+  font-family: Cantarell, var(--font-sans), Ubuntu, ui-sans-serif, system-ui,
+    sans-serif;
+}
+
+/* ---------- theme-aware cursors ---------- */
+html[data-cursors="macos"] {
+  cursor: default;
+}
+html[data-cursors="linux"] button,
+html[data-cursors="linux"] a,
+html[data-cursors="linux"] [role="button"] {
+  cursor: pointer;
+}

@@ -22,8 +22,6 @@ export default function DesktopIcons() {
   // macOS: no desktop icons by default.
   if (theme === "macos") return null;
 
-  const isLinux = theme === "linux";
-
   return (
     <ul
       className={cn(
@@ -41,15 +39,11 @@ export default function DesktopIcons() {
               "focus-visible:border-white/30 focus-visible:bg-white/15 hover:bg-white/10",
             )}
           >
-            {isLinux ? (
-              <LinuxAppIcon app={app} />
-            ) : (
-              <AppIcon
-                icon={app.icon}
-                className="h-11 w-11"
-                glyphClassName="h-5 w-5"
-              />
-            )}
+            <AppIcon
+              icon={app.icon}
+              className="h-11 w-11"
+              glyphClassName="h-5 w-5"
+            />
             <span className="line-clamp-2 px-0.5 [text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">
               {app.title}
             </span>
@@ -57,18 +51,5 @@ export default function DesktopIcons() {
         </li>
       ))}
     </ul>
-  );
-}
-
-function LinuxAppIcon({
-  app,
-}: {
-  app: { icon: { glyph: React.ComponentType<{ className?: string }> } };
-}) {
-  const Glyph = app.icon.glyph;
-  return (
-    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-900 ring-1 ring-white/10">
-      <Glyph className="h-5 w-5 text-[#e95420]" />
-    </div>
   );
 }

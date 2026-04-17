@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { OsProvider } from "@/context/OsContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { ThemeHtmlBridge } from "@/context/ThemeHtmlBridge";
 import { ThemeWallpaperBridge } from "@/context/ThemeWallpaperBridge";
 import { WallpaperProvider } from "@/context/WallpaperContext";
 import { Toaster } from "@/components/ui/sonner";
@@ -117,6 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {JSON.stringify(personJsonLd)}
         </Script>
         <ThemeProvider>
+          <ThemeHtmlBridge />
           <WallpaperProvider>
             <ThemeWallpaperBridge />
             <OsProvider>
