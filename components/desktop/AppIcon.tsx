@@ -46,13 +46,7 @@ export function AppIcon({
   if (icon.native) {
     const Native = NATIVE_ICONS[icon.native][theme];
     return (
-      <div
-        className={cn(
-          "relative flex items-center justify-center",
-          rounded,
-          className,
-        )}
-      >
+      <div className={cn("relative flex items-center justify-center", className)}>
         <Native size={64} />
       </div>
     );
@@ -61,51 +55,72 @@ export function AppIcon({
   const Glyph = icon.glyph;
 
   if (theme === "linux") {
+    // Papirus-style: flat circle with a two-tone symbol
     return (
       <div
         className={cn(
-          "relative flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 ring-1 ring-white/5 shadow-[0_2px_6px_rgba(0,0,0,0.4)]",
+          "relative flex items-center justify-center overflow-hidden rounded-full",
+          "bg-[radial-gradient(circle_at_30%_25%,#3a3a3a,#1a1a1a_70%)]",
+          "ring-1 ring-black/60",
+          "shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_10px_rgba(0,0,0,0.45)]",
           rounded,
           className,
         )}
       >
         <Glyph
-          className={cn("relative text-[#e95420] drop-shadow-sm", glyphClassName)}
+          className={cn("relative text-[#e95420]", glyphClassName)}
+          strokeWidth={2.2}
         />
       </div>
     );
   }
 
   if (theme === "macos") {
+    // macOS squircle with inner highlight + thin black hairline
     return (
       <div
         className={cn(
-          "relative flex items-center justify-center overflow-hidden bg-gradient-to-br shadow-[0_6px_14px_rgba(0,0,0,0.45)] ring-1 ring-black/20",
+          "relative flex items-center justify-center overflow-hidden bg-gradient-to-br",
+          "shadow-[0_8px_18px_-4px_rgba(0,0,0,0.55),0_1px_0_rgba(255,255,255,0.08)_inset]",
+          "ring-[0.5px] ring-black/40",
           rounded ?? "rounded-[22%]",
           icon.gradient.from,
           icon.gradient.to,
           className,
         )}
       >
+        {/* specular highlight */}
         <span
           aria-hidden
           className={cn(
-            "pointer-events-none absolute inset-0 bg-gradient-to-b from-white/35 via-white/10 to-transparent",
+            "pointer-events-none absolute inset-0 bg-gradient-to-b from-white/25 via-white/5 to-transparent",
+            rounded ?? "rounded-[22%]",
+          )}
+        />
+        {/* bottom inner shadow */}
+        <span
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent",
             rounded ?? "rounded-[22%]",
           )}
         />
         <Glyph
-          className={cn("relative text-white drop-shadow-sm", glyphClassName)}
+          className={cn("relative text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]", glyphClassName)}
+          strokeWidth={2}
         />
       </div>
     );
   }
 
+  // Windows 11 Fluent tile — softer gradient, fine bezel, subtle depth
   return (
     <div
       className={cn(
-        "relative flex items-center justify-center overflow-hidden bg-gradient-to-br shadow-[0_4px_12px_rgba(0,0,0,0.35)] ring-1 ring-white/10",
-        rounded ?? "rounded-[10px]",
+        "relative flex items-center justify-center overflow-hidden bg-gradient-to-br",
+        "shadow-[0_4px_14px_-4px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.15)]",
+        "ring-1 ring-white/10",
+        rounded ?? "rounded-[9px]",
         icon.gradient.from,
         icon.gradient.to,
         className,
@@ -114,11 +129,14 @@ export function AppIcon({
       <span
         aria-hidden
         className={cn(
-          "pointer-events-none absolute inset-0 bg-gradient-to-b from-white/25 to-transparent opacity-80",
-          rounded ?? "rounded-[10px]",
+          "pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),transparent_45%)]",
+          rounded ?? "rounded-[9px]",
         )}
       />
-      <Glyph className={cn("relative text-white drop-shadow-sm", glyphClassName)} />
+      <Glyph
+        className={cn("relative text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]", glyphClassName)}
+        strokeWidth={2}
+      />
     </div>
   );
 }

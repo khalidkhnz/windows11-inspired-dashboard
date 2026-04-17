@@ -24,7 +24,7 @@ const APPS: AppDefinition[] = [
   {
     id: "about",
     title: "About Me",
-    icon: { glyph: UserRound, gradient: { from: "from-sky-400", to: "to-blue-600" } },
+    icon: { glyph: UserRound, gradient: { from: "from-sky-500", to: "to-indigo-700" } },
     Content: AboutMe,
     defaultSize: { width: 880, height: 600 },
     pinnedOnDesktop: true,
@@ -37,7 +37,7 @@ const APPS: AppDefinition[] = [
     title: "Projects",
     icon: {
       glyph: Briefcase,
-      gradient: { from: "from-violet-500", to: "to-fuchsia-600" },
+      gradient: { from: "from-violet-600", to: "to-purple-800" },
     },
     Content: Projects,
     defaultSize: { width: 940, height: 600 },
@@ -50,7 +50,7 @@ const APPS: AppDefinition[] = [
     title: "Skills",
     icon: {
       glyph: BarChart3,
-      gradient: { from: "from-emerald-400", to: "to-teal-600" },
+      gradient: { from: "from-emerald-500", to: "to-teal-800" },
     },
     Content: Skills,
     defaultSize: { width: 880, height: 580 },
@@ -60,7 +60,7 @@ const APPS: AppDefinition[] = [
   {
     id: "resume",
     title: "Resume",
-    icon: { glyph: FileText, gradient: { from: "from-rose-400", to: "to-red-600" } },
+    icon: { glyph: FileText, gradient: { from: "from-rose-500", to: "to-rose-800" } },
     Content: ResumeViewer,
     defaultSize: { width: 900, height: 640 },
     pinnedOnDesktop: true,
@@ -71,7 +71,7 @@ const APPS: AppDefinition[] = [
   {
     id: "contact",
     title: "Contact",
-    icon: { glyph: Mail, gradient: { from: "from-pink-400", to: "to-rose-600" } },
+    icon: { glyph: Mail, gradient: { from: "from-cyan-600", to: "to-blue-800" } },
     Content: ContactMe,
     defaultSize: { width: 860, height: 600 },
     pinnedOnDesktop: true,
