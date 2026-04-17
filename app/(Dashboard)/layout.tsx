@@ -1,10 +1,6 @@
+import { Suspense } from "react";
 import WindowsLoading from "@/components/WindowsLoading/WindowsLoading";
-import React, { Suspense } from "react";
 
-type Props = { children: React.ReactNode };
-
-const Layout = ({ children }: Props) => {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<WindowsLoading />}>{children}</Suspense>;
-};
-
-export default Layout;
+}

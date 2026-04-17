@@ -1,0 +1,112 @@
+"use client";
+
+import { useState } from "react";
+import { projects } from "@/lib/portfolio";
+import { ExternalLink, Github, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export default function Projects() {
+  const [activeSlug, setActiveSlug] = useState(projects[0]?.slug);
+  const active = projects.find((p) => p.slug === activeSlug) ?? projects[0];
+
+  return (
+    <div className="flex h-full w-full overflow-hidden bg-neutral-950 text-neutral-100">
+      <aside className="flex h-full w-56 flex-shrink-0 flex-col border-r border-white/5 bg-neutral-950/80">
+        <div className="px-4 pb-2 pt-4 text-xs uppercase tracking-widest text-neutral-500">
+          Projects
+        </div>
+        <nav className="flex-1 overflow-y-auto px-2 pb-4">
+          {projects.map((p) => (
+            <button
+              key={p.slug}
+              onClick={() => setActiveSlug(p.slug)}
+              className={cn(
+                "group mb-1 flex w-full flex-col items-start rounded-md px-3 py-2 text-left text-sm transition-colors",
+                p.slug === active?.slug
+                  ? "bg-white/10 text-white"
+                  : "text-neutral-300 hover:bg-white/5",
+              )}
+            >
+              <span className="font-medium">{p.name}</span>
+              <span className="text-[11px] text-neutral-500 group-hover:text-neutral-400">
+                {p.year} · {p.tags[0]}
+              </span>
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      <section className="flex-1 overflow-y-auto">
+        {active && (
+          <article className="mx-auto max-w-3xl px-8 py-8">
+            <p className="flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400">
+              <Sparkles className="h-3.5 w-3.5" /> Featured
+            </p>
+            <h1 className="mt-2 text-3xl font-semibold">{active.name}</h1>
+            <p className="mt-1 text-sm text-neutral-400">{active.tagline}</p>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {active.tags.map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-neutral-300"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {active.live && (
+                <a
+                  href={active.live}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-blue-500/90 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> Visit
+                </a>
+              )}
+              {active.repo && (
+                <a
+                  href={active.repo}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10"
+                >
+                  <Github className="h-3.5 w-3.5" /> Source
+                </a>
+              )}
+            </div>
+
+            <div className="mt-8">
+              <h2 className="text-xs uppercase tracking-widest text-neutral-500">
+                Overview
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-200">
+                {active.description}
+              </p>
+            </div>
+
+            <div className="mt-6">
+              <h2 className="text-xs uppercase tracking-widest text-neutral-500">
+                Highlights
+              </h2>
+              <ul className="mt-2 space-y-2">
+                {active.highlights.map((h, i) => (
+                  <li
+                    key={i}
+                    className="flex gap-3 rounded-md border border-white/5 bg-white/[0.03] px-4 py-2.5 text-sm text-neutral-200"
+                  >
+                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-400" />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        )}
+      </section>
+    </div>
+  );
+}

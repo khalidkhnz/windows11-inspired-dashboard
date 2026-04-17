@@ -1,20 +1,20 @@
-export default async function sitemap() {
-  const currentDate = new Date().toISOString();
+import type { MetadataRoute } from "next";
+import { owner } from "@/lib/portfolio";
 
-  const sitemap = [
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
+  return [
     {
-      url: "https://khalidkhnz.vercel.app",
-      lastModified: currentDate,
-      changeFrequency: "always",
+      url: owner.siteUrl,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 1,
     },
     {
-      url: "https://khalidkhnz.vercel.app/desktop",
-      lastModified: currentDate,
-      changeFrequency: "always",
+      url: `${owner.siteUrl}/desktop`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
     },
   ];
-
-  return [...sitemap];
 }
-
-export const dynamic = "error";

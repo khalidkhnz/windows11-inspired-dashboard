@@ -1,19 +1,22 @@
-export default function manifest() {
+import type { MetadataRoute } from "next";
+import { owner } from "@/lib/portfolio";
+
+export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Khalidkhnz - portfolio",
-    short_name: "khalidkhnz",
-    description:
-      "Full-Stack Developer with skills to build end-to-end web and Android applications. Experience on creating Front-end and Back-end code from scratch or by utilizing a handful of frameworks and libraries.",
+    name: `${owner.name} — Portfolio 11`,
+    short_name: owner.handle,
+    description: owner.tagline,
     start_url: "/",
+    scope: "/",
     display: "standalone",
-    background_color: "#000",
-    theme_color: "#fff",
+    orientation: "any",
+    background_color: "#0a0a0a",
+    theme_color: "#0a0a0a",
+    categories: ["portfolio", "productivity", "developer"],
+    lang: "en-US",
     icons: [
-      {
-        src: "/favicon.ico",
-        sizes: "48x48",
-        type: "image/x-icon",
-      },
+      { src: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { src: "/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
     ],
   };
 }

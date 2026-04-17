@@ -1,21 +1,17 @@
-import Wallpaper from "@/components/Wallpaper";
-import WindowsTaskBar from "@/components/WindowsTaskBar";
-import React from "react";
+import Wallpaper from "@/components/desktop/Wallpaper";
+import Taskbar from "@/components/desktop/Taskbar";
+import DesktopContextMenu from "@/components/desktop/DesktopContextMenu";
+import WindowsLayer from "@/components/desktop/WindowsLayer";
 
-type Props = {
-  children: React.ReactNode;
-};
-
-const layout = ({ children }: Props) => {
+export default function DesktopLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="relative min-h-screen w-full overflow-hidden bg-black">
+    <main className="relative h-screen w-full overflow-hidden bg-black text-white">
       <Wallpaper />
-      <section id="desktop-root" className="absolute w-full">
-        {children}
-      </section>
-      <WindowsTaskBar />
+      <DesktopContextMenu>
+        <section className="relative h-[calc(100vh-52px)] w-full">{children}</section>
+      </DesktopContextMenu>
+      <WindowsLayer />
+      <Taskbar />
     </main>
   );
-};
-
-export default layout;
+}
