@@ -46,8 +46,8 @@ export default function Taskbar() {
       <footer
         className={cn(
           "fixed inset-x-0 bottom-0 z-40 flex h-[52px] items-center justify-center",
-          // Acrylic glass panel
-          "border-t border-white/10 bg-neutral-950/40 backdrop-blur-2xl backdrop-saturate-150",
+          // Acrylic / Mica — opaque enough to read, glass enough to feel alive
+          "border-t border-white/10 bg-neutral-900/85 backdrop-blur-xl backdrop-saturate-150",
           "before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-t before:from-white/[0.03] before:to-transparent",
         )}
       >

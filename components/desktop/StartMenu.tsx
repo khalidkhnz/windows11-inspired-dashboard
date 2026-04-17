@@ -58,7 +58,7 @@ export function StartMenu({ open, onClose }: { open: boolean; onClose: () => voi
           transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className={cn(
             "fixed bottom-[60px] left-1/2 z-50 w-[640px] max-w-[92vw] -translate-x-1/2 overflow-hidden rounded-xl",
-            "border border-white/[0.08] bg-neutral-950/55 text-neutral-100 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-3xl backdrop-saturate-150",
+            "border border-white/10 bg-neutral-900/95 text-neutral-100 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl backdrop-saturate-150",
           )}
         >
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.06] to-transparent" />

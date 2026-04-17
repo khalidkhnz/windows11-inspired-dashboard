@@ -44,7 +44,7 @@ export function ClockPopover({
           transition={{ duration: 0.16 }}
           className={cn(
             "fixed bottom-[60px] right-3 z-50 w-[320px] overflow-hidden rounded-xl",
-            "border border-white/[0.08] bg-neutral-950/55 text-neutral-100 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-3xl backdrop-saturate-150",
+            "border border-white/10 bg-neutral-900/95 text-neutral-100 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl backdrop-saturate-150",
           )}
         >
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent" />

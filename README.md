@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Portfolio OS — khalidkhnz.in
 
-## Getting Started
+A faux operating-system portfolio for [Khalid Khan](https://www.khalidkhnz.in).
+It currently ships as a **Windows 11** inspired desktop — lock screen, taskbar,
+start menu, real window management, and in-app portfolio content (no iframes to
+broken third-party sites, no database).
 
-First, run the development server:
+> **Status — April 2026:** Windows 11 baseline is live. The next arc is a
+> **three-OS theme system** (Windows / macOS / Linux) with a per-component
+> **Custom** picker. The full plan is tracked in [TODO.md](./TODO.md).
+
+## Stack
+
+- **Framework:** Next.js 14 App Router, React 18, TypeScript 5
+- **Styling:** Tailwind + a tiny set of shadcn/ui primitives
+- **Motion:** Framer Motion (+ GSAP for a couple of boot animations)
+- **Icons:** lucide-react rendered into gradient tiles by `<AppIcon>`
+- **Email:** Nodemailer via a Next server action (`/actions/contact.action.ts`)
+- **Package manager:** [Bun](https://bun.sh)
+- **Data:** Everything lives in `lib/portfolio.ts` — no DB, no CMS
+
+## Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+bun run dev      # http://localhost:3000
+bun run build
+bun run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What's where
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/
+  layout.tsx                # metadata, JSON-LD, providers, Toaster
+  manifest.ts               # /manifest.webmanifest
+  sitemap.ts                # /sitemap.xml
+  robots.ts                 # /robots.txt
+  icon.svg                  # favicon (SVG, auto-wired by Next)
+  apple-icon.tsx            # 180x180 PWA icon via next/og
+  opengraph-image.tsx       # 1200x630 OG card via next/og
+  (Dashboard)/
+    page.tsx                # lock screen → /desktop
+    desktop/
+      layout.tsx            # wallpaper + taskbar + windows layer
+      page.tsx              # desktop icons
+components/
+  apps/                     # AboutMe, Projects, Skills, Resume, Contact, ...
+  desktop/                  # Window, Taskbar, StartMenu, AppIcon, etc.
+  ui/                       # shadcn primitives actually in use
+context/
+  OsContext.tsx             # window manager (open/focus/drag/resize/z-order)
+  WallpaperContext.tsx      # wallpaper choice, persisted to localStorage
+lib/
+  apps.ts                   # the app registry (icon + component + flags)
+  portfolio.ts              # about, projects, skills, resume — edit me
+  mailer.ts                 # nodemailer transport
+  icons.tsx                 # legacy shared image icons (start button, etc.)
+types/
+  os.ts                     # AppDefinition, WindowState, OsContextValue
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Editing portfolio content
 
-## Learn More
+Everything lives in [`lib/portfolio.ts`](./lib/portfolio.ts):
 
-To learn more about Next.js, take a look at the following resources:
+- `owner` — name, role, bio, avatar, site URL, email
+- `projects`, `skills`, `experience`, `socials`, `resume`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+No rebuild-your-mental-model tax — change the object, save, done.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Contact form / email env vars
 
-## Deploy on Vercel
+The contact app calls `sendContactAction` which uses Nodemailer. Set these in
+your environment (e.g. `.env.local` for dev, your host's dashboard for prod):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=465
+EMAIL_USER=you@example.com
+EMAIL_PASSWORD=app-password
+CONTACT_INBOX=you@example.com   # optional — defaults to EMAIL_USER
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Roadmap
+
+The big next arc — **multi-theme system** (Windows / macOS / Linux / Custom
+per-component) — is tracked in [**TODO.md**](./TODO.md). Milestones M1→M7 are
+checklisted there; each milestone is scoped so it can be landed in one PR.
+
+## Deploy
+
+Static-friendly: every route in the current build is pre-rendered. Point
+Vercel (or any Next-capable host) at the repo, set the email env vars above,
+and ship.
+
+---
+
+Made by [Khalid Khan](https://www.khalidkhnz.in) — MIT licensed unless noted.

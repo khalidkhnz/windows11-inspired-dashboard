@@ -71,8 +71,8 @@ export default function DesktopContextMenu({ children }: { children: React.React
             transition={{ duration: 0.1 }}
             style={{ left: menu.x, top: menu.y }}
             className={cn(
-              "fixed z-50 min-w-[220px] overflow-hidden rounded-lg border border-white/[0.08]",
-              "bg-neutral-950/55 p-1.5 text-sm text-neutral-100 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-3xl backdrop-saturate-150",
+              "fixed z-50 min-w-[220px] overflow-hidden rounded-lg border border-white/10",
+              "bg-neutral-900/95 p-1.5 text-sm text-neutral-100 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl backdrop-saturate-150",
             )}
           >
             {items.map((item) => {

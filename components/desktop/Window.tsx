@@ -154,10 +154,10 @@ function WindowImpl({ win, app }: WindowProps) {
           className={cn(
             "fixed flex flex-col overflow-hidden text-neutral-100",
             win.maximized ? "rounded-none" : "rounded-xl",
-            // Glass frame
-            "border border-white/[0.08] bg-neutral-950/60 backdrop-blur-2xl backdrop-saturate-150",
+            // Mica-ish solid-ish frame (Win11 look)
+            "border border-white/10 bg-neutral-900/95 backdrop-blur-md backdrop-saturate-150",
             "shadow-[0_24px_80px_-12px_rgba(0,0,0,0.65)]",
-            isActive && "border-white/15 shadow-[0_30px_100px_-12px_rgba(0,0,0,0.8)]",
+            isActive && "border-white/20 shadow-[0_30px_100px_-12px_rgba(0,0,0,0.8)]",
           )}
           role="dialog"
           aria-label={win.title}
