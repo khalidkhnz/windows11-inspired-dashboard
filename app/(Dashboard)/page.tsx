@@ -8,15 +8,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Wifi, BatteryMedium, Accessibility } from "lucide-react";
 import Wallpaper from "@/components/desktop/Wallpaper";
 import WindowsLoading from "@/components/WindowsLoading/WindowsLoading";
+import { ThemePicker } from "@/components/desktop/ThemePicker/ThemePicker";
+import { useTheme } from "@/context/ThemeContext";
 import { useClock } from "@/hooks/useClock";
 import { owner } from "@/lib/portfolio";
 import { cn } from "@/lib/utils";
 
 /**
- * The lock screen. No auth backend — clicking / pressing any key boots into
- * the desktop. That's the point; this is a portfolio.
+ * Root route. Shows the theme picker on first visit, then the lock screen.
  */
-export default function LockScreen() {
+export default function Root() {
+  const { hydrated, firstRun } = useTheme();
+  const [pickerDone, setPickerDone] = useState(false);
+
+  if (!hydrated) return null;
+  if (firstRun && !pickerDone) {
+    return <ThemePicker onDone={() => setPickerDone(true)} />;
+  }
+  return <LockScreen />;
+}
+
+function LockScreen() {
   const router = useRouter();
   const now = useClock();
   const [signingIn, setSigningIn] = useState(false);

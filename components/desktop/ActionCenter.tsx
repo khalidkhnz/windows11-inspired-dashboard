@@ -11,8 +11,10 @@ import {
   Moon,
   Focus,
   Accessibility,
+  Palette,
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 
 const TILES = [
@@ -27,6 +29,7 @@ const TILES = [
 export function ActionCenter({ open, onClose }: { open: boolean; onClose: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const [tiles, setTiles] = useState(TILES);
+  const { reset: resetTheme } = useTheme();
 
   useEffect(() => {
     if (!open) return;
@@ -90,6 +93,18 @@ export function ActionCenter({ open, onClose }: { open: boolean; onClose: () => 
               <Slider defaultValue={[85]} max={100} step={1} className="flex-1" />
             </div>
           </div>
+
+          <button
+            onClick={() => {
+              resetTheme();
+              onClose();
+              window.location.href = "/";
+            }}
+            className="relative mt-3 flex w-full items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-[12px] text-neutral-200 hover:bg-white/[0.06]"
+          >
+            <Palette className="h-4 w-4" />
+            Change theme…
+          </button>
         </motion.div>
       )}
     </AnimatePresence>

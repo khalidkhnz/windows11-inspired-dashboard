@@ -26,17 +26,17 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 1. Theme picker (first-run)
 
-- [ ] Route: `/` renders a **Welcome / Theme Picker** first when no saved choice
-  - [ ] Animated intro logo (4-tile mark)
-  - [ ] Three big tiles: **Windows**, **macOS**, **Linux** (preview screenshot in each)
-  - [ ] A fourth tile: **Custom** opens the per-component picker
-- [ ] Custom picker UI
-  - [ ] Sectioned list of every themable component
-  - [ ] Radio segmented control (Windows / macOS / Linux) per row
-  - [ ] Live preview strip at the top showing current mix
-  - [ ] "Randomize" and "Reset to default" helpers
-- [ ] "Continue" button saves choices, then navigates to lock screen
-- [ ] Small link in action center / settings to re-open the picker later
+- [x] Route: `/` renders a **Welcome / Theme Picker** first when no saved choice
+  - [x] Animated intro logo (4-tile mark)
+  - [x] Three big tiles: **Windows**, **macOS**, **Linux** (preview screenshot in each)
+  - [x] A fourth tile: **Custom** opens the per-component picker
+- [x] Custom picker UI
+  - [x] Sectioned list of every themable component
+  - [x] Radio segmented control (Windows / macOS / Linux) per row
+  - [x] Live preview strip at the top showing current mix
+  - [x] "Randomize" and "Reset to default" helpers
+- [x] "Continue" button saves choices, then navigates to lock screen
+- [x] Small link in action center / settings to re-open the picker later
 
 ---
 
