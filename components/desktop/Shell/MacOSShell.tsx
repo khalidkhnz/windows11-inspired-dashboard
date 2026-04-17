@@ -79,18 +79,38 @@ export function MacOSShell() {
 
       {/* Dock */}
       <footer className="fixed inset-x-0 bottom-2 z-40 flex items-end justify-center pointer-events-none">
-        <div className="pointer-events-auto flex items-end gap-1.5 rounded-2xl border border-white/10 bg-white/15 px-2 py-1.5 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.55)] backdrop-blur-2xl">
-          <button
+        <div
+          className={cn(
+            "pointer-events-auto flex items-end gap-1 rounded-[20px] px-2.5 py-1.5",
+            "bg-[rgba(255,255,255,0.18)] backdrop-blur-2xl backdrop-saturate-180",
+            "shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.35)]",
+            "ring-[0.5px] ring-black/20",
+          )}
+        >
+          <MacDockItem
+            title="Launchpad"
+            isActive={false}
+            hasWindow={false}
             onClick={() => toggle("launcher")}
-            className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-neutral-400 to-neutral-700 shadow"
-            aria-label="Launchpad"
           >
-            <span className="grid h-6 w-6 grid-cols-3 gap-0.5">
-              {Array.from({ length: 9 }).map((_, i) => (
-                <span key={i} className="rounded-sm bg-white/80" />
-              ))}
-            </span>
-          </button>
+            <div className="relative flex h-12 w-12 items-center justify-center rounded-[14px] bg-[radial-gradient(circle_at_30%_25%,#f5f5f7,#b8b8be_65%,#8e8e93)] ring-[0.5px] ring-black/20 shadow-[0_4px_10px_-2px_rgba(0,0,0,0.35)]">
+              <span className="grid h-7 w-7 grid-cols-3 gap-[3px]">
+                {[
+                  "#ff5f57",
+                  "#febc2e",
+                  "#28c840",
+                  "#5ac8fa",
+                  "#007aff",
+                  "#af52de",
+                  "#ff9500",
+                  "#ff2d55",
+                  "#8e8e93",
+                ].map((c, i) => (
+                  <span key={i} className="rounded-[3px]" style={{ background: c }} />
+                ))}
+              </span>
+            </div>
+          </MacDockItem>
 
           {dockApps.map((app) => {
             const instances = windows.filter((w) => w.appId === app.id);
@@ -111,19 +131,22 @@ export function MacOSShell() {
                   icon={app.icon}
                   className="h-12 w-12"
                   glyphClassName="h-6 w-6"
-                  rounded="rounded-[12px]"
+                  rounded="rounded-[14px]"
                 />
               </MacDockItem>
             );
           })}
 
           {/* separator */}
-          <div className="mx-1 h-10 w-px bg-white/25" />
+          <div className="mx-1 h-10 w-px bg-black/20" />
 
           {/* trash */}
           <MacDockItem title="Trash" isActive={false} hasWindow={false}>
-            <div className="flex h-12 w-12 items-center justify-center rounded-[12px] bg-gradient-to-br from-neutral-600 to-neutral-800 shadow">
-              <span className="h-5 w-5 rounded-sm border-2 border-white/80" />
+            <div className="flex h-12 w-12 flex-col items-center justify-center gap-[2px] rounded-[14px] bg-[radial-gradient(circle_at_30%_25%,#e5e5ea,#98989d_70%)] ring-[0.5px] ring-black/20 shadow-[0_4px_10px_-2px_rgba(0,0,0,0.35)]">
+              <span className="h-[3px] w-5 rounded-sm bg-[#48484a]" />
+              <span className="flex h-6 w-6 items-center justify-center rounded-[4px] border-[2px] border-[#48484a] bg-transparent">
+                <span className="h-3.5 w-0.5 bg-[#48484a]" />
+              </span>
             </div>
           </MacDockItem>
         </div>
