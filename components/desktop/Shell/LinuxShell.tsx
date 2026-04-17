@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { format } from "date-fns";
 import {
   Wifi,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useOs } from "@/context/OsContext";
+import { useShellUI } from "@/context/ShellUIContext";
 import { AppIcon } from "@/components/desktop/AppIcon";
 import { StartMenu } from "@/components/desktop/StartMenu";
 import { ClockPopover } from "@/components/desktop/ClockPopover";
@@ -20,9 +20,10 @@ import { useClock } from "@/hooks/useClock";
 
 export function LinuxShell() {
   const { apps, windows, activeWindowId, openApp, restoreOrMinimize } = useOs();
-  const [activitiesOpen, setActivitiesOpen] = useState(false);
-  const [clockOpen, setClockOpen] = useState(false);
-  const [systemOpen, setSystemOpen] = useState(false);
+  const { popover, open, toggle, close } = useShellUI();
+  const activitiesOpen = popover === "launcher";
+  const clockOpen = popover === "clock";
+  const systemOpen = popover === "action";
   const now = useClock();
 
   const dashApps = apps.filter((a) => a.pinnedInTaskbar);
@@ -34,11 +35,7 @@ export function LinuxShell() {
         className="fixed inset-x-0 top-0 z-40 flex h-8 items-center justify-between bg-black/70 px-3 text-[12px] font-medium text-white"
       >
         <button
-          onClick={() => {
-            setActivitiesOpen((v) => !v);
-            setClockOpen(false);
-            setSystemOpen(false);
-          }}
+          onClick={() => toggle("launcher")}
           className={cn(
             "rounded px-2 py-0.5 hover:bg-white/15",
             activitiesOpen && "bg-white/15",
@@ -47,11 +44,7 @@ export function LinuxShell() {
           Activities
         </button>
         <button
-          onClick={() => {
-            setClockOpen((v) => !v);
-            setActivitiesOpen(false);
-            setSystemOpen(false);
-          }}
+          onClick={() => toggle("clock")}
           className={cn(
             "rounded px-2 py-0.5 tabular-nums hover:bg-white/15",
             clockOpen && "bg-white/15",
@@ -60,11 +53,7 @@ export function LinuxShell() {
           {format(now, "EEE MMM d  HH:mm")}
         </button>
         <button
-          onClick={() => {
-            setSystemOpen((v) => !v);
-            setActivitiesOpen(false);
-            setClockOpen(false);
-          }}
+          onClick={() => toggle("action")}
           className={cn(
             "flex items-center gap-2 rounded px-2 py-0.5 hover:bg-white/15",
             systemOpen && "bg-white/15",
@@ -118,7 +107,7 @@ export function LinuxShell() {
           })}
           <div className="mx-1 h-6 w-px bg-white/15" />
           <button
-            onClick={() => setActivitiesOpen(true)}
+            onClick={() => open("launcher")}
             className="flex h-10 w-10 items-center justify-center rounded-md text-white/80 hover:bg-white/10"
             aria-label="Show apps"
           >
@@ -127,9 +116,9 @@ export function LinuxShell() {
         </div>
       </footer>
 
-      <StartMenu open={activitiesOpen} onClose={() => setActivitiesOpen(false)} />
-      <ClockPopover open={clockOpen} onClose={() => setClockOpen(false)} now={now} />
-      <ActionCenter open={systemOpen} onClose={() => setSystemOpen(false)} />
+      <StartMenu open={activitiesOpen} onClose={close} />
+      <ClockPopover open={clockOpen} onClose={close} now={now} />
+      <ActionCenter open={systemOpen} onClose={close} />
     </>
   );
 }

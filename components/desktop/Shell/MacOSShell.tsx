@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useOs } from "@/context/OsContext";
+import { useShellUI } from "@/context/ShellUIContext";
 import { AppIcon } from "@/components/desktop/AppIcon";
 import { StartMenu } from "@/components/desktop/StartMenu";
 import { ClockPopover } from "@/components/desktop/ClockPopover";
@@ -25,9 +25,10 @@ import { owner } from "@/lib/portfolio";
 
 export function MacOSShell() {
   const { apps, windows, activeWindowId, openApp, restoreOrMinimize, appsById } = useOs();
-  const [launchpadOpen, setLaunchpadOpen] = useState(false);
-  const [clockOpen, setClockOpen] = useState(false);
-  const [controlOpen, setControlOpen] = useState(false);
+  const { popover, toggle, close } = useShellUI();
+  const launchpadOpen = popover === "launcher";
+  const clockOpen = popover === "clock";
+  const controlOpen = popover === "action";
   const now = useClock();
 
   const dockApps = apps.filter((a) => a.pinnedInTaskbar);
@@ -54,11 +55,7 @@ export function MacOSShell() {
           <Wifi className="h-3.5 w-3.5" />
           <Volume2 className="h-3.5 w-3.5" />
           <button
-            onClick={() => {
-              setControlOpen((v) => !v);
-              setClockOpen(false);
-              setLaunchpadOpen(false);
-            }}
+            onClick={() => toggle("action")}
             className={cn(
               "rounded p-0.5 hover:bg-white/20",
               controlOpen && "bg-white/20",
@@ -69,11 +66,7 @@ export function MacOSShell() {
           </button>
           <Search className="h-3.5 w-3.5" />
           <button
-            onClick={() => {
-              setClockOpen((v) => !v);
-              setControlOpen(false);
-              setLaunchpadOpen(false);
-            }}
+            onClick={() => toggle("clock")}
             className={cn(
               "rounded px-1 tabular-nums hover:bg-white/20",
               clockOpen && "bg-white/20",
@@ -88,11 +81,7 @@ export function MacOSShell() {
       <footer className="fixed inset-x-0 bottom-2 z-40 flex items-end justify-center pointer-events-none">
         <div className="pointer-events-auto flex items-end gap-1.5 rounded-2xl border border-white/10 bg-white/15 px-2 py-1.5 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.55)] backdrop-blur-2xl">
           <button
-            onClick={() => {
-              setLaunchpadOpen((v) => !v);
-              setClockOpen(false);
-              setControlOpen(false);
-            }}
+            onClick={() => toggle("launcher")}
             className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-neutral-400 to-neutral-700 shadow"
             aria-label="Launchpad"
           >
@@ -140,9 +129,9 @@ export function MacOSShell() {
         </div>
       </footer>
 
-      <StartMenu open={launchpadOpen} onClose={() => setLaunchpadOpen(false)} />
-      <ClockPopover open={clockOpen} onClose={() => setClockOpen(false)} now={now} />
-      <ActionCenter open={controlOpen} onClose={() => setControlOpen(false)} />
+      <StartMenu open={launchpadOpen} onClose={close} />
+      <ClockPopover open={clockOpen} onClose={close} now={now} />
+      <ActionCenter open={controlOpen} onClose={close} />
     </>
   );
 }

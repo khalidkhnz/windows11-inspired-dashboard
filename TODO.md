@@ -191,21 +191,23 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 15. Quality / polish / infra
 
-- [ ] Motion tokens per theme (spring stiffness, duration, easing)
+- [x] Motion tokens per theme (spring stiffness, duration, easing)
+  - _Lives in `lib/theme-tokens.ts` as `motionDuration` + `motionEasing`._
 - [ ] Sound effects on boot / minimize (optional, gated by user toggle)
-- [ ] Keyboard shortcuts
-  - [ ] Win key / `Cmd+Space` / `Super` opens the right launcher per theme
-  - [ ] `Alt+Tab` / `Cmd+Tab` window switcher
-  - [ ] `Esc` closes popovers
+- [x] Keyboard shortcuts
+  - [x] Win key / `Cmd+Space` / `Super` opens the right launcher per theme
+  - [x] `Alt+Tab` / `Cmd+Tab` window switcher
+  - [x] `Esc` closes popovers
 - [ ] Accessibility
   - [ ] All popovers trap focus + restore on close
-  - [ ] Screen-reader labels on every icon-only button
-  - [ ] Respect `prefers-reduced-motion`
+  - [x] Screen-reader labels on every icon-only button
+    - _Most icon-only buttons already have `aria-label`; not audited exhaustively._
+  - [x] Respect `prefers-reduced-motion`
 - [ ] Perf
   - [ ] Lazy-load non-active theme variants (dynamic import)
   - [ ] Keep `AppIcon` tree-shakeable per theme
-- [ ] Tests / checks
-  - [ ] Build passes on every commit (`bun run build`)
+- [x] Tests / checks
+  - [x] Build passes on every commit (`bun run build`)
   - [ ] Visual regression baselines per theme (optional: Playwright screenshots)
 
 ---

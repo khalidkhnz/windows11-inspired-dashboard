@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { Search, Wifi, Volume2, BatteryMedium } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useOs } from "@/context/OsContext";
+import { useShellUI } from "@/context/ShellUIContext";
 import { ICONS } from "@/lib/icons";
 import { StartMenu } from "./StartMenu";
 import { ClockPopover } from "./ClockPopover";
@@ -16,9 +16,10 @@ import { useClock } from "@/hooks/useClock";
 
 export default function Taskbar() {
   const { apps, windows, activeWindowId, openApp, restoreOrMinimize } = useOs();
-  const [startOpen, setStartOpen] = useState(false);
-  const [clockOpen, setClockOpen] = useState(false);
-  const [actionOpen, setActionOpen] = useState(false);
+  const { popover, toggle, close } = useShellUI();
+  const startOpen = popover === "launcher";
+  const clockOpen = popover === "clock";
+  const actionOpen = popover === "action";
   const now = useClock();
 
   const pinned = apps.filter((a) => a.pinnedInTaskbar);
@@ -54,11 +55,7 @@ export default function Taskbar() {
         <div className="relative flex items-center gap-1">
           <button
             aria-label="Start"
-            onClick={() => {
-              setStartOpen((v) => !v);
-              setActionOpen(false);
-              setClockOpen(false);
-            }}
+            onClick={() => toggle("launcher")}
             className={cn(
               "relative flex h-10 w-10 items-center justify-center rounded-md transition-colors",
               startOpen ? "bg-white/15" : "hover:bg-white/10",
@@ -71,11 +68,7 @@ export default function Taskbar() {
           </button>
           <button
             aria-label="Search"
-            onClick={() => {
-              setStartOpen((v) => !v);
-              setActionOpen(false);
-              setClockOpen(false);
-            }}
+            onClick={() => toggle("launcher")}
             className="flex h-10 w-10 items-center justify-center rounded-md text-neutral-200 transition-colors hover:bg-white/10"
           >
             <Search className="h-4 w-4" />
@@ -114,11 +107,7 @@ export default function Taskbar() {
 
         <div className="absolute inset-y-0 right-0 flex items-center px-2">
           <button
-            onClick={() => {
-              setActionOpen((v) => !v);
-              setClockOpen(false);
-              setStartOpen(false);
-            }}
+            onClick={() => toggle("action")}
             className={cn(
               "flex h-10 items-center gap-2 rounded-md px-2 text-neutral-200 transition-colors hover:bg-white/10",
               actionOpen && "bg-white/15",
@@ -130,11 +119,7 @@ export default function Taskbar() {
             <BatteryMedium className="h-4 w-4" />
           </button>
           <button
-            onClick={() => {
-              setClockOpen((v) => !v);
-              setActionOpen(false);
-              setStartOpen(false);
-            }}
+            onClick={() => toggle("clock")}
             className={cn(
               "flex h-10 items-center rounded-md px-3 text-right text-[11px] leading-tight text-neutral-100 transition-colors hover:bg-white/10",
               clockOpen && "bg-white/15",
@@ -149,9 +134,9 @@ export default function Taskbar() {
         </div>
       </footer>
 
-      <StartMenu open={startOpen} onClose={() => setStartOpen(false)} />
-      <ClockPopover open={clockOpen} onClose={() => setClockOpen(false)} now={now} />
-      <ActionCenter open={actionOpen} onClose={() => setActionOpen(false)} />
+      <StartMenu open={startOpen} onClose={close} />
+      <ClockPopover open={clockOpen} onClose={close} now={now} />
+      <ActionCenter open={actionOpen} onClose={close} />
     </>
   );
 }
