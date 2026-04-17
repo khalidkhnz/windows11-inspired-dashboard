@@ -48,9 +48,9 @@ export default function Projects() {
                 p.slug === active?.slug ? activeRow : "text-neutral-300 hover:bg-white/5",
               )}
             >
-              <span className="font-medium">{p.name}</span>
+              <span className="font-medium line-clamp-1">{p.name}</span>
               <span className="text-[11px] text-neutral-500 group-hover:text-neutral-400">
-                {p.year} · {p.tags[0]}
+                {p.role} · {p.year}
               </span>
             </button>
           ))}
@@ -61,7 +61,7 @@ export default function Projects() {
         {active && (
           <article className="mx-auto max-w-3xl px-8 py-8">
             <p className="flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400">
-              <Sparkles className="h-3.5 w-3.5" /> Featured
+              <Sparkles className="h-3.5 w-3.5" /> {active.role} · {active.year}
             </p>
             <h1 className="mt-2 text-3xl font-semibold">{active.name}</h1>
             <p className="mt-1 text-sm text-neutral-400">{active.tagline}</p>

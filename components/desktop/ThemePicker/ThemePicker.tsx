@@ -78,7 +78,7 @@ export function ThemePicker({ onDone }: { onDone: () => void }) {
               <div className="mb-8 text-center">
                 <h1 className="text-3xl font-light">Welcome.</h1>
                 <p className="mt-2 text-sm text-white/60">
-                  Choose the desktop style you want to explore — you can mix and
+                  Choose the desktop style you want to explore. You can mix and
                   match later.
                 </p>
               </div>

@@ -74,7 +74,7 @@ export default function Settings() {
           <div>
             <h2 className="text-xl font-semibold">Theme</h2>
             <p className="text-sm text-neutral-400">
-              Pick a preset or mix components per-OS. Changes apply live.
+              Pick a preset or mix components per OS. Changes apply live.
             </p>
 
             <div className="mt-5 grid grid-cols-3 gap-3">
@@ -251,7 +251,7 @@ export default function Settings() {
             <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.03] p-5 text-sm text-neutral-300">
               <p>
                 A Windows 11 inspired desktop built with Next.js, Tailwind, and Framer
-                Motion. No database — all content lives in code.
+                Motion. No database. All content lives in code.
               </p>
               <dl className="mt-4 grid grid-cols-2 gap-y-2 text-xs">
                 <dt className="text-neutral-500">Build</dt>

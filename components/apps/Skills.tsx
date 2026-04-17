@@ -19,7 +19,7 @@ export default function Skills() {
         <p className="text-xs uppercase tracking-widest text-neutral-400">Skills</p>
         <h1 className="mt-1 text-2xl font-semibold">Tools I reach for, day to day</h1>
         <p className="mt-1 text-sm text-neutral-400">
-          Self-rated — numbers are vibes, not benchmarks.
+          Self rated. Numbers are vibes, not benchmarks.
         </p>
       </header>
 

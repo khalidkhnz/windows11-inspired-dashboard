@@ -61,7 +61,7 @@ const help = [
   "  projects          list featured projects",
   "  skills            list top skills",
   "  socials           show social links",
-  "  open <slug>       open a project's live URL (e.g. open sportjacks)",
+  "  open <slug>       open a project's live URL (e.g. open defi_platform)",
   "  clear             clear the screen",
   "  echo <text>       echo back",
   "  date              current date/time",
@@ -79,13 +79,13 @@ function run(command: string): Line[] {
       return help.map((t) => ({ kind: "out", text: t }));
     case "whoami":
       return [
-        { kind: "out", text: `${owner.name} — ${owner.role} (${owner.location})` },
+        { kind: "out", text: `${owner.name} · ${owner.role} (${owner.location})` },
         { kind: "out", text: owner.tagline },
       ];
     case "projects":
       return projects.map((p) => ({
         kind: "out",
-        text: `  ${p.slug.padEnd(22)} ${p.name} — ${p.tagline}`,
+        text: `  ${p.slug.padEnd(22)} ${p.name} · ${p.tagline}`,
       }));
     case "skills":
       return skills.flatMap((group) => [
@@ -125,7 +125,7 @@ export default function Terminal() {
   const themeKey = useThemeChoice("terminal");
   const theme = TERMINAL_THEMES[themeKey] ?? TERMINAL_THEMES.windows;
   const [lines, setLines] = useState<Line[]>([
-    { kind: "out", text: `Welcome to ${owner.handle}'s portfolio shell — type 'help' to begin.` },
+    { kind: "out", text: `Welcome to ${owner.handle}'s portfolio shell. Type 'help' to begin.` },
   ]);
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);

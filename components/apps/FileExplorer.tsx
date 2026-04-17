@@ -30,7 +30,7 @@ const tree: Record<string, FileNode[]> = {
   ],
   Documents: [
     {
-      name: "Resume.pdf",
+      name: "KHALID_KHAN_RESUME.pdf",
       kind: "file",
       icon: "pdf",
       size: resume.sizeLabel,
@@ -38,20 +38,26 @@ const tree: Record<string, FileNode[]> = {
       href: resume.url,
     },
     {
-      name: "Cover-Letter.pdf",
+      name: "KHALID_KHAN_RESUME.html",
       kind: "file",
       icon: "pdf",
-      size: "112 KB",
-      updated: "2024-06-10",
-      locked: true,
+      size: "18 KB",
+      updated: resume.updated,
+      href: resume.htmlUrl,
     },
   ],
   Pictures: [],
   Projects: [
-    { name: "portfolio-v2", kind: "folder", icon: "folder" },
-    { name: "sportjacks", kind: "folder", icon: "folder" },
-    { name: "hotel-deepali", kind: "folder", icon: "folder" },
-    { name: "win11-dashboard", kind: "folder", icon: "folder" },
+    { name: "defi_platform", kind: "folder", icon: "folder" },
+    { name: "dlt_supply_chain", kind: "folder", icon: "folder" },
+    { name: "ai_coding_platform", kind: "folder", icon: "folder" },
+    { name: "ide_agent", kind: "folder", icon: "folder" },
+    { name: "ops_dashboard", kind: "folder", icon: "folder" },
+    { name: "transport_platform", kind: "folder", icon: "folder" },
+    { name: "digital_card_saas", kind: "folder", icon: "folder" },
+    { name: "user_management", kind: "folder", icon: "folder" },
+    { name: "cloud_iot", kind: "folder", icon: "folder" },
+    { name: "win11_dashboard", kind: "folder", icon: "folder" },
   ],
 };
 

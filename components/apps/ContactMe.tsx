@@ -38,7 +38,7 @@ export default function ContactMe() {
     startTransition(async () => {
       const result = await sendContactAction(formData);
       if (result.ok) {
-        toast.success("Message sent — I'll get back to you.");
+        toast.success("Message sent. I'll get back to you.");
         setSent(true);
         form.reset();
       } else {
@@ -112,7 +112,7 @@ export default function ContactMe() {
           <div className="rounded-xl border border-white/5 bg-white/[0.03] p-5">
             <h3 className="text-sm font-medium">Prefer email?</h3>
             <p className="mt-1 text-xs text-neutral-400">
-              Reach me directly — I reply within a day or two.
+              Reach me directly. I reply within a day or two.
             </p>
             <a
               href={`mailto:${owner.email}`}
@@ -125,7 +125,7 @@ export default function ContactMe() {
 
           <div className="mt-4 rounded-xl border border-white/5 bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-5 text-xs text-neutral-300">
             <p>
-              Your message lands in my inbox via a server action — no third-party form
+              Your message lands in my inbox via a server action. No third party form
               services in the mix.
             </p>
           </div>
