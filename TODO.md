@@ -106,24 +106,24 @@ styles: **Windows 11**, **macOS**, or **Linux (GNOME/KDE-flavored)** — plus a
 
 ## 6. Action center / Control Center / System Tray
 
-- [ ] `ThemedActionCenter`
-  - [ ] **Windows 11 Quick Settings** (current) — tile grid + sliders
-  - [ ] **macOS Control Center** — rounded groups for Wi-Fi/Bluetooth/Focus/Brightness/Sound/Music
-  - [ ] **Linux System Menu** — vertical list with slider rows, user + power actions at the bottom
+- [x] `ThemedActionCenter`
+  - [x] **Windows 11 Quick Settings** (current) — tile grid + sliders
+  - [x] **macOS Control Center** — rounded groups for Wi-Fi/Bluetooth/Focus/Brightness/Sound/Music
+  - [x] **Linux System Menu** — vertical list with slider rows, user + power actions at the bottom
 
 ## 7. Clock / calendar popover
 
-- [ ] `ThemedClock`
-  - [ ] Windows: large time + month calendar (current)
-  - [ ] macOS: notifications column + widgets column (Calendar / Weather / World Clock)
-  - [ ] Linux: date + mini calendar + media player strip
+- [x] `ThemedClock`
+  - [x] Windows: large time + month calendar (current)
+  - [x] macOS: notifications column + widgets column (Calendar / Weather / World Clock)
+  - [x] Linux: date + mini calendar + media player strip
 
 ## 8. Context menus
 
-- [ ] `ThemedContextMenu`
-  - [ ] Windows 11: rounded acrylic with icon column
-  - [ ] macOS: narrow rows, right-aligned shortcuts, semi-transparent
-  - [ ] Linux: flat, hover-fill, no icons
+- [x] `ThemedContextMenu`
+  - [x] Windows 11: rounded acrylic with icon column
+  - [x] macOS: narrow rows, right-aligned shortcuts, semi-transparent
+  - [x] Linux: flat, hover-fill, no icons
 
 ---
 
