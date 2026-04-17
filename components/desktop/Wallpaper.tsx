@@ -9,10 +9,14 @@ export default function Wallpaper({ blur = false }: { blur?: boolean }) {
     return (
       <>
         <div
-          className={blur ? "absolute inset-0 scale-105 blur-[3px] brightness-90" : "absolute inset-0"}
+          className={
+            blur
+              ? "pointer-events-none absolute inset-0 scale-105 blur-[3px] brightness-90"
+              : "pointer-events-none absolute inset-0"
+          }
           style={{ background: wallpaper.gradient }}
         />
-        {blur && <div className="absolute inset-0 bg-black/30" />}
+        {blur && <div className="pointer-events-none absolute inset-0 bg-black/30" />}
       </>
     );
   }
@@ -24,10 +28,14 @@ export default function Wallpaper({ blur = false }: { blur?: boolean }) {
           alt=""
           fill
           priority
-          className={blur ? "object-cover scale-105 blur-[3px] brightness-90" : "object-cover"}
+          className={
+            blur
+              ? "pointer-events-none object-cover scale-105 blur-[3px] brightness-90"
+              : "pointer-events-none object-cover"
+          }
         />
       )}
-      {blur && <div className="absolute inset-0 bg-black/30" />}
+      {blur && <div className="pointer-events-none absolute inset-0 bg-black/30" />}
     </>
   );
 }

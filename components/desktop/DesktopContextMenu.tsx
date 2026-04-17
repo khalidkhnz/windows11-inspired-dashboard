@@ -43,7 +43,10 @@ export default function DesktopContextMenu({ children }: { children: React.React
           y: Math.min(e.clientY, window.innerHeight - padY),
         });
       }}
-      className="h-full w-full"
+      // `relative` (no z-index) lifts this wrapper above the absolute Wallpaper
+      // sibling in source order without creating a new stacking context that
+      // would trap nested fixed elements (windows, shell chrome).
+      className="relative h-full w-full"
     >
       {children}
       <AnimatePresence>
