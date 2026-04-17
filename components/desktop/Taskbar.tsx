@@ -47,9 +47,10 @@ export default function Taskbar() {
       <footer
         className={cn(
           "fixed inset-x-0 bottom-0 z-40 flex h-[52px] items-center justify-center",
-          // Acrylic / Mica — opaque enough to read, glass enough to feel alive
-          "border-t border-white/10 bg-neutral-900/85 backdrop-blur-xl backdrop-saturate-150",
-          "before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-t before:from-white/[0.03] before:to-transparent",
+          // Mica acrylic — more premium translucency and hairline top stroke
+          "border-t border-white/[0.07] bg-neutral-950/75 backdrop-blur-2xl backdrop-saturate-150",
+          "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-white/0 before:via-white/[0.12] before:to-white/0",
+          "after:pointer-events-none after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent_30%)]",
         )}
       >
         <div className="relative flex items-center gap-1">
