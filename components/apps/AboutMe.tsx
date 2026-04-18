@@ -28,7 +28,7 @@ export default function AboutMe() {
 
   return (
     <div className="flex h-full w-full flex-col overflow-y-auto text-neutral-100">
-      <div className="relative px-8 pb-6 pt-10">
+      <div className="relative px-4 pb-6 pt-8 sm:px-8 sm:pt-10">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_at_top,rgba(120,119,198,0.25),transparent_60%)]"
@@ -50,7 +50,7 @@ export default function AboutMe() {
         </div>
       </div>
 
-      <div className="grid gap-6 px-8 pb-6 md:grid-cols-5">
+      <div className="grid gap-6 px-4 pb-6 sm:px-8 md:grid-cols-5">
         <section className="md:col-span-3">
           <h2 className="text-xs uppercase tracking-widest text-neutral-400">Bio</h2>
           <p className="mt-2 text-sm leading-relaxed text-neutral-200">{owner.bio}</p>
@@ -122,7 +122,7 @@ export default function AboutMe() {
         </section>
       </div>
 
-      <section className="px-8 pb-12">
+      <section className="px-4 pb-12 sm:px-8">
         <div className="flex items-end justify-between gap-4">
           <div>
             <h2 className="text-xs uppercase tracking-widest text-neutral-400">
@@ -141,7 +141,7 @@ export default function AboutMe() {
           </button>
         </div>
 
-        <ul className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <ul className="mt-4 grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
           {projects.map((p) => (
             <li
               key={p.slug}

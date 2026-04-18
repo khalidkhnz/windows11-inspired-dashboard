@@ -91,10 +91,10 @@ export default function FileExplorer() {
   const folderColor = FOLDER_ICON_COLOR_BY_THEME[theme];
 
   return (
-    <div className="flex h-full w-full overflow-hidden text-neutral-100">
+    <div className="flex h-full w-full flex-col overflow-hidden text-neutral-100 md:flex-row">
       <aside
         className={cn(
-          "w-52 border-r p-3",
+          "hidden w-52 border-r p-3 md:block",
           theme === "macos"
             ? "border-white/5 bg-neutral-900/40 backdrop-blur"
             : theme === "linux"
@@ -134,6 +134,40 @@ export default function FileExplorer() {
           </button>
         ))}
       </aside>
+
+      {/* Mobile top nav */}
+      <nav
+        className={cn(
+          "flex flex-shrink-0 gap-1.5 overflow-x-auto border-b px-3 py-2 md:hidden",
+          theme === "linux"
+            ? "border-black/30 bg-[#242424]"
+            : "border-white/[0.06] bg-white/[0.02]",
+        )}
+      >
+        {Object.keys(tree).map((folder) => (
+          <button
+            key={folder}
+            onClick={() => setPath([folder])}
+            className={cn(
+              "flex flex-shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-[12px]",
+              current === folder
+                ? theme === "linux"
+                  ? "border-transparent bg-[#e95420] text-white"
+                  : theme === "macos"
+                    ? "border-transparent bg-[#0a84ff]/80 text-white"
+                    : "border-transparent bg-white/10 text-white"
+                : "border-white/10 bg-white/[0.02] text-neutral-300",
+            )}
+          >
+            {folder === "This PC" ? (
+              <HardDrive className="h-3.5 w-3.5" />
+            ) : (
+              <Folder className={cn("h-3.5 w-3.5", folderColor)} />
+            )}
+            {folder}
+          </button>
+        ))}
+      </nav>
 
       <section className="flex flex-1 flex-col">
         <div

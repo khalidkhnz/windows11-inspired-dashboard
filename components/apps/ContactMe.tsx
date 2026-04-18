@@ -49,7 +49,7 @@ export default function ContactMe() {
 
   return (
     <div className="flex h-full w-full flex-col overflow-y-auto text-neutral-100">
-      <header className="border-b border-white/5 bg-white/[0.02] px-8 py-6">
+      <header className="border-b border-white/5 bg-white/[0.02] px-4 py-5 sm:px-8 sm:py-6">
         <p className="text-xs uppercase tracking-widest text-neutral-400">Contact</p>
         <h1 className="mt-1 text-2xl font-semibold">Let&apos;s talk</h1>
         <p className="mt-1 text-sm text-neutral-400">
@@ -57,7 +57,7 @@ export default function ContactMe() {
         </p>
       </header>
 
-      <div className="grid flex-1 gap-6 px-8 py-6 lg:grid-cols-5">
+      <div className="grid flex-1 gap-4 px-4 py-5 sm:gap-6 sm:px-8 sm:py-6 lg:grid-cols-5">
         <form onSubmit={handleSubmit} className="lg:col-span-3">
           <div className="grid gap-4">
             <div className="grid gap-1.5">

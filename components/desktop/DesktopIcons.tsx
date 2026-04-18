@@ -2,15 +2,22 @@
 
 import { cn } from "@/lib/utils";
 import { useOs } from "@/context/OsContext";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { AppIcon } from "./AppIcon";
+import { MobileHome } from "./Mobile/MobileHome";
 
 /**
  * Desktop icons grid. Flows top-to-bottom, then wraps into a new column
  * when the current column fills the available height, so a long list of
- * pinned apps never overflows off-screen. Shown on every OS theme.
+ * pinned apps never overflows off-screen. On phone viewports the grid is
+ * replaced by a full-screen, themed home screen.
  */
 export default function DesktopIcons() {
+  const isMobile = useIsMobile();
   const { apps, openApp } = useOs();
+
+  if (isMobile) return <MobileHome />;
+
   const pinned = apps.filter((a) => a.pinnedOnDesktop);
 
   return (

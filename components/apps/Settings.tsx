@@ -46,8 +46,8 @@ export default function Settings() {
   const accentRing = ACCENT_RING_BY_THEME[theme];
 
   return (
-    <div className="flex h-full w-full overflow-hidden text-neutral-100">
-      <aside className="w-56 border-r border-white/[0.06] bg-white/[0.02] p-3">
+    <div className="flex h-full w-full flex-col overflow-hidden text-neutral-100 md:flex-row">
+      <aside className="hidden w-56 border-r border-white/[0.06] bg-white/[0.02] p-3 md:block">
         <p className="px-2 pb-2 pt-1 text-[11px] uppercase tracking-widest text-neutral-500">
           Settings
         </p>
@@ -69,7 +69,29 @@ export default function Settings() {
         })}
       </aside>
 
-      <section className="flex-1 overflow-y-auto px-8 py-6">
+      {/* Mobile tab strip */}
+      <nav className="flex flex-shrink-0 gap-1.5 overflow-x-auto border-b border-white/[0.06] bg-white/[0.02] px-3 py-2 md:hidden">
+        {sections.map((s) => {
+          const Icon = s.icon;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setActive(s.id)}
+              className={cn(
+                "flex flex-shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] transition-colors",
+                active === s.id
+                  ? cn("border-transparent", activeRow)
+                  : "border-white/10 bg-white/[0.02] text-neutral-300",
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {s.label}
+            </button>
+          );
+        })}
+      </nav>
+
+      <section className="flex-1 overflow-y-auto px-4 py-5 sm:px-8 sm:py-6">
         {active === "theme" && (
           <div>
             <h2 className="text-xl font-semibold">Theme</h2>

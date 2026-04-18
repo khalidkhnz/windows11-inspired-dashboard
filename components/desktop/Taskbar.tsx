@@ -46,7 +46,7 @@ export default function Taskbar() {
     <>
       <footer
         className={cn(
-          "fixed inset-x-0 bottom-0 z-40 flex h-[52px] items-center justify-center",
+          "fixed inset-x-0 bottom-0 z-50 flex h-[52px] items-center justify-center",
           // Mica acrylic — more premium translucency and hairline top stroke
           "border-t border-white/[0.07] bg-neutral-950/75 backdrop-blur-2xl backdrop-saturate-150",
           "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-white/0 before:via-white/[0.12] before:to-white/0",

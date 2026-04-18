@@ -10,7 +10,7 @@ import {
 } from "react";
 import { useOs } from "@/context/OsContext";
 
-type Popover = "launcher" | "clock" | "action" | null;
+type Popover = "launcher" | "clock" | "action" | "recents" | null;
 
 type ShellUIContextValue = {
   popover: Popover;

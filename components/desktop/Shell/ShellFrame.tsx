@@ -1,33 +1,27 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useThemeChoice } from "@/context/ThemeContext";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { getShellInsets } from "@/lib/shell-insets";
 
 /**
  * Theme-aware content frame. Reserves vertical padding for the active shell
- * (bottom taskbar for Windows, top menu bar + bottom dock for macOS, top panel
- * + bottom dash for Linux) so floating windows don't clip into the chrome.
+ * so floating windows / home screens don't clip into the chrome. Mobile
+ * variants swap in shorter bars (status bar + nav bar / home indicator).
  */
 export function ShellFrame({ children }: { children: ReactNode }) {
   const theme = useThemeChoice("taskbar");
-
-  const style: CSSProperties & Record<string, string> = {
-    "--shell-top": theme === "macos" ? "28px" : theme === "linux" ? "32px" : "0px",
-    "--shell-bottom":
-      theme === "macos" ? "88px" : theme === "linux" ? "76px" : "52px",
-  };
+  const isMobile = useIsMobile();
+  const { top, bottom } = getShellInsets(theme, isMobile);
 
   return (
-    <div
-      className="relative h-screen w-full"
-      style={style}
-    >
+    <div className="relative h-screen w-full">
       <section
         className="relative w-full"
         style={{
-          height:
-            "calc(100vh - var(--shell-top) - var(--shell-bottom))",
-          marginTop: "var(--shell-top)",
+          height: `calc(100vh - ${top}px - ${bottom}px)`,
+          marginTop: `${top}px`,
         }}
       >
         {children}

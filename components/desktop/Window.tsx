@@ -2,11 +2,15 @@
 
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useOs } from "@/context/OsContext";
 import { useThemeChoice } from "@/context/ThemeContext";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { getShellInsets } from "@/lib/shell-insets";
 import type { AppDefinition, WindowState } from "@/types/os";
 import { ThemedTitleBar, CHROME_TOKENS } from "./WindowChrome";
+import { AppIcon } from "./AppIcon";
 
 export const TASKBAR_HEIGHT = 52;
 const TITLEBAR_HEIGHT = 36;
@@ -34,6 +38,9 @@ function WindowImpl({ win, app }: WindowProps) {
   const Content = app.Content;
   const windowTheme = useThemeChoice("window");
   const chrome = CHROME_TOKENS[windowTheme];
+  const shellTheme = useThemeChoice("taskbar");
+  const isMobile = useIsMobile();
+  const insets = getShellInsets(shellTheme, isMobile);
 
   const frameRef = useRef<HTMLDivElement>(null);
   const [drag, setDrag] = useState<null | { offsetX: number; offsetY: number }>(null);
@@ -49,11 +56,11 @@ function WindowImpl({ win, app }: WindowProps) {
 
   const onTitleMouseDown = useCallback(
     (e: React.MouseEvent) => {
-      if (win.maximized || e.button !== 0) return;
+      if (isMobile || win.maximized || e.button !== 0) return;
       focusWindow(win.id);
       setDrag({ offsetX: e.clientX - win.x, offsetY: e.clientY - win.y });
     },
-    [win.id, win.x, win.y, win.maximized, focusWindow],
+    [win.id, win.x, win.y, win.maximized, focusWindow, isMobile],
   );
 
   useEffect(() => {
@@ -63,8 +70,6 @@ function WindowImpl({ win, app }: WindowProps) {
       const y = e.clientY - drag.offsetY;
       const viewportH = window.innerHeight;
       const viewportW = window.innerWidth;
-      // Allow windows to partly overflow left/right but never hide the titlebar behind
-      // the taskbar. Clamp so top <= (viewport - taskbar - titlebar).
       const minX = EDGE_VISIBLE_PX - win.width;
       const maxX = viewportW - EDGE_VISIBLE_PX;
       const minY = 0;
@@ -106,7 +111,6 @@ function WindowImpl({ win, app }: WindowProps) {
       width = Math.max(MIN_WIDTH, width);
       height = Math.max(MIN_HEIGHT, height);
 
-      // Don't let the bottom edge go past the top of the taskbar.
       const viewportH = window.innerHeight;
       const maxBottom = viewportH - TASKBAR_HEIGHT;
       if (y + height > maxBottom) {
@@ -125,15 +129,15 @@ function WindowImpl({ win, app }: WindowProps) {
     };
   }, [resize, win.id, moveWindow, resizeWindow]);
 
-  const maximizedStyle: React.CSSProperties = {
+  const fullscreenStyle: React.CSSProperties = {
     left: 0,
-    top: 0,
+    top: insets.top,
     width: "100vw",
-    height: `calc(100vh - ${TASKBAR_HEIGHT}px)`,
+    height: `calc(100vh - ${insets.top}px - ${insets.bottom}px)`,
   };
 
-  const style: React.CSSProperties = win.maximized
-    ? maximizedStyle
+  const style: React.CSSProperties = isMobile || win.maximized
+    ? fullscreenStyle
     : {
         left: win.x,
         top: win.y,
@@ -147,16 +151,16 @@ function WindowImpl({ win, app }: WindowProps) {
         <motion.div
           ref={frameRef}
           key={win.id}
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.14, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: isMobile ? 1 : 0.96, y: isMobile ? 20 : 0 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: isMobile ? 1 : 0.98, y: isMobile ? 20 : 0 }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
           onMouseDown={() => focusWindow(win.id)}
-          style={{ ...style, zIndex: win.zIndex }}
+          style={{ ...style, zIndex: Math.min(win.zIndex, 49) }}
           className={cn(
             "fixed flex flex-col overflow-hidden text-neutral-100",
-            win.maximized ? "rounded-none" : chrome.radius,
-            chrome.border,
+            isMobile || win.maximized ? "rounded-none" : chrome.radius,
+            isMobile ? "" : chrome.border,
             chrome.background,
             isActive ? chrome.shadowActive : chrome.shadow,
           )}
@@ -164,26 +168,33 @@ function WindowImpl({ win, app }: WindowProps) {
           aria-label={win.title}
           data-app-window
         >
-          {/* Subtle inner highlight, acrylic */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent" />
 
-          <ThemedTitleBar
-            title={win.title}
-            icon={win.icon}
-            active={isActive}
-            maximized={win.maximized}
-            onDragStart={onTitleMouseDown}
-            onDoubleClick={() => toggleMaximize(win.id)}
-            onMinimize={() => minimizeWindow(win.id)}
-            onMaximize={() => toggleMaximize(win.id)}
-            onClose={() => closeWindow(win.id)}
-          />
+          {isMobile ? (
+            <MobileTitleBar
+              title={win.title}
+              icon={win.icon}
+              onClose={() => closeWindow(win.id)}
+            />
+          ) : (
+            <ThemedTitleBar
+              title={win.title}
+              icon={win.icon}
+              active={isActive}
+              maximized={win.maximized}
+              onDragStart={onTitleMouseDown}
+              onDoubleClick={() => toggleMaximize(win.id)}
+              onMinimize={() => minimizeWindow(win.id)}
+              onMaximize={() => toggleMaximize(win.id)}
+              onClose={() => closeWindow(win.id)}
+            />
+          )}
 
           <div className="relative flex-1 overflow-hidden">
             {Content && <Content windowId={win.id} />}
           </div>
 
-          {!win.maximized && (
+          {!isMobile && !win.maximized && (
             <ResizeHandles
               onBegin={(edge, e) => {
                 setResize({
@@ -205,6 +216,30 @@ function WindowImpl({ win, app }: WindowProps) {
 }
 
 export const Window = memo(WindowImpl);
+
+function MobileTitleBar({
+  title,
+  icon,
+  onClose,
+}: {
+  title: string;
+  icon: WindowState["icon"];
+  onClose: () => void;
+}) {
+  return (
+    <div className="relative flex h-11 flex-shrink-0 items-center gap-2 border-b border-white/[0.06] bg-white/[0.02] px-3">
+      <AppIcon icon={icon} className="h-5 w-5" glyphClassName="h-3 w-3" rounded="rounded-[5px]" />
+      <span className="flex-1 truncate text-[13px] font-medium text-neutral-100">{title}</span>
+      <button
+        onClick={onClose}
+        aria-label="Close"
+        className="flex h-8 w-8 items-center justify-center rounded-full text-neutral-300 active:bg-white/10"
+      >
+        <X className="h-4 w-4" />
+      </button>
+    </div>
+  );
+}
 
 type ResizeEdge = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
 

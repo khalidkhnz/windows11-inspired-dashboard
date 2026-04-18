@@ -16,14 +16,14 @@ export default function ResumeViewer() {
   const dlClass = DL_BY_THEME[theme];
   return (
     <div className="flex h-full w-full flex-col text-neutral-100">
-      <header className="flex items-center justify-between border-b border-white/5 bg-white/[0.02] px-4 py-2">
-        <div className="flex items-baseline gap-3">
-          <span className="text-sm font-medium">KHALID_KHAN_RESUME.pdf</span>
-          <span className="text-xs text-neutral-500">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 bg-white/[0.02] px-3 py-2 sm:px-4">
+        <div className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-baseline sm:gap-3">
+          <span className="truncate text-sm font-medium">KHALID_KHAN_RESUME.pdf</span>
+          <span className="text-[11px] text-neutral-500 sm:text-xs">
             Updated {resume.updated} · {resume.sizeLabel}
           </span>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-shrink-0 gap-2">
           <a
             href={resume.url}
             target="_blank"

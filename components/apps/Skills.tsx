@@ -15,7 +15,7 @@ export default function Skills() {
   const barClass = PROGRESS_CLASS_BY_THEME[theme];
   return (
     <div className="flex h-full w-full flex-col overflow-y-auto text-neutral-100">
-      <header className="border-b border-white/5 bg-white/[0.02] px-8 py-6">
+      <header className="border-b border-white/5 bg-white/[0.02] px-4 py-5 sm:px-8 sm:py-6">
         <p className="text-xs uppercase tracking-widest text-neutral-400">Skills</p>
         <h1 className="mt-1 text-2xl font-semibold">Tools I reach for, day to day</h1>
         <p className="mt-1 text-sm text-neutral-400">
@@ -23,7 +23,7 @@ export default function Skills() {
         </p>
       </header>
 
-      <div className="grid flex-1 gap-6 px-8 py-6 md:grid-cols-3">
+      <div className="grid flex-1 gap-4 px-4 py-5 sm:gap-6 sm:px-8 sm:py-6 md:grid-cols-3">
         {skills.map((group) => (
           <section
             key={group.category}

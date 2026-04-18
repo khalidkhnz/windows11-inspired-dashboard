@@ -39,7 +39,7 @@ export function MacOSShell() {
     <>
       {/* Menu bar */}
       <header
-        className="fixed inset-x-0 top-0 z-40 flex h-7 items-center justify-between bg-black/35 px-3 text-[12px] text-white backdrop-blur-md"
+        className="fixed inset-x-0 top-0 z-50 flex h-7 items-center justify-between bg-black/35 px-3 text-[12px] text-white backdrop-blur-md"
       >
         <div className="flex items-center gap-4">
           <Apple className="h-3.5 w-3.5" fill="currentColor" />
@@ -78,7 +78,7 @@ export function MacOSShell() {
       </header>
 
       {/* Dock */}
-      <footer className="fixed inset-x-0 bottom-2 z-40 flex items-end justify-center pointer-events-none">
+      <footer className="fixed inset-x-0 bottom-2 z-50 flex items-end justify-center pointer-events-none">
         <div
           className={cn(
             "pointer-events-auto flex items-end gap-1 rounded-[20px] px-2.5 py-1.5",

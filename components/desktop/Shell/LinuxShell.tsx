@@ -32,7 +32,7 @@ export function LinuxShell() {
     <>
       {/* Top panel */}
       <header
-        className="fixed inset-x-0 top-0 z-40 flex h-8 items-center justify-between bg-black/70 px-3 text-[12px] font-medium text-white"
+        className="fixed inset-x-0 top-0 z-50 flex h-8 items-center justify-between bg-black/70 px-3 text-[12px] font-medium text-white"
       >
         <button
           onClick={() => toggle("launcher")}
@@ -69,7 +69,7 @@ export function LinuxShell() {
       </header>
 
       {/* Bottom dash */}
-      <footer className="fixed inset-x-0 bottom-3 z-40 flex justify-center pointer-events-none">
+      <footer className="fixed inset-x-0 bottom-3 z-50 flex justify-center pointer-events-none">
         <div className="pointer-events-auto flex items-center gap-1 rounded-lg bg-black/70 p-1 ring-1 ring-white/10 backdrop-blur">
           {dashApps.map((app) => {
             const instances = windows.filter((w) => w.appId === app.id);

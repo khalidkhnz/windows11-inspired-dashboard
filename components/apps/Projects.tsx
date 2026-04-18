@@ -46,8 +46,9 @@ export default function Projects() {
   const dot = DOT_BY_THEME[theme];
 
   return (
-    <div className="flex h-full w-full overflow-hidden text-neutral-100">
-      <aside className="flex h-full w-56 flex-shrink-0 flex-col border-r border-white/[0.06] bg-white/[0.02]">
+    <div className="flex h-full w-full flex-col overflow-hidden text-neutral-100 md:flex-row">
+      {/* Desktop sidebar */}
+      <aside className="hidden h-full w-56 flex-shrink-0 flex-col border-r border-white/[0.06] bg-white/[0.02] md:flex">
         <div className="px-4 pb-2 pt-4 text-xs uppercase tracking-widest text-neutral-500">
           Projects
         </div>
@@ -79,13 +80,34 @@ export default function Projects() {
         </nav>
       </aside>
 
+      {/* Mobile top tab strip */}
+      <nav className="flex flex-shrink-0 gap-1.5 overflow-x-auto border-b border-white/[0.06] bg-white/[0.02] px-3 py-2 md:hidden">
+        {projects.map((p) => (
+          <button
+            key={p.slug}
+            onClick={() => setActiveSlug(p.slug)}
+            className={cn(
+              "flex flex-shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] transition-colors",
+              p.slug === active?.slug
+                ? cn("border-transparent", activeRow)
+                : "border-white/10 bg-white/[0.02] text-neutral-300",
+            )}
+          >
+            <span className="max-w-[140px] truncate">{p.name}</span>
+            {p.live && (
+              <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-emerald-400" />
+            )}
+          </button>
+        ))}
+      </nav>
+
       <section className="flex-1 overflow-y-auto">
         {active && (
-          <article className="mx-auto max-w-3xl px-8 py-8">
+          <article className="mx-auto max-w-3xl px-4 py-6 sm:px-8 sm:py-8">
             <p className="flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400">
               <Sparkles className="h-3.5 w-3.5" /> {active.role} · {active.year}
             </p>
-            <h1 className="mt-2 text-3xl font-semibold">{active.name}</h1>
+            <h1 className="mt-2 text-2xl font-semibold sm:text-3xl">{active.name}</h1>
             <p className="mt-1 text-sm text-neutral-400">{active.tagline}</p>
 
             <div className="mt-4 flex flex-wrap gap-2">

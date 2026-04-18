@@ -246,6 +246,11 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
+  const minimizeAll = useCallback(() => {
+    setWindows((prev) => prev.map((w) => ({ ...w, minimized: true })));
+    setActiveWindowId(null);
+  }, []);
+
   const autoOpenedRef = useRef(false);
   useEffect(() => {
     if (autoOpenedRef.current) return;
@@ -274,6 +279,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
     moveWindow,
     resizeWindow,
     restoreOrMinimize,
+    minimizeAll,
   };
 
   return <OsContext.Provider value={value}>{children}</OsContext.Provider>;

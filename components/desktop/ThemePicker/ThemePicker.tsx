@@ -40,10 +40,10 @@ export function ThemePicker({ onDone }: { onDone: () => void }) {
   }
 
   return (
-    <main className="relative flex h-screen w-full flex-col overflow-hidden bg-[#0a0a0b] text-white">
+    <main className="relative flex min-h-screen w-full flex-col overflow-y-auto bg-[#0a0a0b] text-white">
       {/* Subtle ambient lighting — kept understated to feel premium */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(96,205,255,0.08),transparent_50%),radial-gradient(circle_at_82%_85%,rgba(168,85,247,0.07),transparent_55%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.6))]" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(96,205,255,0.08),transparent_50%),radial-gradient(circle_at_82%_85%,rgba(168,85,247,0.07),transparent_55%)]" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.6))]" />
 
       <header className="relative z-10 flex items-center justify-between px-8 pt-8">
         <div className="flex items-center gap-3">
@@ -66,7 +66,7 @@ export function ThemePicker({ onDone }: { onDone: () => void }) {
         )}
       </header>
 
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-8">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-8 py-8">
         <AnimatePresence mode="wait">
           {stage === "presets" ? (
             <motion.div

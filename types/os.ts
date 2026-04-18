@@ -59,4 +59,5 @@ export type OsContextValue = {
   moveWindow: (id: number, x: number, y: number) => void;
   resizeWindow: (id: number, width: number, height: number) => void;
   restoreOrMinimize: (id: number) => void;
+  minimizeAll: () => void;
 };
