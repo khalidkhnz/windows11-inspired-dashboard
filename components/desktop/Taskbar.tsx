@@ -56,6 +56,7 @@ export default function Taskbar() {
         <div className="relative flex items-center gap-1">
           <button
             aria-label="Start"
+            data-launcher-trigger="start"
             onClick={() => toggle("launcher")}
             className={cn(
               "relative flex h-10 w-10 items-center justify-center rounded-md transition-colors",
@@ -69,6 +70,7 @@ export default function Taskbar() {
           </button>
           <button
             aria-label="Search"
+            data-launcher-trigger="search"
             onClick={() => toggle("launcher")}
             className="flex h-10 w-10 items-center justify-center rounded-md text-neutral-200 transition-colors hover:bg-white/10"
           >

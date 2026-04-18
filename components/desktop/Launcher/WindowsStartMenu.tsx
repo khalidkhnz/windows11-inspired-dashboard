@@ -11,19 +11,54 @@ import { owner } from "@/lib/portfolio";
 import { AppIcon } from "@/components/desktop/AppIcon";
 import type { LauncherProps } from "./types";
 
+const MENU_WIDTH = 620;
+const VIEWPORT_MARGIN = 12;
+
 export function WindowsStartMenu({ open, onClose }: LauncherProps) {
   const { apps, openApp } = useOs();
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  /** Center X (px) of the start button; null until measured. */
+  const [anchorX, setAnchorX] = useState<number | null>(null);
 
   useEffect(() => {
     if (!open) setQuery("");
   }, [open]);
 
+  /** Auto-focus the search input whenever the menu opens. */
+  useEffect(() => {
+    if (!open) return;
+    const t = window.setTimeout(() => inputRef.current?.focus(), 50);
+    return () => window.clearTimeout(t);
+  }, [open]);
+
+  /** Track the start button's center so the menu opens above it (Windows 11 behavior). */
+  useEffect(() => {
+    if (!open) return;
+    const update = () => {
+      const trigger = document.querySelector<HTMLElement>(
+        '[data-launcher-trigger="start"]',
+      );
+      if (!trigger) return;
+      const r = trigger.getBoundingClientRect();
+      setAnchorX(r.left + r.width / 2);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const handleClick = (e: MouseEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) onClose();
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      // Don't close if the click is inside the menu, or on a launcher trigger
+      // (start / search button) — let the trigger's own toggle handler decide.
+      if (containerRef.current?.contains(target)) return;
+      if (target.closest("[data-launcher-trigger]")) return;
+      onClose();
     };
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -57,8 +92,9 @@ export function WindowsStartMenu({ open, onClose }: LauncherProps) {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 40, opacity: 0 }}
           transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          style={getAnchorStyle(anchorX)}
           className={cn(
-            "fixed bottom-[60px] left-1/2 z-50 w-[620px] max-w-[92vw] -translate-x-1/2 overflow-hidden rounded-[10px]",
+            "fixed bottom-[60px] z-50 w-[620px] max-w-[92vw] overflow-hidden rounded-[10px]",
             "border border-white/[0.08] bg-[rgba(20,20,22,0.92)] text-neutral-100",
             "shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7),0_0_0_0.5px_rgba(255,255,255,0.04)]",
             "backdrop-blur-2xl backdrop-saturate-150",
@@ -71,6 +107,7 @@ export function WindowsStartMenu({ open, onClose }: LauncherProps) {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
               <Input
+                ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search apps, settings, and documents"
@@ -165,4 +202,22 @@ export function WindowsStartMenu({ open, onClose }: LauncherProps) {
       )}
     </AnimatePresence>
   );
+}
+
+/**
+ * Position the menu so its center sits above the start button. If we haven't
+ * measured a button yet, fall back to viewport center. Always clamp so the
+ * menu stays inside the viewport with a small margin.
+ */
+function getAnchorStyle(anchorX: number | null): React.CSSProperties {
+  if (typeof window === "undefined") {
+    return { left: "50%", transform: "translateX(-50%)" };
+  }
+  const viewport = window.innerWidth;
+  const halfWidth = Math.min(MENU_WIDTH, viewport * 0.92) / 2;
+  const cx = anchorX ?? viewport / 2;
+  const minLeft = halfWidth + VIEWPORT_MARGIN;
+  const maxLeft = viewport - halfWidth - VIEWPORT_MARGIN;
+  const clamped = Math.max(minLeft, Math.min(cx, maxLeft));
+  return { left: clamped, transform: "translateX(-50%)" };
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useThemeChoice } from "@/context/ThemeContext";
@@ -19,6 +20,12 @@ export type AppIconSpec = {
    * (Windows / macOS / Linux) is shown.
    */
   native?: NativeIconKey;
+  /**
+   * Image URL (e.g. a favicon) shown in place of the lucide glyph. The
+   * gradient tile, ring, and shadow are still rendered behind it. Falls
+   * back to the glyph if the image fails to load.
+   */
+  image?: string;
 };
 
 type Props = {
@@ -42,6 +49,7 @@ export function AppIcon({
 }: Props) {
   const resolved = useThemeChoice("icons");
   const theme = forceTheme ?? resolved;
+  const [imageBroken, setImageBroken] = useState(false);
 
   if (icon.native) {
     const Native = NATIVE_ICONS[icon.native][theme];
@@ -53,6 +61,18 @@ export function AppIcon({
   }
 
   const Glyph = icon.glyph;
+  const useImage = !!icon.image && !imageBroken;
+  const imageEl = useImage ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={icon.image}
+      alt=""
+      onError={() => setImageBroken(true)}
+      className={cn(
+        "relative h-3/4 w-3/4 object-contain drop-shadow-[0_1px_1px_rgba(0,0,0,0.45)]",
+      )}
+    />
+  ) : null;
 
   if (theme === "linux") {
     // Papirus-style: flat circle with a two-tone symbol
@@ -67,10 +87,12 @@ export function AppIcon({
           className,
         )}
       >
-        <Glyph
-          className={cn("relative text-[#e95420]", glyphClassName)}
-          strokeWidth={2.2}
-        />
+        {imageEl ?? (
+          <Glyph
+            className={cn("relative text-[#e95420]", glyphClassName)}
+            strokeWidth={2.2}
+          />
+        )}
       </div>
     );
   }
@@ -105,10 +127,12 @@ export function AppIcon({
             rounded ?? "rounded-[22%]",
           )}
         />
-        <Glyph
-          className={cn("relative text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]", glyphClassName)}
-          strokeWidth={2}
-        />
+        {imageEl ?? (
+          <Glyph
+            className={cn("relative text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]", glyphClassName)}
+            strokeWidth={2}
+          />
+        )}
       </div>
     );
   }
@@ -133,10 +157,12 @@ export function AppIcon({
           rounded ?? "rounded-[9px]",
         )}
       />
-      <Glyph
-        className={cn("relative text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]", glyphClassName)}
-        strokeWidth={2}
-      />
+      {imageEl ?? (
+        <Glyph
+          className={cn("relative text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]", glyphClassName)}
+          strokeWidth={2}
+        />
+      )}
     </div>
   );
 }

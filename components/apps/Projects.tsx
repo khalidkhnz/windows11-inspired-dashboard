@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { projects } from "@/lib/portfolio";
-import { ExternalLink, Github, Sparkles } from "lucide-react";
+import { useMemo, useState } from "react";
+import { projects as rawProjects, sortProjectsForDisplay } from "@/lib/portfolio";
+import { ExternalLink, Code2, Sparkles } from "lucide-react";
 import { useThemeChoice } from "@/context/ThemeContext";
+import { useOs } from "@/context/OsContext";
+import { getAppIdByWebUrl } from "@/lib/apps";
 import { cn } from "@/lib/utils";
 
 const ACTIVE_ROW_BY_THEME = {
@@ -25,8 +27,19 @@ const DOT_BY_THEME = {
 } as const;
 
 export default function Projects() {
+  const projects = useMemo(() => sortProjectsForDisplay(rawProjects), []);
   const [activeSlug, setActiveSlug] = useState(projects[0]?.slug);
   const active = projects.find((p) => p.slug === activeSlug) ?? projects[0];
+  const { openApp } = useOs();
+
+  function handleVisit(url: string) {
+    const appId = getAppIdByWebUrl(url);
+    if (appId) {
+      openApp(appId);
+    } else if (typeof window !== "undefined") {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  }
   const theme = useThemeChoice("window");
   const activeRow = ACTIVE_ROW_BY_THEME[theme];
   const accent = ACCENT_BY_THEME[theme];
@@ -48,7 +61,16 @@ export default function Projects() {
                 p.slug === active?.slug ? activeRow : "text-neutral-300 hover:bg-white/5",
               )}
             >
-              <span className="font-medium line-clamp-1">{p.name}</span>
+              <span className="flex w-full items-center gap-1.5">
+                <span className="font-medium line-clamp-1">{p.name}</span>
+                {p.live && (
+                  <span
+                    aria-label="Live"
+                    title="Live"
+                    className="ml-auto h-1.5 w-1.5 flex-shrink-0 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(74,222,128,0.7)]"
+                  />
+                )}
+              </span>
               <span className="text-[11px] text-neutral-500 group-hover:text-neutral-400">
                 {p.role} · {p.year}
               </span>
@@ -79,17 +101,16 @@ export default function Projects() {
 
             <div className="mt-4 flex flex-wrap gap-2">
               {active.live && (
-                <a
-                  href={active.live}
-                  target="_blank"
-                  rel="noreferrer noopener"
+                <button
+                  type="button"
+                  onClick={() => handleVisit(active.live!)}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white",
                     accent,
                   )}
                 >
                   <ExternalLink className="h-3.5 w-3.5" /> Visit
-                </a>
+                </button>
               )}
               {active.repo && (
                 <a
@@ -98,7 +119,7 @@ export default function Projects() {
                   rel="noreferrer noopener"
                   className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10"
                 >
-                  <Github className="h-3.5 w-3.5" /> Source
+                  <Code2 className="h-3.5 w-3.5" /> Source
                 </a>
               )}
             </div>

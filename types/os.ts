@@ -23,6 +23,11 @@ export type AppDefinition = {
   pinnedInTaskbar?: boolean;
   /** Show in the recommended strip. */
   recommended?: boolean;
+  /** Auto-open this app once on first OS mount. */
+  autoOpen?: boolean;
+  /** If this app is a WebApp wrapper, the live URL it embeds. Used to look up the
+   *  app from a project's `live` URL so "Visit" can open the in-OS window. */
+  webUrl?: string;
 };
 
 export type WindowState = {

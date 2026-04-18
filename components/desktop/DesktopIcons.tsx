@@ -1,33 +1,29 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useOs } from "@/context/OsContext";
-import { useThemeChoice } from "@/context/ThemeContext";
 import { AppIcon } from "./AppIcon";
 
+/**
+ * Desktop icons grid. Flows top-to-bottom, then wraps into a new column
+ * when the current column fills the available height, so a long list of
+ * pinned apps never overflows off-screen. Shown on every OS theme.
+ */
 export default function DesktopIcons() {
   const { apps, openApp } = useOs();
-  const theme = useThemeChoice("desktopIcons");
   const pinned = apps.filter((a) => a.pinnedOnDesktop);
-
-  // Open About Me by default on first desktop mount.
-  const bootstrapped = useRef(false);
-  useEffect(() => {
-    if (bootstrapped.current) return;
-    bootstrapped.current = true;
-    openApp("about");
-  }, [openApp]);
-
-  // macOS: no desktop icons by default.
-  if (theme === "macos") return null;
 
   return (
     <ul
       className={cn(
-        "absolute left-4 top-4 grid auto-rows-[92px] grid-cols-1 content-start gap-1",
+        "absolute left-4 right-4 top-4 grid grid-flow-col content-start gap-1",
       )}
-      style={{ gridTemplateRows: "repeat(auto-fill, 92px)" }}
+      style={{
+        gridTemplateRows: "repeat(auto-fill, 92px)",
+        gridAutoColumns: "80px",
+        // Leave room for the taskbar / dock / panel.
+        height: "calc(100vh - 80px)",
+      }}
     >
       {pinned.map((app) => (
         <li key={app.id}>

@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type {
   AppDefinition,
   AppId,
@@ -34,6 +42,48 @@ function fitSize(size: { width: number; height: number }) {
     width: Math.max(MIN_WIDTH, Math.min(size.width, maxW)),
     height: Math.max(MIN_HEIGHT, Math.min(size.height, maxH)),
   };
+}
+
+/**
+ * Place a set of windows in a single horizontal row, centered on screen.
+ * Used to fan out auto-open windows so they never spawn on top of each other.
+ * Falls back to the original positions if the viewport is too narrow.
+ */
+function arrangeSideBySide(
+  windows: WindowState[],
+  ordering: { id: AppId }[],
+): WindowState[] {
+  if (typeof window === "undefined") return windows;
+  // Pick the most recently opened window per appId in `ordering`.
+  const targets = ordering
+    .map((app) => {
+      const matches = windows.filter((w) => w.appId === app.id);
+      return matches.length ? matches[matches.length - 1] : undefined;
+    })
+    .filter((w): w is WindowState => !!w);
+  if (targets.length === 0) return windows;
+
+  const margin = 16;
+  const gap = 16;
+  const totalW =
+    targets.reduce((s, w) => s + w.width, 0) + gap * (targets.length - 1);
+  const viewportW = window.innerWidth;
+  const startX = Math.max(margin, Math.round((viewportW - totalW) / 2));
+
+  let cursor = startX;
+  const updates = new Map<number, { x: number; y: number }>();
+  for (const t of targets) {
+    const y = Math.max(
+      margin,
+      Math.round((window.innerHeight - TASKBAR_HEIGHT - t.height) / 2),
+    );
+    updates.set(t.id, { x: cursor, y });
+    cursor += t.width + gap;
+  }
+  return windows.map((w) => {
+    const u = updates.get(w.id);
+    return u ? { ...w, ...u } : w;
+  });
 }
 
 function pickSpawnPosition(
@@ -195,6 +245,21 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
       ),
     );
   }, []);
+
+  const autoOpenedRef = useRef(false);
+  useEffect(() => {
+    if (autoOpenedRef.current) return;
+    autoOpenedRef.current = true;
+    const autoApps = apps.filter((a) => a.autoOpen);
+    if (autoApps.length === 0) return;
+    autoApps.forEach((a) => openApp(a.id));
+    // openApp's setWindows updates batch — wait one frame, then arrange the
+    // newly-opened windows side-by-side so the auto-opens never overlap.
+    const raf = requestAnimationFrame(() => {
+      setWindows((prev) => arrangeSideBySide(prev, autoApps));
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [apps, openApp]);
 
   const value: OsContextValue = {
     apps,

@@ -1,9 +1,31 @@
 "use client";
 
+import { useMemo } from "react";
 import Image from "next/image";
-import { owner, experience, socials } from "@/lib/portfolio";
+import { ExternalLink, Code2 } from "lucide-react";
+import {
+  owner,
+  experience,
+  socials,
+  projects as rawProjects,
+  sortProjectsForDisplay,
+} from "@/lib/portfolio";
+import { useOs } from "@/context/OsContext";
+import { getAppIdByWebUrl } from "@/lib/apps";
 
 export default function AboutMe() {
+  const projects = useMemo(() => sortProjectsForDisplay(rawProjects), []);
+  const { openApp } = useOs();
+
+  function handleVisit(url: string) {
+    const appId = getAppIdByWebUrl(url);
+    if (appId) {
+      openApp(appId);
+    } else if (typeof window !== "undefined") {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  }
+
   return (
     <div className="flex h-full w-full flex-col overflow-y-auto text-neutral-100">
       <div className="relative px-8 pb-6 pt-10">
@@ -28,7 +50,7 @@ export default function AboutMe() {
         </div>
       </div>
 
-      <div className="grid gap-6 px-8 pb-10 md:grid-cols-5">
+      <div className="grid gap-6 px-8 pb-6 md:grid-cols-5">
         <section className="md:col-span-3">
           <h2 className="text-xs uppercase tracking-widest text-neutral-400">Bio</h2>
           <p className="mt-2 text-sm leading-relaxed text-neutral-200">{owner.bio}</p>
@@ -99,6 +121,88 @@ export default function AboutMe() {
           </div>
         </section>
       </div>
+
+      <section className="px-8 pb-12">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-xs uppercase tracking-widest text-neutral-400">
+              Projects
+            </h2>
+            <p className="mt-1 text-xs text-neutral-500">
+              {projects.length} total · live builds first
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => openApp("projects")}
+            className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-neutral-200 hover:bg-white/10"
+          >
+            Open Projects app
+          </button>
+        </div>
+
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {projects.map((p) => (
+            <li
+              key={p.slug}
+              className="group flex h-full flex-col rounded-xl border border-white/5 bg-white/[0.03] p-4 transition-colors hover:bg-white/[0.05]"
+            >
+              <div className="flex items-start gap-2">
+                <h3 className="flex-1 text-sm font-medium text-neutral-100">{p.name}</h3>
+                {p.live && (
+                  <span
+                    aria-label="Live"
+                    title="Live"
+                    className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(74,222,128,0.7)]"
+                  />
+                )}
+              </div>
+              <p className="mt-0.5 text-[11px] text-neutral-500">
+                {p.role} · {p.year}
+              </p>
+              <p className="mt-2 line-clamp-2 text-xs text-neutral-300">{p.tagline}</p>
+              <div className="mt-3 flex flex-wrap gap-1">
+                {p.tags.slice(0, 4).map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[10px] text-neutral-300"
+                  >
+                    {t}
+                  </span>
+                ))}
+                {p.tags.length > 4 && (
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[10px] text-neutral-400">
+                    +{p.tags.length - 4}
+                  </span>
+                )}
+              </div>
+              {(p.live || p.repo) && (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {p.live && (
+                    <button
+                      type="button"
+                      onClick={() => handleVisit(p.live!)}
+                      className="inline-flex items-center gap-1 rounded-md bg-emerald-500/15 px-2 py-1 text-[11px] text-emerald-300 hover:bg-emerald-500/25"
+                    >
+                      <ExternalLink className="h-3 w-3" /> Visit
+                    </button>
+                  )}
+                  {p.repo && (
+                    <a
+                      href={p.repo}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[11px] text-neutral-300 hover:bg-white/10"
+                    >
+                      <Code2 className="h-3 w-3" /> Code
+                    </a>
+                  )}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
