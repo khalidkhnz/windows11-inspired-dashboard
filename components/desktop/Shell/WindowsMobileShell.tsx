@@ -4,6 +4,7 @@ import { useShellUI } from "@/context/ShellUIContext";
 import { MobileStatusBar } from "@/components/desktop/Mobile/MobileStatusBar";
 import { AndroidNavBar } from "@/components/desktop/Mobile/AndroidNavBar";
 import { MobileRecents } from "@/components/desktop/Mobile/MobileRecents";
+import { MobileActionPanel } from "@/components/desktop/Mobile/MobileActionPanel";
 
 /**
  * Windows-flavored mobile shell: Windows Phone has been discontinued, so
@@ -20,6 +21,7 @@ export function WindowsMobileShell() {
         background="border-t border-white/10 bg-neutral-950/80 backdrop-blur-xl"
       />
       <MobileRecents open={popover === "recents"} onClose={close} />
+      <MobileActionPanel open={popover === "action"} onClose={close} theme="windows" />
     </>
   );
 }
