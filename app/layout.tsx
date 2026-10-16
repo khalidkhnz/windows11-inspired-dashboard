@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { OsProvider } from "@/context/OsContext";
+import { SoundProvider } from "@/context/SoundProvider";
 import { ShellUIProvider } from "@/context/ShellUIContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ThemeHtmlBridge } from "@/context/ThemeHtmlBridge";
@@ -127,12 +128,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <ThemeHtmlBridge />
           <WallpaperProvider>
-            <OsProvider>
-              <ShellUIProvider>
-                {children}
-                <Toaster theme="dark" position="bottom-right" richColors />
-              </ShellUIProvider>
-            </OsProvider>
+            <SoundProvider>
+              <OsProvider>
+                <ShellUIProvider>
+                  {children}
+                  <Toaster theme="dark" position="bottom-right" richColors />
+                </ShellUIProvider>
+              </OsProvider>
+            </SoundProvider>
           </WallpaperProvider>
         </ThemeProvider>
       </body>
