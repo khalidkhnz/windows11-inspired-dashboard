@@ -8,12 +8,14 @@ import {
   Plane,
   Sun,
   Volume2,
+  VolumeX,
   Moon,
   Focus,
   Accessibility,
   Palette,
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { SoundToggle } from "./SoundToggle";
 import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 import type { ActionCenterProps } from "./types";
@@ -94,6 +96,24 @@ export function WindowsActionCenter({ open, onClose }: ActionCenterProps) {
               <Slider defaultValue={[85]} max={100} step={1} className="flex-1" />
             </div>
           </div>
+
+          <SoundToggle
+            className={(on) =>
+              cn(
+                "relative mt-3 flex w-full items-center gap-2 rounded-lg border px-3 py-2 text-[12px] transition-colors",
+                on
+                  ? "border-sky-400/40 bg-sky-500/20 text-white"
+                  : "border-white/10 bg-white/[0.03] text-neutral-300 hover:bg-white/[0.06]",
+              )
+            }
+          >
+            {(on) => (
+              <>
+                {on ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                {on ? "UI sounds on" : "UI sounds off"}
+              </>
+            )}
+          </SoundToggle>
 
           <button
             onClick={() => {

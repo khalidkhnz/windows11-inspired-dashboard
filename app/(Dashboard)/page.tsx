@@ -6,6 +6,7 @@ import { ThemePicker } from "@/components/desktop/ThemePicker/ThemePicker";
 import { ThemedLockScreen } from "@/components/desktop/LockScreen";
 import { useTheme } from "@/context/ThemeContext";
 import { useClock } from "@/hooks/useClock";
+import { playSound } from "@/lib/sound";
 
 /**
  * Root route. Shows the theme picker on first visit, then the lock screen.
@@ -44,6 +45,7 @@ function LockScreen() {
   async function boot() {
     setSigningIn(true);
     await new Promise((r) => setTimeout(r, 1400));
+    playSound("success");
     router.push("/desktop");
   }
 

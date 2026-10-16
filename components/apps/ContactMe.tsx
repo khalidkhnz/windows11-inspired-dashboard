@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { playSound } from "@/lib/sound";
 import { sendContactAction } from "@/actions/contact.action";
 import { owner } from "@/lib/portfolio";
 import { Input } from "@/components/ui/input";
@@ -38,10 +39,12 @@ export default function ContactMe() {
     startTransition(async () => {
       const result = await sendContactAction(formData);
       if (result.ok) {
+        playSound("success");
         toast.success("Message sent. I'll get back to you.");
         setSent(true);
         form.reset();
       } else {
+        playSound("error");
         toast.error(result.error);
       }
     });

@@ -8,12 +8,14 @@ import {
   Bluetooth,
   Sun,
   Volume2,
+  VolumeX,
   Settings,
   Lock,
   Power,
   Palette,
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+import { SoundToggle } from "./SoundToggle";
 import { useTheme } from "@/context/ThemeContext";
 import { owner } from "@/lib/portfolio";
 import { cn } from "@/lib/utils";
@@ -73,6 +75,29 @@ export function LinuxSystemMenu({ open, onClose }: ActionCenterProps) {
               on={bluetooth}
               onClick={() => setBluetooth((v) => !v)}
             />
+            <SoundToggle className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[12px] hover:bg-white/5">
+              {(on) => (
+                <>
+                  <span className={cn("text-white/75", on && "text-[#e95420]")}>
+                    {on ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                  </span>
+                  <span className="flex-1">{on ? "UI Sounds On" : "UI Sounds Off"}</span>
+                  <span
+                    className={cn(
+                      "h-4 w-7 rounded-full p-0.5 transition-colors",
+                      on ? "bg-[#e95420]" : "bg-white/15",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "block h-3 w-3 rounded-full bg-white transition-transform",
+                        on ? "translate-x-3" : "translate-x-0",
+                      )}
+                    />
+                  </span>
+                </>
+              )}
+            </SoundToggle>
             <SimpleRow
               icon={<Palette className="h-4 w-4" />}
               label="Change theme…"

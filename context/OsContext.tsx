@@ -16,6 +16,7 @@ import type {
   WindowState,
 } from "@/types/os";
 import { getApps } from "@/lib/apps";
+import { playSound } from "@/lib/sound";
 
 const OsContext = createContext<OsContextValue | null>(null);
 
@@ -135,6 +136,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
         app.action();
         return;
       }
+      playSound("open");
       setWindows((prev) => {
         if (!app.multiInstance) {
           const existing = prev.find((w) => w.appId === appId);
@@ -175,6 +177,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
   );
 
   const closeWindow = useCallback((id: number) => {
+    playSound("close");
     setWindows((prev) => {
       const next = prev.filter((w) => w.id !== id);
       if (next.length === 0) {
@@ -188,6 +191,7 @@ export function OsProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const minimizeWindow = useCallback((id: number) => {
+    playSound("minimize");
     setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, minimized: true } : w)));
     setActiveWindowId((current) => (current === id ? null : current));
   }, []);
